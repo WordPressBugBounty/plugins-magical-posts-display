@@ -1,0 +1,1 @@
+# plugins-magical-posts-display
