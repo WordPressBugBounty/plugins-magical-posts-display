@@ -1,0 +1,46 @@
+/*
+*
+* Magical posts display 
+* Gutenberg Admin style
+*
+*/
+
+
+.cf-field.cf-separator h3 {
+    font-size: 16px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    display: inline-block;
+}
+.cf-block__fields {
+    border-left: 1px solid #ededed;
+    border-right: 1px solid #ededed;
+    border-bottom: 1px solid #ededed;
+}
+.cf-field.cf-select select {
+    max-width: 400px;
+}
+.cf-block__tabs {
+    border-bottom: 4px solid #ededed;
+}
+li.cf-block__tabs-item {
+    border: 1px solid #ccc;
+    margin-right: 5px;
+    box-shadow: 0 3px 0 #ccc;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+li.cf-block__tabs-item.cf-block__tabs-item--current {
+    box-shadow: 0 3px 0 #00a0d2;
+    background: #e0ecff;
+}
+
+li.cf-block__tabs-item:hover {
+    background: #e0ecff;
+}
+
+.mp-display-gird .card {
+    padding: 0 !important;
+}
