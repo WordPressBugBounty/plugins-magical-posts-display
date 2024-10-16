@@ -67,8 +67,8 @@ if (!function_exists('spacehide_go_me')) :
 			esc_attr($class),
 			wp_kses_post($message),
 			esc_url($url1),
-			esc_html__('see here', 'magical-post-display'),
-			esc_html__('View WordPress Theme', 'magical-post-display')
+			esc_html__('see here', 'magical-posts-display'),
+			esc_html__('View WordPress Theme', 'magical-posts-display')
 		);
 	}
 	add_action('admin_notices', 'spacehide_go_me');

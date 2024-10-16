@@ -209,7 +209,7 @@ if (!class_exists('mgpd_Recent_Posts')) :
 					}
 					?>
 				</select>
-				<span style="color: red;font-size:12px"><?php esc_html_e('Only Work with pro version', 'magical-post-display'); ?></span>
+				<span style="color: red;font-size:12px"><?php esc_html_e('Only Work with pro version', 'magical-posts-display'); ?></span>
 			</p>
 
 			<p>

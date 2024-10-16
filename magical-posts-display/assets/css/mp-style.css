@@ -17,7 +17,7 @@
   padding: 20px 0;
   margin: 30px 0;
 }
-.mgpd p{
+.mgpd p {
   margin-bottom: 10px;
 }
 
@@ -680,8 +680,8 @@ ul.nav.nav-tabs li a {
 
 @media only screen and (max-width: 991px) {
   .mgac-mcontent .mpdac-post-image {
-      margin-bottom: 10px;
-    }
+    margin-bottom: 10px;
+  }
 }
 @media only screen and (max-width: 767px) {
   .mgpticker .mgpticker-text {
@@ -825,7 +825,7 @@ a.mgps-btn {
   box-shadow: 0 0.2rem 2.8rem rgba(36, 36, 36, 0.1);
 }
 .swiper-button-next svg,
-.swiper-button-prev svg{
+.swiper-button-prev svg {
   width: 12px;
   box-shadow: 0 0.2rem 2.8rem rgba(36, 36, 36, 0.1);
 }
@@ -957,7 +957,7 @@ a.mgps-btn {
   font-weight: 700;
 }
 .mgladp1 .mp-post-cat a,
-.mgladp1-all .mp-post-cat a{
+.mgladp1-all .mp-post-cat a {
   background: #31942e;
   padding: 5px 10px;
   line-height: 1;
@@ -1014,11 +1014,10 @@ a.mgps-btn {
     text-align: left;
   }
   /* Grid group two*/
-    .mgladp2-items {
-      grid-template-columns: auto;
-      grid-column-gap: 20px;
-    }
-
+  .mgladp2-items {
+    grid-template-columns: auto;
+    grid-column-gap: 20px;
+  }
 }
 /*Image grid*/
 .mgomg-pimg {
@@ -1089,7 +1088,7 @@ a.mgps-btn {
   padding: 20px;
   width: 100%;
 }
-.mgomg-pimg a ,
+.mgomg-pimg a,
 .mgomg-pimg a:hover {
   color: inherit;
 }
@@ -1104,7 +1103,12 @@ a.mgps-btn {
 
 .mgomg-post-text {
   background: rgb(0, 0, 0);
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.8578781854538691) 0%, rgba(0, 0, 0, 0.3676821070224965) 35%, rgba(0, 0, 0, 0.08196782130821079) 100%);
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.8578781854538691) 0%,
+    rgba(0, 0, 0, 0.3676821070224965) 35%,
+    rgba(0, 0, 0, 0.08196782130821079) 100%
+  );
   padding: 15px;
 }
 
@@ -1147,7 +1151,7 @@ a.mgps-btn {
 .mgomg-items.mgomg-style3 .mgomg-pimg.mgomg-items1 {
   height: 100%;
 }
-.mgomg-items.mgomg-style2 .mgomg-pimg.mgomg-items1 img ,
+.mgomg-items.mgomg-style2 .mgomg-pimg.mgomg-items1 img,
 .mgomg-items.mgomg-style3 .mgomg-pimg.mgomg-items1 img {
   height: 100%;
   width: auto;
@@ -1157,24 +1161,22 @@ a.mgps-btn {
   display: flex;
   height: 100%;
 }
-.mgomg-items .mgomg-items1 .mgomg-post-text .mgomg-plus-gtext{
+.mgomg-items .mgomg-items1 .mgomg-post-text .mgomg-plus-gtext {
   height: 100%;
   display: grid;
   align-content: flex-start;
 }
 @media only screen and (max-width: 767px) {
   .mgomg-items.mgomg-style2,
-    .mgomg-items.mgomg-style3 {
-      grid-template-columns: 1fr;
-      grid-gap: 10px 0;
-    }
-    .mgomg-items.mgomg-style2 .mgomg-pimg:first-child,
-    .mgomg-items.mgomg-style3 .mgomg-pimg:first-child {
-      grid-row: 1;
-      grid-column: 1;
-    }
-
-  
+  .mgomg-items.mgomg-style3 {
+    grid-template-columns: 1fr;
+    grid-gap: 10px 0;
+  }
+  .mgomg-items.mgomg-style2 .mgomg-pimg:first-child,
+  .mgomg-items.mgomg-style3 .mgomg-pimg:first-child {
+    grid-row: 1;
+    grid-column: 1;
+  }
 }
 
 /*Feature categories style*/
@@ -1301,4 +1303,60 @@ span.mgpckit-cat-badge.mgpckit-cat-top {
   background: #000;
   color: #fff;
   text-decoration: none;
+}
+
+/* Magical Posts grid third style css  */
+
+.magical-post-authon-category {
+  display: flex;
+  gap: 20px;
+}
+
+.magical-post-authon-category .mppost-cats i,
+.magical-post-authon-category .mp-meta i,
+.magical-post-authon-category .mp-meta .byline:hover span.author a,
+.magical-post-authon-category .mppost-cats:hover a {
+  font-size: 16px;
+  color: #fc6601;
+}
+
+.magical-post-authon-category .mppost-cats svg,
+.magical-post-authon-category .mp-meta svg,
+.mgp_there_style-time svg {
+  width: 16px;
+  fill: #fc6601;
+}
+
+.magical-post-authon-category .mppost-cats a,
+.magical-post-authon-category .mp-meta .byline span.author a {
+  color: #000000;
+  font-size: 16px;
+  transition: 0.5s;
+}
+.mgp_there_style-time {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #dce1e4;
+  padding-top: 15px;
+}
+
+.mgp_there_style-time span {
+  color: #000000;
+}
+
+.mgp_there_style-time i {
+  color: #fc6601;
+  margin-right: 6px;
+}
+
+.mgp_there_style-time a {
+  font-weight: 600;
+}
+
+.mgpd.style3 .mg-card-text p {
+  margin-bottom: 15px;
+}
+.mgpd.style3 .mg-card-text {
+  padding: 1.2rem;
 }

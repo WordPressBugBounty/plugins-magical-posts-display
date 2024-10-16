@@ -246,6 +246,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'options' => [
                     '1'   => __('Style One', 'magical-posts-display'),
                     '2'  => __('Style Two', 'magical-posts-display'),
+                    '3'  => __('Style Three', 'magical-posts-display'),
                 ]
             ]
         );
@@ -1118,6 +1119,8 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mp-post-cat, {{WRAPPER}} .mp-post-cat a' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .mp-post-cat, {{WRAPPER}} .mp-post-cat i' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .mp-post-cat svg' => 'fill: {{VALUE}};',
                 ],
                 'condition' => [
                     'mgpg_category_show' => 'yes',
@@ -1125,7 +1128,25 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-
+        
+        $this->add_responsive_control(
+            'mgpg_meta_cate_icon_size',
+            [
+                'label' => __('Icon Size', 'bk-helper'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range' => [
+                    'px' => [
+                        'min' => 10,
+                        'max' => 300,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}}  .mp-post-cat i' => 'font-size: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mp-post-cat svg' => 'width: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        ); 
 
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
@@ -1174,12 +1195,32 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mp-meta .byline i, {{WRAPPER}} .mp-meta .byline a' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .mp-meta .byline svg' => 'fill: {{VALUE}};',
                 ],
                 'condition' => [
                     'mgpg_author_show' => 'yes',
                 ],
             ]
         );
+
+        $this->add_responsive_control(
+            'mgpg_meta_author_icon_size',
+            [
+                'label' => __('Icon Size', 'bk-helper'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range' => [
+                    'px' => [
+                        'min' => 10,
+                        'max' => 300,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}}  .mp-meta .byline i' => 'font-size: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mp-meta .byline svg' => 'width: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        ); 
 
 
         $this->add_group_control(
@@ -1212,7 +1253,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-time,{{WRAPPER}} .mp-posts-date' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .mgp-time,{{WRAPPER}} .mp-posts-date, {{WRAPPER}} .mp-posts-date, {{WRAPPER}} .mgp_there_style-time > span:first-of-type' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
                 'condition' => [
                     'mgpg_date_show' => 'yes',
@@ -1226,20 +1267,40 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'label' => __('Text Color', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-time, {{WRAPPER}} .mgp-time i,{{WRAPPER}} .mp-posts-date,{{WRAPPER}} .mp-posts-date i' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .mgp-time, {{WRAPPER}} .mgp-time i, {{WRAPPER}} .mgp_there_style-time > span:first-of-type,{{WRAPPER}} .mgp_there_style-time > span:first-of-type i, {{WRAPPER}} .mp-posts-date,{{WRAPPER}} .mp-posts-date i' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .mgp_there_style-time > span:first-of-type svg, {{WRAPPER}} .mgp-time svg, {{WRAPPER}} .mp-posts-date svg' => 'fill: {{VALUE}};',
                 ],
                 'condition' => [
                     'mgpg_date_show' => 'yes',
                 ],
             ]
         );
+        
+        $this->add_responsive_control(
+            'mgpg_meta_date_icon_size',
+            [
+                'label' => __('Icon Size', 'bk-helper'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range' => [
+                    'px' => [
+                        'min' => 10,
+                        'max' => 300,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}}  .mgp-time i, {{WRAPPER}} .mp-posts-date i, {{WRAPPER}} .mgp_there_style-time > span:first-of-type i' => 'font-size: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mgp-time svg, {{WRAPPER}} .mp-posts-date svg, .mgp_there_style-time > span:first-of-type svg' => 'width: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        ); 
 
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
             [
                 'name' => 'mgpg_meta_date_typography',
                 'label' => __('Typography', 'magical-posts-display'),
-                'selector' => '{{WRAPPER}} .mp-posts-date,{{WRAPPER}} .mgp-time',
+                'selector' => '{{WRAPPER}} .mp-posts-date,{{WRAPPER}} .mgp-time, {{WRAPPER}} .mgp_there_style-time > span:first-of-type',
                 'condition' => [
                     'mgpg_date_show' => 'yes',
                 ],
@@ -1279,12 +1340,34 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mpg-tags-links a, {{WRAPPER}} .mpg-tags-links i' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .mpg-tags-links svg' => 'fill: {{VALUE}};',
                 ],
                 'condition' => [
                     'mgpg_tag_show' => 'yes',
                 ],
             ]
         );
+
+        $this->add_responsive_control(
+            'mgpg_meta_tag_icon_size',
+            [
+                'label' => __('Icon Size', 'bk-helper'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range' => [
+                    'px' => [
+                        'min' => 10,
+                        'max' => 300,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mpg-tags-links i' => 'font-size: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mpg-tags-links svg' => 'width: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        ); 
+
+
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
             [
@@ -1331,6 +1414,25 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
             ]
         );
 
+        $this->add_responsive_control(
+            'mgpg_btn_icon_size',
+            [
+                'label' => __('Icon Size', 'bk-helper'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range' => [
+                    'px' => [
+                        'min' => 10,
+                        'max' => 300,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mgp-card a.mp-post-btn i,{{WRAPPER}} .mgp_there_style-time a span i' => 'font-size: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mgp_there_style-time a span svg, {{WRAPPER}} .mgp-card a.mp-post-btn svg' => 'width: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+ 
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
             [
@@ -1391,7 +1493,9 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'default' => '',
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card a.mp-post-btn' => 'color: {{VALUE}} !important;',
+                    '{{WRAPPER}} .mgp-card a.mp-post-btn, {{WRAPPER}} .mgp_there_style-time a, .mgp_there_style-time a span, .mgp_there_style-time a span i' => 'color: {{VALUE}} !important;',
+                    '{{WRAPPER}} .mgp_there_style-time a span svg, {{WRAPPER}} .mgp-card a.mp-post-btn span svg' => 'fill: {{VALUE}} !important;',
+
                 ],
             ]
         );
@@ -1430,7 +1534,8 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'label' => __('Text Color', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card a.mp-post-btn:hover, {{WRAPPER}} .mgp-card a.mp-post-btn:focus' => 'color: {{VALUE}} !important;',
+                    '{{WRAPPER}} .mgp-card a.mp-post-btn:hover, {{WRAPPER}} .mgp-card a.mp-post-btn:focus, .mgp-card a.mp-post-btn:hover span, .mgp-card a.mp-post-btn:hover span i' => 'color: {{VALUE}} !important;',
+                    '{{WRAPPER}} .mgp-card a.mp-post-btn:hover span svg' => 'fill: {{VALUE}} !important;',
                 ],
             ]
         );
@@ -1821,70 +1926,100 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 $column_set = 'col-lg-' . $mgpg_rownumber . ' col-md-6';
             }
 ?>
-            <div id="mgp-items" class="mgpd mgp-items style<?php echo esc_attr($mgpg_post_style); ?>">
-                <div class="row" data-masonry='{"percentPosition": true }'>
-                    <?php while ($mgpg_posts->have_posts()) : $mgpg_posts->the_post(); ?>
-                        <div class="<?php echo esc_attr($column_set); ?>">
-                            <div class="card mg-card mg-shadow mgp-card mb-4">
-                                <?php mp_post_thumbnail($mgpg_post_img_show); ?>
-                                <div class="mg-card-text card-body">
-                                    <?php
-                                    if ($mgpg_post_type == 'post') {
-                                        mp_post_cat_display($settings['mgpg_category_show'], $settings['mgpg_cat_type'], ', ');
-                                    }
-                                    ?>
-
-                                    <?php
-                                    mp_post_title($mgpg_show_title, $mgpg_title_tag, $mgpg_crop_title);
-                                    ?>
-                                    <?php
-                                    if ($mgpg_post_style == '1') {
-                                        mpd_posts_meta($settings['mgpg_author_show'], $settings['mgpg_date_show'], $settings['mgpg_comment_icon_show']);
-                                    }
-                                    ?>
-                                    <?php if ($mgpg_desc_show) : ?>
-                                        <p><?php
-                                            if (has_excerpt()) {
-                                                echo esc_html(wp_trim_words(get_the_excerpt(), $mgpg_crop_desc, '...'));
-                                            } else {
-                                                echo esc_html(wp_trim_words(get_the_content(), $mgpg_crop_desc, '...'));
-                                            }
-                                            ?></p>
-                                    <?php endif; ?>
-
-
-                                    <?php
-                                    if ($mgpg_post_btn) {
-                                        mp_post_btn(
-                                            $text = $mgpg_btn_title,
-                                            $icon_show = $mgpg_usebtn_icon,
-                                            $icon = $settings['mgpg_btn_icon'],
-                                            $icon_position = $mgpg_btn_icon_position,
-                                            $target = $mgpg_btn_target,
-                                            $class = $settings['mgpg_link_type']
-                                        );
-                                    }
-
-                                    if ($mgpg_post_style == '2') {
-                                        mpd_posts_meta_author_date($settings['mgpg_author_show'], $settings['mgpg_date_show']);
-                                    }
-
-                                    mpd_post_tags($settings['mgpg_tag_show']);
-
-                                    ?>
-                                </div>
-
-                            </div>
-                        </div>
+<div id="mgp-items" class="mgpd mgp-items style<?php echo esc_attr($mgpg_post_style); ?>">
+    <div class="row" data-masonry='{"percentPosition": true }'>
+        <?php while ($mgpg_posts->have_posts()) : $mgpg_posts->the_post(); ?>
+        <div class="<?php echo esc_attr($column_set); ?>">
+            <div class="card mg-card mg-shadow mgp-card mb-4">
+                <?php mp_post_thumbnail($mgpg_post_img_show); ?>
+                <div class="mg-card-text card-body">
                     <?php
-                    endwhile;
-                    wp_reset_query();
-                    wp_reset_postdata();
+                    if ($mgpg_post_style == '3') {
                     ?>
-                </div>
-            </div>
+                    <div class="magical-post-authon-category">
+                        <?php                                             
+                        mpd_posts_meta($settings['mgpg_author_show']);
+                        mp_post_cat_display($settings['mgpg_category_show']);
+                    ?>
+                    </div>
+                    <?php
+                        }
+                            if ($mgpg_post_type == 'post' && ($mgpg_post_style == '1' || $mgpg_post_style == '2')) {
+                            mp_post_cat_display($settings['mgpg_category_show'], $settings['mgpg_cat_type'], ', ');
+                            }
+                        ?>
+                    <?php
+                        mp_post_title($mgpg_show_title, $mgpg_title_tag, $mgpg_crop_title);
+                        ?>
+                    <?php
+                        if ($mgpg_post_style == '1') {
+                            mpd_posts_meta($settings['mgpg_author_show'], $settings['mgpg_date_show'], $settings['mgpg_comment_icon_show']);
+                        }
+                    ?>
+                    <?php if ($mgpg_desc_show) : ?>
+                    <p><?php
+                        if (has_excerpt()) {
+                            echo esc_html(wp_trim_words(get_the_excerpt(), $mgpg_crop_desc, '...'));
+                        } else {
+                            echo esc_html(wp_trim_words(get_the_content(), $mgpg_crop_desc, '...'));
+                        }
+                        ?>
+                    </p>
+                    <?php endif; ?>
+                    <?php
+                        if ($mgpg_post_style == '3') {
+                        ?>
+                    <div class="mgp_there_style-time">
+                        <span>
+                            <i class="fa-regular fa-calendar-days"></i>
+                            <?php echo esc_html(get_the_date('d M Y')); ?>
+                        </span>
+                        <?php
+                                if ($mgpg_post_btn && ($mgpg_post_style == '3')) {
+                                mp_post_btn(
+                                    $text = $mgpg_btn_title,
+                                    $icon_show = $mgpg_usebtn_icon,
+                                    $icon = $settings['mgpg_btn_icon'],
+                                    $icon_position = $mgpg_btn_icon_position,
+                                    $target = $mgpg_btn_target,
+                                    $class = $settings['mgpg_link_type']
+                                );
+                            }
+                            ?>
+                    </div>
+                    <?php
+                            }
+                            if ($mgpg_post_btn && ($mgpg_post_style == '1' || $mgpg_post_style == '2')) {
+                                mp_post_btn(
+                                    $text = $mgpg_btn_title,
+                                    $icon_show = $mgpg_usebtn_icon,
+                                    $icon = $settings['mgpg_btn_icon'],
+                                    $icon_position = $mgpg_btn_icon_position,
+                                    $target = $mgpg_btn_target,
+                                    $class = $settings['mgpg_link_type']
+                                );
+                            }
 
-            <?php
+                        if ($mgpg_post_style == '2') {
+                            mpd_posts_meta_author_date($settings['mgpg_author_show'], $settings['mgpg_date_show']);
+                        }
+
+                        mpd_post_tags($settings['mgpg_tag_show']);
+
+                        ?>
+                </div>
+
+            </div>
+        </div>
+        <?php
+            endwhile;
+            wp_reset_query();
+            wp_reset_postdata();
+            ?>
+    </div>
+</div>
+
+<?php
             if ($mgpg_pagination_show) {
                 mp_display_pagination($paged, $mgpg_posts, $settings['mgpg_pagination_style']);
             }
