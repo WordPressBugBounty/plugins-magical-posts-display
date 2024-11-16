@@ -1092,6 +1092,9 @@ a.mgps-btn {
 .mgomg-pimg a:hover {
   color: inherit;
 }
+.mgomg-items .mgp-ptitle {
+  color: #fff;
+}
 .mgomg-post-text h2.grid-title a {
   color: #fff;
   text-decoration: none;
