@@ -135,6 +135,10 @@ Yes, Magical Posts Display supports posts categories, allowing you to display po
 
 == Changelog ==
 
+= 1.2.43 =
+ * Fixed  Function _load_textdomain_just_in_time was called incorrectly Error
+ * update package
+
 = 1.2.42 =
  * Added new style for list posts
  * Tested with with wp 6.7
