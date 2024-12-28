@@ -935,11 +935,22 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         $this->start_controls_section(
             'mgpg_title_style',
             [
-                'label' => __('posts Title', 'magical-posts-display'),
+                'label' => __('Posts Title', 'magical-posts-display'),
                 'tab'   => \Elementor\Controls_Manager::TAB_STYLE,
             ]
         );
-
+        
+        // Adding Tabs for Normal and Hover
+        $this->start_controls_tabs('mgpg_title_tabs');
+        
+        // Normal Tab
+        $this->start_controls_tab(
+            'mgpg_title_normal',
+            [
+                'label' => __('Normal', 'magical-posts-display'),
+            ]
+        );
+        
         $this->add_responsive_control(
             'mgpg_title_padding',
             [
@@ -951,6 +962,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
+        
         $this->add_responsive_control(
             'mgpg_title_margin',
             [
@@ -962,6 +974,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
+        
         $this->add_control(
             'mgpg_title_color',
             [
@@ -972,6 +985,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
+        
         $this->add_control(
             'mgpg_title_bgcolor',
             [
@@ -982,6 +996,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
+        
         $this->add_control(
             'mgpg_descb_radius',
             [
@@ -993,7 +1008,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-
+        
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
             [
@@ -1002,7 +1017,73 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mgp-card .mgp-ptitle',
             ]
         );
+        
+        $this->end_controls_tab();
+        
+        // Hover Tab
+        $this->start_controls_tab(
+            'mgpg_title_hover',
+            [
+                'label' => __('Hover', 'magical-posts-display'),
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_hover_transition',
+            [
+                'label' => __('Hover Transition', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 3,
+                        'step' => 0.1,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mgp-card .mgp-ptitle' => 'transition: all {{SIZE}}s ease;',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_title_hover_color',
+            [
+                'label' => __('Text Hover Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgp-card a.mgp-title-link:hover, {{WRAPPER}} .mgp-card .mgp-ptitle:hover' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_title_hover_bgcolor',
+            [
+                'label' => __('Background Hover Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgp-card .mgp-ptitle:hover' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_descb_hover_radius',
+            [
+                'label' => __('Hover Border Radius', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .mgp-card .mgp-ptitle:hover' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+        
+        $this->end_controls_tab(); 
+        $this->end_controls_tabs();
         $this->end_controls_section();
+        
 
         $this->start_controls_section(
             'mgpg_description_style',
@@ -1011,7 +1092,17 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'tab'   => \Elementor\Controls_Manager::TAB_STYLE,
             ]
         );
-
+        
+        $this->start_controls_tabs('mgpg_description_tabs');
+        
+        // Normal Tab
+        $this->start_controls_tab(
+            'mgpg_description_normal',
+            [
+                'label' => __('Normal', 'magical-posts-display'),
+            ]
+        );
+        
         $this->add_responsive_control(
             'mgpg_description_padding',
             [
@@ -1023,6 +1114,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
+        
         $this->add_responsive_control(
             'mgpg_description_margin',
             [
@@ -1034,6 +1126,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
+        
         $this->add_control(
             'mgpg_description_color',
             [
@@ -1044,6 +1137,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
+        
         $this->add_control(
             'mgpg_description_bgcolor',
             [
@@ -1054,6 +1148,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
+        
         $this->add_control(
             'mgpg_description_radius',
             [
@@ -1065,7 +1160,61 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-
+        
+        $this->end_controls_tab(); // End of Normal Tab
+        
+        // Hover Tab
+        $this->start_controls_tab(
+            'mgpg_description_hover',
+            [
+                'label' => __('Hover', 'magical-posts-display'),
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_description_hover_color',
+            [
+                'label' => __('Hover Text Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p:hover' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_description_hover_bgcolor',
+            [
+                'label' => __('Hover Background Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p:hover' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_des_hover_transition',
+            [
+                'label' => __('Hover Transition', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 3,
+                        'step' => 0.1,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p' => 'transition: all {{SIZE}}s ease;',
+                ],
+            ]
+        );
+        
+        $this->end_controls_tab(); // End of Hover Tab
+        
+        $this->end_controls_tabs();
+        
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
             [
@@ -1074,8 +1223,9 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mgp-card .mg-card-text.card-body p',
             ]
         );
-
+        
         $this->end_controls_section();
+        
         $this->start_controls_section(
             'mgpg_meta_style',
             [
@@ -1086,7 +1236,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         $this->add_control(
             'mgpg_meta_cat',
             [
-                'label' => __('Category style', 'magical-posts-display'),
+                'label' => __('Category Style', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::HEADING,
                 'separator' => 'before',
                 'condition' => [
@@ -1095,59 +1245,145 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-
-        $this->add_responsive_control(
-            'mgpg_meta_cat_margin',
+        
+        $this->start_controls_tabs('mgpg_meta_cat_tabs');
+        
+        // Normal Tab
+        $this->start_controls_tab(
+            'mgpg_meta_cat_normal',
             [
-                'label' => __('Margin', 'magical-posts-display'),
-                'type' => \Elementor\Controls_Manager::DIMENSIONS,
-                'size_units' => ['px', 'em', '%'],
-                'selectors' => [
-                    '{{WRAPPER}} .mp-post-cat' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-                ],
-                'condition' => [
-                    'mgpg_category_show' => 'yes',
-                    'mgpg_post_type' => 'post',
-                ],
+                'label' => __('Normal', 'magical-posts-display'),
             ]
         );
-
+        
         $this->add_control(
-            'mgpg_meta_cat_color',
+            'mgpg_meta_cat_text_color',
             [
                 'label' => __('Text Color', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mp-post-cat, {{WRAPPER}} .mp-post-cat a' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .mp-post-cat, {{WRAPPER}} .mp-post-cat i' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .mp-post-cat svg' => 'fill: {{VALUE}};',
                 ],
-                'condition' => [
-                    'mgpg_category_show' => 'yes',
-                    'mgpg_post_type' => 'post',
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_meta_cat_bg_color',
+            [
+                'label' => __('Background Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mp-post-cat' => 'background-color: {{VALUE}};',
                 ],
             ]
         );
         
         $this->add_responsive_control(
-            'mgpg_meta_cate_icon_size',
+            'mgpg_meta_cat_margin',
             [
-                'label' => __('Icon Size', 'bk-helper'),
-                'type' => \Elementor\Controls_Manager::SLIDER,
-                'size_units' => ['px'],
-                'range' => [
-                    'px' => [
-                        'min' => 10,
-                        'max' => 300,
-                    ],
-                ],
+                'label' => __('Margin', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
                 'selectors' => [
-                    '{{WRAPPER}}  .mp-post-cat i' => 'font-size: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .mp-post-cat svg' => 'width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mp-post-cat' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
-        ); 
+        );
+        
+        $this->add_responsive_control(
+            'mgpg_meta_cat_padding',
+            [
+                'label' => __('Padding', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'selectors' => [
+                    '{{WRAPPER}} .mp-post-cat' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_meta_cat_border_radius',
+            [
+                'label' => __('Border Radius', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .mp-post-cat' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+                ],
+            ]
+        );
 
+        $this->add_group_control(
+            \Elementor\Group_Control_Border::get_type(),
+            [
+                'name' => 'mgpg_meta_cat_border',
+                'label' => __('Border', 'magical-posts-display'),
+                'selector' => '{{WRAPPER}} .mp-post-cat',
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Box_Shadow::get_type(),
+            [
+                'name' => 'mgpg_meta_cat_box_shadow',
+                'label' => __('Box Shadow', 'magical-posts-display'),
+                'selector' => '{{WRAPPER}} .mp-post-cat',
+            ]
+        );
+        
+        $this->end_controls_tab(); // End Normal Tab
+        
+        // Hover Tab
+        $this->start_controls_tab(
+            'mgpg_meta_cat_hover',
+            [
+                'label' => __('Hover', 'magical-posts-display'),
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_meta_cat_text_color_hover',
+            [
+                'label' => __('Hover Text Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mp-post-cat:hover, {{WRAPPER}} .mp-post-cat a:hover' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_meta_cat_bg_color_hover',
+            [
+                'label' => __('Hover Background Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mp-post-cat:hover' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Border::get_type(),
+            [
+                'name' => 'mgpg_meta_cat_border_hover',
+                'label' => __('Hover Border', 'magical-posts-display'),
+                'selector' => '{{WRAPPER}} .mp-post-cat:hover',
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Box_Shadow::get_type(),
+            [
+                'name' => 'mgpg_meta_cat_box_shadow_hover',
+                'label' => __('Hover Box Shadow', 'magical-posts-display'),
+                'selector' => '{{WRAPPER}} .mp-post-cat:hover',
+            ]
+        );
+        
+        $this->end_controls_tab(); // End Hover Tab
+        
+        $this->end_controls_tabs(); // End Tabs
+        
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
             [
@@ -1160,53 +1396,10 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-
-        $this->add_control(
-            'mgpg_meta_author',
-            [
-                'label' => __('Posts Author', 'magical-posts-display'),
-                'type' => \Elementor\Controls_Manager::HEADING,
-                'separator' => 'before',
-                'condition' => [
-                    'mgpg_author_show' => 'yes',
-                ],
-            ]
-        );
-
         $this->add_responsive_control(
-            'mgpg_meta_author_margin',
+            'mgpg_meta_category_icon_size',
             [
-                'label' => __('Margin', 'magical-posts-display'),
-                'type' => \Elementor\Controls_Manager::DIMENSIONS,
-                'size_units' => ['px', 'em', '%'],
-                'selectors' => [
-                    '{{WRAPPER}} .mp-meta .byline' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-                ],
-                'condition' => [
-                    'mgpg_author_show' => 'yes',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'mgpg_meta_author_color',
-            [
-                'label' => __('Text Color', 'magical-posts-display'),
-                'type' => \Elementor\Controls_Manager::COLOR,
-                'selectors' => [
-                    '{{WRAPPER}} .mp-meta .byline i, {{WRAPPER}} .mp-meta .byline a' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .mp-meta .byline svg' => 'fill: {{VALUE}};',
-                ],
-                'condition' => [
-                    'mgpg_author_show' => 'yes',
-                ],
-            ]
-        );
-
-        $this->add_responsive_control(
-            'mgpg_meta_author_icon_size',
-            [
-                'label' => __('Icon Size', 'bk-helper'),
+                'label' => __('Icon Size', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range' => [
@@ -1216,25 +1409,200 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                     ],
                 ],
                 'selectors' => [
-                    '{{WRAPPER}}  .mp-meta .byline i' => 'font-size: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .mp-meta .byline svg' => 'width: {{SIZE}}{{UNIT}};',
-                ],
-            ]
-        ); 
-
-
-        $this->add_group_control(
-            \Elementor\Group_Control_Typography::get_type(),
-            [
-                'name' => 'mgpg_meta_author_typography',
-                'label' => __('Typography', 'magical-posts-display'),
-                'selector' => '{{WRAPPER}} .mp-meta .byline a',
-                'condition' => [
-                    'mgpg_author_show' => 'yes',
+                    '{{WRAPPER}} .mppost-cats i' => 'font-size: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mppost-cats svg' => 'width: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
 
+        // Transition Duration Control
+        $this->add_control(
+            'mgpg_meta_cat_transition',
+            [
+                'label' => __('Transition Duration', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 3,
+                        'step' => 0.1,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mp-post-cat' => 'transition: all {{SIZE}}s ease;',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_author_style_section',
+            [
+                'label' => __('Author Style', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::HEADING,
+                'separator' => 'before',
+                'condition' => [
+                            'mgpg_author_show' => 'yes',
+                ],
+            ]
+        );
+
+        
+        $this->start_controls_tabs('mgpg_author_tabs');
+        
+        // Normal Tab
+        $this->start_controls_tab(
+            'mgpg_author_normal_tab',
+            [
+                'label' => __('Normal', 'magical-posts-display'),
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Typography::get_type(),
+            [
+                'name' => 'mgpg_author_typography',
+                'label' => __('Typography', 'magical-posts-display'),
+                'selector' => '{{WRAPPER}} .mp-meta .byline a',
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgpg_meta_author_icon_size',
+            [
+                'label' => __('Icon Size', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range' => [
+                    'px' => [
+                        'min' => 10,
+                        'max' => 300,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mp-meta .byline i' => 'font-size: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mp-meta .byline svg' => 'width: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_author_text_color',
+            [
+                'label' => __('Text Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mp-meta .byline i, {{WRAPPER}} .mp-meta .byline a' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_author_background_color',
+            [
+                'label' => __('Background Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mp-meta .byline' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Border::get_type(),
+            [
+                'name' => 'mgpg_author_border',
+                'label' => __('Border', 'magical-posts-display'),
+                'selector' => '{{WRAPPER}} .mp-meta .byline',
+            ]
+        );
+        
+        $this->add_responsive_control(
+            'mgpg_author_margin',
+            [
+                'label' => __('Margin', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'selectors' => [
+                    '{{WRAPPER}} .mp-meta .byline' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+        
+        $this->add_responsive_control(
+            'mgpg_author_padding',
+            [
+                'label' => __('Padding', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'selectors' => [
+                    '{{WRAPPER}} .mp-meta .byline' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+        
+        $this->end_controls_tab();
+        
+        // Hover Tab
+        $this->start_controls_tab(
+            'mgpg_author_hover_tab',
+            [
+                'label' => __('Hover', 'magical-posts-display'),
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_author_hover_text_color',
+            [
+                'label' => __('Text Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mp-meta .byline a:hover' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_author_hover_background_color',
+            [
+                'label' => __('Background Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mp-meta .byline:hover' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Box_Shadow::get_type(),
+            [
+                'name' => 'mgpg_author_hover_box_shadow',
+                'label' => __('Box Shadow', 'magical-posts-display'),
+                'selector' => '{{WRAPPER}} .mp-meta .byline:hover',
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_author_transition_duration',
+            [
+                'label' => __('Transition Duration', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 2,
+                        'step' => 0.1,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mp-meta .byline' => 'transition: all {{SIZE}}s;',
+                ],
+            ]
+        );
+        
+        $this->end_controls_tab();
+        
+        $this->end_controls_tabs();
+        
+
+        
         $this->add_control(
             'mgpg_meta_date',
             [
@@ -1246,35 +1614,149 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        $this->add_responsive_control(
-            'mgpg_meta_date_margin',
-            [
-                'label' => __('Margin', 'magical-posts-display'),
-                'type' => \Elementor\Controls_Manager::DIMENSIONS,
-                'size_units' => ['px', 'em', '%'],
-                'selectors' => [
-                    '{{WRAPPER}} .mgp-time,{{WRAPPER}} .mp-posts-date, {{WRAPPER}} .mp-posts-date, {{WRAPPER}} .mgp_there_style-time > span:first-of-type' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-                ],
-                'condition' => [
-                    'mgpg_date_show' => 'yes',
-                ],
-            ]
-        );
+        $this->start_controls_tabs('mgpg_meta_date_tabs');
 
+        // Normal Tab
+        $this->start_controls_tab('mgpg_meta_date_normal', [
+            'label' => __('Normal', 'magical-posts-display'),
+        ]);
+        
         $this->add_control(
             'mgpg_meta_date_color',
             [
                 'label' => __('Text Color', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-time, {{WRAPPER}} .mgp-time i, {{WRAPPER}} .mgp_there_style-time > span:first-of-type,{{WRAPPER}} .mgp_there_style-time > span:first-of-type i, {{WRAPPER}} .mp-posts-date,{{WRAPPER}} .mp-posts-date i' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .mgp_there_style-time > span:first-of-type svg, {{WRAPPER}} .mgp-time svg, {{WRAPPER}} .mp-posts-date svg' => 'fill: {{VALUE}};',
-                ],
-                'condition' => [
-                    'mgpg_date_show' => 'yes',
+                    '{{WRAPPER}} .mp-posts-date, {{WRAPPER}} .mgp-time' => 'color: {{VALUE}};',
                 ],
             ]
         );
+        
+        $this->add_control(
+            'mgpg_meta_date_background_color',
+            [
+                'label' => __('Background Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mp-posts-date, {{WRAPPER}} .mgp-time' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_responsive_control(
+            'mgpg_meta_date_margin',
+            [
+                'label' => __('Margin', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'selectors' => [
+                    '{{WRAPPER}} .mp-posts-date, {{WRAPPER}} .mgp-time' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+        
+        $this->add_responsive_control(
+            'mgpg_meta_date_padding',
+            [
+                'label' => __('Padding', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'selectors' => [
+                    '{{WRAPPER}} .mp-posts-date, {{WRAPPER}} .mgp-time' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Border::get_type(),
+            [
+                'name' => 'mgpg_meta_date_border',
+                'selector' => '{{WRAPPER}} .mp-posts-date, {{WRAPPER}} .mgp-time',
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Box_Shadow::get_type(),
+            [
+                'name' => 'mgpg_meta_date_box_shadow',
+                'selector' => '{{WRAPPER}} .mp-posts-date, {{WRAPPER}} .mgp-time',
+            ]
+        );
+        
+        $this->end_controls_tab();
+        
+        // Hover Tab
+        $this->start_controls_tab('mgpg_meta_date_hover', [
+            'label' => __('Hover', 'magical-posts-display'),
+        ]);
+        
+        $this->add_control(
+            'mgpg_meta_date_hover_color',
+            [
+                'label' => __('Text Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mp-posts-date:hover, {{WRAPPER}} .mgp-time:hover' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_meta_date_hover_background_color',
+            [
+                'label' => __('Background Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mp-posts-date:hover, {{WRAPPER}} .mgp-time:hover' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Border::get_type(),
+            [
+                'name' => 'mgpg_meta_date_hover_border',
+                'selector' => '{{WRAPPER}} .mp-posts-date:hover, {{WRAPPER}} .mgp-time:hover',
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Box_Shadow::get_type(),
+            [
+                'name' => 'mgpg_meta_date_hover_box_shadow',
+                'selector' => '{{WRAPPER}} .mp-posts-date:hover, {{WRAPPER}} .mgp-time:hover',
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_meta_date_transition',
+            [
+                'label' => __('Transition Duration', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'size_units' => ['s'],
+                'range' => [
+                    's' => [
+                        'min' => 0,
+                        'max' => 2,
+                        'step' => 0.1,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mp-posts-date, {{WRAPPER}} .mgp-time' => 'transition: all {{SIZE}}s;',
+                ],
+            ]
+        );
+        
+        $this->end_controls_tab();
+        $this->end_controls_tabs();
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Typography::get_type(),
+            [
+                'name' => 'mgpg_meta_date_typography',
+                'label' => __('Typography', 'magical-posts-display'),
+                'selector' => '{{WRAPPER}} .mp-posts-date, {{WRAPPER}} .mgp-time',
+            ]
+        );
+        
         
         $this->add_responsive_control(
             'mgpg_meta_date_icon_size',
@@ -1295,18 +1777,6 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
             ]
         ); 
 
-        $this->add_group_control(
-            \Elementor\Group_Control_Typography::get_type(),
-            [
-                'name' => 'mgpg_meta_date_typography',
-                'label' => __('Typography', 'magical-posts-display'),
-                'selector' => '{{WRAPPER}} .mp-posts-date,{{WRAPPER}} .mgp-time, {{WRAPPER}} .mgp_there_style-time > span:first-of-type',
-                'condition' => [
-                    'mgpg_date_show' => 'yes',
-                ],
-            ]
-        );
-
         $this->add_control(
             'mgpg_meta_tag',
             [
@@ -1319,6 +1789,36 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
             ]
         );
 
+        $this->start_controls_tabs('mgpg_meta_tag_tabs');
+
+        // Normal Tab
+        $this->start_controls_tab('mgpg_meta_tag_normal', [
+            'label' => __('Normal', 'magical-posts-display'),
+        ]);
+        
+        $this->add_control(
+            'mgpg_meta_tag_color',
+            [
+                'label' => __('Text Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mpg-tags-links a, {{WRAPPER}} .mpg-tags-links i' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .mpg-tags-links svg' => 'fill: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_meta_tag_background_color',
+            [
+                'label' => __('Background Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mpg-tags-links' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+        
         $this->add_responsive_control(
             'mgpg_meta_tag_margin',
             [
@@ -1328,19 +1828,113 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selectors' => [
                     '{{WRAPPER}} .mpg-tags-links' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
-                'condition' => [
-                    'mgpg_tag_show' => 'yes',
+            ]
+        );
+        
+        $this->add_responsive_control(
+            'mgpg_meta_tag_padding',
+            [
+                'label' => __('Padding', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', 'em', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .mpg-tags-links' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Border::get_type(),
+            [
+                'name' => 'mgpg_meta_tag_border',
+                'selector' => '{{WRAPPER}} .mpg-tags-links',
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Box_Shadow::get_type(),
+            [
+                'name' => 'mgpg_meta_tag_box_shadow',
+                'selector' => '{{WRAPPER}} .mpg-tags-links',
+            ]
+        );
+        
+        $this->end_controls_tab();
+        
+        // Hover Tab
+        $this->start_controls_tab('mgpg_meta_tag_hover', [
+            'label' => __('Hover', 'magical-posts-display'),
+        ]);
+        
         $this->add_control(
-            'mgpg_meta_tag_color',
+            'mgpg_meta_tag_hover_color',
             [
                 'label' => __('Text Color', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .mpg-tags-links a, {{WRAPPER}} .mpg-tags-links i' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .mpg-tags-links svg' => 'fill: {{VALUE}};',
+                    '{{WRAPPER}} .mpg-tags-links a:hover, {{WRAPPER}} .mpg-tags-links i:hover' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .mpg-tags-links svg:hover' => 'fill: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_meta_tag_hover_background_color',
+            [
+                'label' => __('Background Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mpg-tags-links:hover' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Border::get_type(),
+            [
+                'name' => 'mgpg_meta_tag_hover_border',
+                'selector' => '{{WRAPPER}} .mpg-tags-links:hover',
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Box_Shadow::get_type(),
+            [
+                'name' => 'mgpg_meta_tag_hover_box_shadow',
+                'selector' => '{{WRAPPER}} .mpg-tags-links:hover',
+            ]
+        );
+        
+        $this->add_control(
+            'mgpg_meta_tag_transition',
+            [
+                'label' => __('Transition Duration', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'size_units' => ['s'],
+                'range' => [
+                    's' => [
+                        'min' => 0,
+                        'max' => 2,
+                        'step' => 0.1,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mpg-tags-links' => 'transition: all {{SIZE}}s;',
+                ],
+            ]
+        );
+        
+        $this->end_controls_tab();
+        $this->end_controls_tabs();
+
+        $this->add_group_control(
+            \Elementor\Group_Control_Typography::get_type(),
+            [
+                'name' => 'mgpg_meta_tag_typography',
+                'label' => __('Typography', 'magical-posts-display'),
+                'selector' => '{{WRAPPER}} .mpg-tags-links a',
+                'condition' => [
+                    'mgpg_date_show' => 'yes',
                 ],
                 'condition' => [
                     'mgpg_tag_show' => 'yes',
@@ -1364,22 +1958,11 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                     '{{WRAPPER}} .mpg-tags-links i' => 'font-size: {{SIZE}}{{UNIT}};',
                     '{{WRAPPER}} .mpg-tags-links svg' => 'width: {{SIZE}}{{UNIT}};',
                 ],
-            ]
-        ); 
-
-
-        $this->add_group_control(
-            \Elementor\Group_Control_Typography::get_type(),
-            [
-                'name' => 'mgpg_meta_tag_typography',
-                'label' => __('Typography', 'magical-posts-display'),
-                'selector' => '{{WRAPPER}} .mpg-tags-links a',
                 'condition' => [
-                    'mgpg_date_show' => 'yes',
+                    'mgpg_tag_show' => 'yes',
                 ],
             ]
-        );
-
+        ); 
 
         $this->end_controls_section();
 
