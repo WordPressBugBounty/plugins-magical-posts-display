@@ -160,7 +160,7 @@ if (!function_exists('mp_display_posts_name')) {
     function mp_display_posts_name($post_type = 'post')
     {
         $options = array();
-        $options['0'] = __('Select', 'bstoolkit-for-elementor');
+        $options['0'] = __('Select', 'magical-posts-display');
         // $perpage = mp_display_get_option( 'loadproductlimit', 'mp_display_others_tabs', '20' );
         $all_post = array('posts_per_page' => -1, 'post_type' => $post_type);
         $post_terms = get_posts($all_post);
@@ -172,6 +172,23 @@ if (!function_exists('mp_display_posts_name')) {
         }
     }
 }
+if (!function_exists('mp_display_posts_by_slug')) {
+    function mp_display_posts_by_slug($post_type = 'post')
+    {
+        $options = array();
+        $options['0'] = __('Select', 'magical-posts-display');
+        $all_posts = array('posts_per_page' => -1, 'post_type' => $post_type);
+        $post_terms = get_posts($all_posts);
+        if (!empty($post_terms) && !is_wp_error($post_terms)) {
+            foreach ($post_terms as $term) {
+                $options[$term->post_name] = $term->post_title; // Use post_name (slug)
+            }
+        }
+        return $options;
+    }
+}
+
+
 /**
  *  Taxonomy List
  * @return array
