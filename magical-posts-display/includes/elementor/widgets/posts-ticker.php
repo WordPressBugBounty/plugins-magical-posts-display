@@ -69,6 +69,15 @@ class mgpdEPostsTicker extends \Elementor\Widget_Base
         return ['magic', 'post', 'ticker', 'posts', 'category'];
     }
 
+
+    public function get_script_depends()
+    {
+        return [
+            'jquery.easy-ticker'
+        ];
+    }
+
+
     /**
      * Register Blank widget controls.
      *

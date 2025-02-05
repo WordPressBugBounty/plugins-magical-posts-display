@@ -8,7 +8,7 @@
  * Plugin Name:       Magical Posts Display
  * Plugin URI:        http://wpthemespace.com
  * Description:       Show your site posts, Pages and Custom Post Types with many different styles by Elementor Widgets.
- * Version:           1.2.46
+ * Version:           1.2.47
  * Author:            Noor alam
  * Author URI:        https://profiles.wordpress.org/nalam-1
  * License:           GPL-2.0+
@@ -304,7 +304,6 @@ if (!class_exists('magicalPostDisplay')) :
 		public function mgpblock_scripts()
 		{
 
-
 			wp_register_script(
 				'mg-swiper',
 				plugins_url('/assets/js/swiper.min.js', __FILE__),
@@ -312,12 +311,17 @@ if (!class_exists('magicalPostDisplay')) :
 				'8.4.5',
 				true
 			);
+			wp_register_script(
+				'jquery.easy-ticker',
+				plugins_url('/assets/js/jquery.easy-ticker.min.js', __FILE__),
+				['jquery'],
+				'3.1.0',
+				true
+			);
 
 			wp_enqueue_script('masonry');
 			wp_enqueue_script('venobox-js', plugins_url('/assets/js/venobox.min.js', __FILE__), array('jquery'), '1.0.0', true);
 			wp_enqueue_script('bootstrap.bundle.min', plugins_url('/assets/js/bootstrap.bundle.min.js', __FILE__), array('jquery'), '5.1.1', false);
-			//	wp_enqueue_script('swiper.min', plugins_url('/assets/js/swiper.min.js', __FILE__), array('jquery'), '5.3.8', false);
-			wp_enqueue_script('jquery.easy-ticker', plugins_url('/assets/js/jquery.easy-ticker.min.js', __FILE__), array('jquery'), '3.1.0', false);
 			wp_enqueue_script('mpd-main', plugins_url('/assets/js/main.js', __FILE__), array('jquery'), MAGICAL_POSTS_DISPLAY_VERSION, true);
 		}
 
@@ -349,15 +353,15 @@ if (!class_exists('magicalPostDisplay')) :
 		{
 			global $pagenow;
 
-			if (in_array($pagenow, array('post-new.php', 'post.php'))) {
-				wp_enqueue_style('mp-admin-style', plugins_url('/assets/css/admin-style.css', __FILE__), array(), '1.1.0', 'all');
 
+			wp_enqueue_style('mp-admin-style', plugins_url('/assets/css/admin-style.css', __FILE__), array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
+			if (in_array($pagenow, array('post-new.php', 'post.php'))) {
 				wp_enqueue_script('cmb2-conditional-logic', plugins_url('/assets/js/cmb2-conditional-logic.js', __FILE__), array('jquery'), '2.5.1', true);
 			}
 			if (isset($_GET['page']) && $_GET['page'] == 'mgpd-page') {
-				wp_enqueue_style('mp-admin-page', plugins_url('/assets/css/mgadmin-page.css', __FILE__), array(), '1.1.0', 'all');
-				wp_enqueue_style('venobox.min', plugins_url('/assets/css/venobox.min.css', __FILE__), array(), '1.0.0', 'all');
-				wp_enqueue_script('venobox-js', plugins_url('/assets/js/venobox.min.js', __FILE__), array('jquery'), '1.0.0', true);
+				wp_enqueue_style('mp-admin-page', plugins_url('/assets/css/mgadmin-page.css', __FILE__), array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
+				wp_enqueue_style('venobox.min', plugins_url('/assets/css/venobox.min.css', __FILE__), array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
+				wp_enqueue_script('venobox-js', plugins_url('/assets/js/venobox.min.js', __FILE__), array('jquery'), MAGICAL_POSTS_DISPLAY_VERSION, true);
 			}
 			wp_enqueue_script('mgntc-js', plugins_url('/assets/js/mgntc.js', __FILE__), array('jquery'), '1.0.0', true);
 		}

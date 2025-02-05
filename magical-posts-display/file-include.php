@@ -52,6 +52,11 @@ if ($mgposts) {
 // all posts function
 require_once(MAGICAL_POSTS_DISPLAY_DIR . 'includes/mp-posts-function.php');
 
+//admin info
+if (!mpd_check_plugin_active('magical-posts-display-pro/magical-posts-display-pro.php')) {
+	require_once(MAGICAL_POSTS_DISPLAY_DIR . 'admin/admin-page/admin-info.php');
+}
+
 
 require_once(MAGICAL_POSTS_DISPLAY_DIR . 'includes/mp-posts-meta.php');
 require_once(MAGICAL_POSTS_DISPLAY_DIR . 'includes/widgets/recent-posts-widget.php');

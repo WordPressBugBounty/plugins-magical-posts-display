@@ -11,7 +11,7 @@
 			var url = new URL(location.href);
 			url.searchParams.append('mgelhide',1);
 			location.href= url;
-		});
+		}); 
 		$('.mgade-notice-hide').on('click',function(event){
 			event.preventDefault();
 			var url = new URL(location.href);

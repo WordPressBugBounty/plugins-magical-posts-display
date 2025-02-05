@@ -144,3 +144,10 @@ if (!function_exists('mp_post_is_week_viewed')) :
         }
     }
 endif;
+
+
+function mpd_check_plugin_active($plugin_path)
+{
+    $active_plugins = apply_filters('active_plugins', get_option('active_plugins'));
+    return in_array($plugin_path, $active_plugins);
+}
