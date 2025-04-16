@@ -3,7 +3,7 @@ Contributors: nalam
 Donate link: https://wpthemespace.com/donation
 Tags: post display, Page display, custom Post, elementor widget, post slider
 Requires at least: 5.0
-Tested up to: 6.7
+Tested up to: 6.8
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -134,6 +134,10 @@ Yes, Magical Posts Display supports posts categories, allowing you to display po
 
 
 == Changelog ==
+
+= 1.2.48 =
+ * Tested WordPress 6.8
+ * text domain issue fixed
 
 = 1.2.43 =
  * Fixed  Function _load_textdomain_just_in_time was called incorrectly Error

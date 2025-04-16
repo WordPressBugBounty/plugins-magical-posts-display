@@ -8,7 +8,7 @@
  * Plugin Name:       Magical Posts Display
  * Plugin URI:        http://wpthemespace.com
  * Description:       Show your site posts, Pages and Custom Post Types with many different styles by Elementor Widgets.
- * Version:           1.2.47
+ * Version:           1.2.48
  * Author:            Noor alam
  * Author URI:        https://profiles.wordpress.org/nalam-1
  * License:           GPL-2.0+
@@ -95,7 +95,6 @@ if (!class_exists('magicalPostDisplay')) :
 
 			//add_action('activated_plugin', [$this, 'mgpd_plugin_homego']);
 			$this->define_constants();
-			add_action('init', [$this, 'i18n']);
 			add_action('plugins_loaded', [$this, 'init']);
 			add_filter('plugin_action_links_' . plugin_basename(__FILE__), [$this, 'admin_adminpro_link']);
 			add_action('init', [$this, 'elementor_notice_hide_options']);
@@ -131,22 +130,6 @@ if (!class_exists('magicalPostDisplay')) :
 			define('MAGICAL_POSTS_DISPLAY_ASSETS', MAGICAL_POSTS_DISPLAY_URL . '/assets/');
 		}
 
-
-		/**
-		 * Load Textdomain
-		 *
-		 * Load plugin localization files.
-		 *
-		 * Fired by `init` action hook.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @access public
-		 */
-		public function i18n()
-		{
-			load_plugin_textdomain('magical-posts-display', false, dirname(plugin_basename(__FILE__)) . '/languages');
-		}
 
 		/**
 		 * Initialize the plugin
