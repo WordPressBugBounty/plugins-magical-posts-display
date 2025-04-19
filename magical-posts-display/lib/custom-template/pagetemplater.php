@@ -78,7 +78,7 @@ if (!class_exists('mgpDisplayTemplater')) {
 
 			// Add your templates to this array.
 			$this->templates = array(
-				'mgp-template.php' => esc_html__('Magical Posts Display', 'magical-blocks'),
+				'mgp-template.php' => esc_html__('Magical Posts Display', 'magical-posts-display'),
 			);
 		}
 
@@ -171,4 +171,4 @@ if (!class_exists('mgpDisplayTemplater')) {
 		}
 	}
 }
-add_action('plugins_loaded', array('mgpDisplayTemplater', 'get_instance'));
+add_action('init', array('mgpDisplayTemplater', 'get_instance'));
