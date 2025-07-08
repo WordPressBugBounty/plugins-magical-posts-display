@@ -135,7 +135,12 @@ Yes, Magical Posts Display supports posts categories, allowing you to display po
 
 == Changelog ==
 
-= 1.2.49 =
+= 1.2.50 =
+ * Added new style for posts slider
+ * Magical posts category moved top to middle 
+ * Added huge options for posts slider widget 
+
+ = 1.2.49 =
  * text domain issue fixed
 
 = 1.2.48 =

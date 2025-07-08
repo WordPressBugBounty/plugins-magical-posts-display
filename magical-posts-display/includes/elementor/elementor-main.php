@@ -67,35 +67,35 @@ class mgPostsElementorMain
 	public function register_new_category(\Elementor\Elements_Manager $elements_manager)
 	{
 
-		//add our categories
 		$category_prefix = 'mgp-';
+			$category_slug   = $category_prefix . 'mgposts';
 
-		if (class_exists('magicalPostDisplayPro')) {
-			$elements_manager->add_category($category_prefix . 'mgposts', [
-				'title' => esc_html__('Magical Posts Display', 'magical-posts-display'),
-				'icon' => 'fa fa-magic',
-			]);
-		} else {
-			$elements_manager->add_category(
-				$category_prefix . 'mgposts',
-				[
-					'title' => esc_html__('Magical Posts Display', 'magical-posts-display'),
-					'icon' => 'fa fa-magic',
-				]
-			);
-			$reorder_cats = function () use ($category_prefix) {
-				uksort($this->categories, function ($keyOne, $keyTwo) use ($category_prefix) {
-					if (substr($keyOne, 0, 4) == $category_prefix) {
-						return -1;
-					}
-					if (substr($keyTwo, 0, 4) == $category_prefix) {
-						return 1;
-					}
-					return 0;
-				});
-			};
-			$reorder_cats->call($elements_manager);
-		} // check pro version
+			$elements_manager->add_category( $category_slug, [
+				'title' => esc_html__( 'Magical Posts Display', 'magical-posts-display' ),
+				'icon'  => 'fa fa-magic',
+			] );
+
+			// Get all existing categories
+			$categories = $elements_manager->get_categories();
+
+			// Remove your custom category from the list to reposition it
+			$magical_category = $categories[ $category_slug ] ?? null;
+			unset( $categories[ $category_slug ] );
+
+			if ( ! $magical_category ) {
+				return; // Stop if not found
+			}
+
+			// Insert at index 3 (4th position)
+			$before    = array_slice( $categories, 0, 3, true );
+			$after     = array_slice( $categories, 3, null, true );
+			$reordered = $before + [ $category_slug => $magical_category ] + $after;
+
+			// Use reflection to inject reordered categories
+			$reflection = new \ReflectionClass( $elements_manager );
+			$property   = $reflection->getProperty( 'categories' );
+			$property->setAccessible( true );
+			$property->setValue( $elements_manager, $reordered );
 
 	}
 

@@ -256,13 +256,13 @@ a.btn.btn-link {
 .mgpc-pcarousel .mgp-card i {
   opacity: 1;
 }
-.swiper-button-prev,
-.swiper-container-rtl .swiper-button-next {
+.mgpdc2 .swiper-button-prev,
+.mgpdc2 .swiper-container-rtl .swiper-button-next {
   left: 5px !important;
   right: auto;
 }
-.swiper-button-next,
-.swiper-container-rtl .swiper-button-prev {
+.mgpdc2 .swiper-button-next,
+.mgpdc2 .swiper-container-rtl .swiper-button-prev {
   right: 5px;
   left: auto;
 }
@@ -1362,4 +1362,297 @@ span.mgpckit-cat-badge.mgpckit-cat-top {
 }
 .mgpd.style3 .mg-card-text {
   padding: 1.2rem;
+}
+
+/* Style Two Layout - Side by Side */
+.mgps-layout-style_two .mgps-style-two-container {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-height: 500px;
+  gap: 30px;
+}
+
+.mgps-layout-style_two .mgps-style-two-image {
+  flex: 0 0 50%;
+  overflow: hidden;
+  border-radius: 8px;
+  min-height: 400px;
+}
+
+.mgps-layout-style_two .mgps-style-two-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.mgps-layout-style_two .mgps-style-two-image:hover img {
+  transform: scale(1.05);
+}
+
+.mgps-layout-style_two .mgps-style-two-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 20px;
+  background: transparent;
+}
+
+.mgps-layout-style_two .mgps-style-two-content .slide-cat {
+  margin-bottom: 15px;
+  display: inline-block;
+}
+
+.mgps-layout-style_two .mgps-style-two-content .slide-cat a {
+  background: #007cba;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.mgps-layout-style_two .mgps-style-two-content .slide-cat a:hover {
+  background: #005a87;
+  transform: translateY(-2px);
+}
+
+.mgps-layout-style_two .mgps-style-two-content .mgs-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 20px 0;
+  line-height: 1.2;
+  text-shadow: none;
+}
+
+.mgps-layout-style_two .mgps-style-two-content .mgs-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  text-shadow: none;
+}
+
+.mgps-layout-style_two .mgps-style-two-content .mp-post-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #007cba;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+}
+
+.mgps-layout-style_two .mgps-style-two-content .mp-post-btn:hover {
+  background: #005a87;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 124, 186, 0.3);
+}
+
+/* ====== NAVIGATION ARROWS POSITIONING ====== */
+
+/* Base styles for all navigation arrows */
+.mgps-main .swiper-button-prev,
+.mgps-main .swiper-button-next {
+  position: absolute;
+  z-index: 10;
+  margin-top: 0;
+  width: 50px;
+  height: 50px;
+  transition: all 0.3s ease;
+}
+
+/* Default positioning for Style One - Centered vertically on left/right sides */
+.mgps-layout-style_one:not([class*="mgps-nav-vertical"]):not([class*="mgps-nav-horizontal"]) .swiper-button-prev,
+.mgps-layout-style_one:not([class*="mgps-nav-vertical"]):not([class*="mgps-nav-horizontal"]) .swiper-button-next {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.mgps-layout-style_one:not([class*="mgps-nav-horizontal"]) .swiper-button-prev {
+  left: 20px;
+  right: auto;
+}
+
+.mgps-layout-style_one:not([class*="mgps-nav-horizontal"]) .swiper-button-next {
+  right: 20px;
+  left: auto;
+}
+
+/* Default positioning for Style Two - Bottom right */
+.mgps-layout-style_two:not([class*="mgps-nav-vertical"]):not([class*="mgps-nav-horizontal"]) .swiper-button-prev,
+.mgps-layout-style_two:not([class*="mgps-nav-vertical"]):not([class*="mgps-nav-horizontal"]) .swiper-button-next {
+  top: auto;
+  bottom: 20px;
+  transform: translateY(0);
+}
+
+.mgps-layout-style_two:not([class*="mgps-nav-horizontal"]) .swiper-button-prev {
+  right: 80px;
+  left: auto;
+}
+
+.mgps-layout-style_two:not([class*="mgps-nav-horizontal"]) .swiper-button-next {
+  right: 20px;
+  left: auto;
+}
+
+/* Style Two specific visual styling */
+.mgps-layout-style_two .swiper-button-prev,
+.mgps-layout-style_two .swiper-button-next {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mgps-layout-style_two .swiper-button-prev svg,
+.mgps-layout-style_two .swiper-button-next svg{
+  fill: #fff;
+}
+.mgps-layout-style_two .swiper-button-prev:hover,
+.mgps-layout-style_two .swiper-button-next:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(1.1);
+}
+
+/* Reset transforms for positioned arrows in style_two */
+.mgps-layout-style_two.mgps-nav-vertical-bottom .swiper-button-prev:hover,
+.mgps-layout-style_two.mgps-nav-vertical-bottom .swiper-button-next:hover {
+  transform: scale(1.1);
+}
+
+.mgps-layout-style_two.mgps-nav-vertical-top .swiper-button-prev:hover,
+.mgps-layout-style_two.mgps-nav-vertical-top .swiper-button-next:hover {
+  transform: scale(1.1);
+}
+
+/* Responsive defaults for mobile devices */
+@media (max-width: 768px) {
+  /* Style One mobile defaults - keep center positioning */
+  .mgps-layout-style_one:not([class*="mgps-nav-vertical"]):not([class*="mgps-nav-horizontal"]) .swiper-button-prev,
+  .mgps-layout-style_one:not([class*="mgps-nav-vertical"]):not([class*="mgps-nav-horizontal"]) .swiper-button-next {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .mgps-layout-style_one:not([class*="mgps-nav-horizontal"]) .swiper-button-prev {
+    left: 15px;
+  }
+
+  .mgps-layout-style_one:not([class*="mgps-nav-horizontal"]) .swiper-button-next {
+    right: 15px;
+  }
+
+  /* Style Two mobile defaults - keep bottom-right positioning */
+  .mgps-layout-style_two:not([class*="mgps-nav-vertical"]):not([class*="mgps-nav-horizontal"]) .swiper-button-prev,
+  .mgps-layout-style_two:not([class*="mgps-nav-vertical"]):not([class*="mgps-nav-horizontal"]) .swiper-button-next {
+    top: auto;
+    bottom: 15px;
+    transform: translateY(0);
+  }
+
+  .mgps-layout-style_two:not([class*="mgps-nav-horizontal"]) .swiper-button-prev {
+    right: 70px;
+  }
+
+  .mgps-layout-style_two:not([class*="mgps-nav-horizontal"]) .swiper-button-next {
+    right: 15px;
+  }
+}
+
+/* ====== USER CONTROLLED NAVIGATION POSITIONING ====== */
+/* These rules have higher specificity than defaults and apply when users set custom positions */
+
+/* Vertical positioning controls */
+.mgps-layout-style_one.mgps-nav-vertical-top .swiper-button-prev,
+.mgps-layout-style_one.mgps-nav-vertical-top .swiper-button-next,
+.mgps-layout-style_two.mgps-nav-vertical-top .swiper-button-prev,
+.mgps-layout-style_two.mgps-nav-vertical-top .swiper-button-next {
+  top: 20px;
+  bottom: auto;
+  transform: translateY(0);
+}
+
+.mgps-layout-style_one.mgps-nav-vertical-bottom .swiper-button-prev,
+.mgps-layout-style_one.mgps-nav-vertical-bottom .swiper-button-next,
+.mgps-layout-style_two.mgps-nav-vertical-bottom .swiper-button-prev,
+.mgps-layout-style_two.mgps-nav-vertical-bottom .swiper-button-next {
+  top: auto;
+  bottom: 20px;
+  transform: translateY(0);
+}
+
+/* Horizontal positioning controls */
+.mgps-layout-style_one.mgps-nav-horizontal-left .swiper-button-prev,
+.mgps-layout-style_two.mgps-nav-horizontal-left .swiper-button-prev {
+  left: 20px;
+  right: auto;
+}
+
+.mgps-layout-style_one.mgps-nav-horizontal-left .swiper-button-next,
+.mgps-layout-style_two.mgps-nav-horizontal-left .swiper-button-next {
+  left: 80px;
+  right: auto;
+}
+
+.mgps-layout-style_one.mgps-nav-horizontal-right .swiper-button-prev,
+.mgps-layout-style_two.mgps-nav-horizontal-right .swiper-button-prev {
+  left: auto;
+  right: 80px;
+}
+
+.mgps-layout-style_one.mgps-nav-horizontal-right .swiper-button-next,
+.mgps-layout-style_two.mgps-nav-horizontal-right .swiper-button-next {
+  left: auto;
+  right: 20px;
+}
+
+/* Responsive positioning controls for mobile */
+@media (max-width: 768px) {
+  .mgps-layout-style_one.mgps-nav-vertical-top .swiper-button-prev,
+  .mgps-layout-style_one.mgps-nav-vertical-top .swiper-button-next,
+  .mgps-layout-style_two.mgps-nav-vertical-top .swiper-button-prev,
+  .mgps-layout-style_two.mgps-nav-vertical-top .swiper-button-next {
+    top: 15px;
+  }
+
+  .mgps-layout-style_one.mgps-nav-vertical-bottom .swiper-button-prev,
+  .mgps-layout-style_one.mgps-nav-vertical-bottom .swiper-button-next,
+  .mgps-layout-style_two.mgps-nav-vertical-bottom .swiper-button-prev,
+  .mgps-layout-style_two.mgps-nav-vertical-bottom .swiper-button-next {
+    bottom: 15px;
+  }
+
+  .mgps-layout-style_one.mgps-nav-horizontal-left .swiper-button-prev,
+  .mgps-layout-style_two.mgps-nav-horizontal-left .swiper-button-prev {
+    left: 15px;
+  }
+
+  .mgps-layout-style_one.mgps-nav-horizontal-left .swiper-button-next,
+  .mgps-layout-style_two.mgps-nav-horizontal-left .swiper-button-next {
+    left: 70px;
+  }
+
+  .mgps-layout-style_one.mgps-nav-horizontal-right .swiper-button-prev,
+  .mgps-layout-style_two.mgps-nav-horizontal-right .swiper-button-prev {
+    right: 70px;
+  }
+
+  .mgps-layout-style_one.mgps-nav-horizontal-right .swiper-button-next,
+  .mgps-layout-style_two.mgps-nav-horizontal-right .swiper-button-next {
+    right: 15px;
+  }
 }

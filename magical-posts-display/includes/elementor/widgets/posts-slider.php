@@ -163,6 +163,18 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             ]
         );
         $this->add_control(
+            'mgps_layout_style',
+            [
+                'label' => __('Layout Style', 'magical-posts-display'),
+                'type' => Controls_Manager::SELECT,
+                'options' => [
+                    'style_one' => __('Style One (Overlay)', 'magical-posts-display'),
+                    'style_two' => __('Style Two (Side by Side)', 'magical-posts-display'),
+                ],
+                'default' => 'style_one',
+            ]
+        );
+        $this->add_control(
             'mgps_content_show',
             [
                 'label' => __('Show Slider content?', 'magical-posts-display'),
@@ -445,9 +457,134 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
 
             ]
         );
+
+        $this->add_control(
+            'mgps_nav_positioning_heading',
+            [
+                'label' => __('Navigation Positioning', 'magical-posts-display'),
+                'type' => Controls_Manager::HEADING,
+                'separator' => 'before',
+                'condition' => [
+                    'mgps_navigation' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgps_nav_vertical_position',
+            [
+                'label' => __('Arrow Vertical Position', 'magical-posts-display'),
+                'type' => Controls_Manager::CHOOSE,
+                'options' => [
+                    'top' => [
+                        'title' => __('Top', 'magical-posts-display'),
+                        'icon' => 'eicon-v-align-top',
+                    ],
+                    'bottom' => [
+                        'title' => __('Bottom', 'magical-posts-display'),
+                        'icon' => 'eicon-v-align-bottom',
+                    ],
+                ],
+                'condition' => [
+                    'mgps_navigation' => 'yes',
+                ],
+                'prefix_class' => 'mgps-nav-vertical%s-',
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgps_nav_horizontal_position',
+            [
+                'label' => __('Arrow Horizontal Position', 'magical-posts-display'),
+                'type' => Controls_Manager::CHOOSE,
+                'options' => [
+                    'left' => [
+                        'title' => __('Left', 'magical-posts-display'),
+                        'icon' => 'eicon-h-align-left',
+                    ],
+                    'right' => [
+                        'title' => __('Right', 'magical-posts-display'),
+                        'icon' => 'eicon-h-align-right',
+                    ],
+                ],
+                'condition' => [
+                    'mgps_navigation' => 'yes',
+                ],
+                'prefix_class' => 'mgps-nav-horizontal%s-',
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgps_nav_vertical_offset',
+            [
+                'label' => __('Vertical Offset', 'magical-posts-display'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => ['px', '%'],
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 500,
+                        'step' => 1,
+                    ],
+                    '%' => [
+                        'min' => 0,
+                        'max' => 100,
+                        'step' => 1,
+                    ],
+                ],
+                'condition' => [
+                    'mgps_navigation' => 'yes',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}}.mgps-nav-vertical-top .swiper-button-prev, {{WRAPPER}}.mgps-nav-vertical-top .swiper-button-next' => 'top: {{SIZE}}{{UNIT}}; bottom: auto;',
+                    '{{WRAPPER}}.mgps-nav-vertical-bottom .swiper-button-prev, {{WRAPPER}}.mgps-nav-vertical-bottom .swiper-button-next' => 'bottom: {{SIZE}}{{UNIT}}; top: auto;',
+                    '{{WRAPPER}}.mgps-nav-vertical-tablet-top .swiper-button-prev, {{WRAPPER}}.mgps-nav-vertical-tablet-top .swiper-button-next' => 'top: {{SIZE}}{{UNIT}}; bottom: auto;',
+                    '{{WRAPPER}}.mgps-nav-vertical-tablet-bottom .swiper-button-prev, {{WRAPPER}}.mgps-nav-vertical-tablet-bottom .swiper-button-next' => 'bottom: {{SIZE}}{{UNIT}}; top: auto;',
+                    '{{WRAPPER}}.mgps-nav-vertical-mobile-top .swiper-button-prev, {{WRAPPER}}.mgps-nav-vertical-mobile-top .swiper-button-next' => 'top: {{SIZE}}{{UNIT}}; bottom: auto;',
+                    '{{WRAPPER}}.mgps-nav-vertical-mobile-bottom .swiper-button-prev, {{WRAPPER}}.mgps-nav-vertical-mobile-bottom .swiper-button-next' => 'bottom: {{SIZE}}{{UNIT}}; top: auto;',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgps_nav_horizontal_offset',
+            [
+                'label' => __('Horizontal Offset', 'magical-posts-display'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => ['px', '%'],
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 500,
+                        'step' => 1,
+                    ],
+                    '%' => [
+                        'min' => 0,
+                        'max' => 100,
+                        'step' => 1,
+                    ],
+                ],
+                'condition' => [
+                    'mgps_navigation' => 'yes',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}}.mgps-nav-horizontal-left .swiper-button-prev' => 'left: {{SIZE}}{{UNIT}}; right: auto;',
+                    '{{WRAPPER}}.mgps-nav-horizontal-left .swiper-button-next' => 'left: calc({{SIZE}}{{UNIT}} + 60px); right: auto;',
+                    '{{WRAPPER}}.mgps-nav-horizontal-right .swiper-button-prev' => 'right: calc({{SIZE}}{{UNIT}} + 60px); left: auto;',
+                    '{{WRAPPER}}.mgps-nav-horizontal-right .swiper-button-next' => 'right: {{SIZE}}{{UNIT}}; left: auto;',
+                    '{{WRAPPER}}.mgps-nav-horizontal-tablet-left .swiper-button-prev' => 'left: {{SIZE}}{{UNIT}}; right: auto;',
+                    '{{WRAPPER}}.mgps-nav-horizontal-tablet-left .swiper-button-next' => 'left: calc({{SIZE}}{{UNIT}} + 60px); right: auto;',
+                    '{{WRAPPER}}.mgps-nav-horizontal-tablet-right .swiper-button-prev' => 'right: calc({{SIZE}}{{UNIT}} + 60px); left: auto;',
+                    '{{WRAPPER}}.mgps-nav-horizontal-tablet-right .swiper-button-next' => 'right: {{SIZE}}{{UNIT}}; left: auto;',
+                    '{{WRAPPER}}.mgps-nav-horizontal-mobile-left .swiper-button-prev' => 'left: {{SIZE}}{{UNIT}}; right: auto;',
+                    '{{WRAPPER}}.mgps-nav-horizontal-mobile-left .swiper-button-next' => 'left: calc({{SIZE}}{{UNIT}} + 60px); right: auto;',
+                    '{{WRAPPER}}.mgps-nav-horizontal-mobile-right .swiper-button-prev' => 'right: calc({{SIZE}}{{UNIT}} + 60px); left: auto;',
+                    '{{WRAPPER}}.mgps-nav-horizontal-mobile-right .swiper-button-next' => 'right: {{SIZE}}{{UNIT}}; left: auto;',
+                ],
+            ]
+        );
+
         $this->end_controls_section();
-
-
         $this->start_controls_section(
             'mgps_button',
             [
@@ -575,6 +712,8 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'selectors' => [
                     '{{WRAPPER}} .mg-card .mp-post-btn i.left,{{WRAPPER}} .mg-card .mp-post-btn .left i' => 'margin-right: {{SIZE}}{{UNIT}};',
                     '{{WRAPPER}} .mg-card .mp-post-btn i.right, {{WRAPPER}} .mg-card .mp-post-btn .right i' => 'margin-left: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mgps-style-two-content .mp-post-btn i.left, {{WRAPPER}} .mgps-style-two-content .mp-post-btn .left i' => 'margin-right: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mgps-style-two-content .mp-post-btn i.right, {{WRAPPER}} .mgps-style-two-content .mp-post-btn .right i' => 'margin-left: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -678,6 +817,143 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
         $this->end_controls_section();
 
         $this->start_controls_section(
+            'mgps_style_two_section',
+            [
+                'label' => __('Style Two Layout', 'magical-posts-display'),
+                'tab'   => Controls_Manager::TAB_STYLE,
+                'condition' => [
+                    'mgps_layout_style' => 'style_two',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgps_style_two_image_width',
+            [
+                'label' => __('Image Width', 'magical-posts-display'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => ['px', '%'],
+                'range' => [
+                    'px' => [
+                        'min' => 200,
+                        'max' => 800,
+                        'step' => 10,
+                    ],
+                    '%' => [
+                        'min' => 30,
+                        'max' => 70,
+                        'step' => 1,
+                    ],
+                ],
+                'default' => [
+                    'unit' => '%',
+                    'size' => 50,
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mgps-layout-style_two .mgps-style-two-image' => 'width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mgps-layout-style_two .mgps-style-two-content' => 'width: calc(100% - {{SIZE}}{{UNIT}});',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgps_style_two_image_height',
+            [
+                'label' => __('Image Min Height', 'magical-posts-display'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => ['px', 'vh'],
+                'range' => [
+                    'px' => [
+                        'min' => 200,
+                        'max' => 800,
+                        'step' => 10,
+                    ],
+                    'vh' => [
+                        'min' => 20,
+                        'max' => 80,
+                        'step' => 1,
+                    ],
+                ],
+                'default' => [
+                    'unit' => 'px',
+                    'size' => 400,
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mgps-layout-style_two .mgps-style-two-image' => 'min-height: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mgps-layout-style_two .mgps-style-two-container' => 'min-height: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgps_style_two_gap',
+            [
+                'label' => __('Gap Between Image and Content', 'magical-posts-display'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => ['px', 'em'],
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 100,
+                        'step' => 1,
+                    ],
+                    'em' => [
+                        'min' => 0,
+                        'max' => 5,
+                        'step' => 0.1,
+                    ],
+                ],
+                'default' => [
+                    'unit' => 'px',
+                    'size' => 30,
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mgps-layout-style_two .mgps-style-two-container' => 'gap: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgps_style_two_content_padding',
+            [
+                'label' => __('Content Padding', 'magical-posts-display'),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', 'em', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .mgps-layout-style_two .mgps-style-two-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgps_style_two_content_alignment',
+            [
+                'label' => __('Content Alignment', 'magical-posts-display'),
+                'type' => Controls_Manager::CHOOSE,
+                'options' => [
+                    'flex-start' => [
+                        'title' => __('Top', 'magical-posts-display'),
+                        'icon' => 'eicon-v-align-top',
+                    ],
+                    'center' => [
+                        'title' => __('Center', 'magical-posts-display'),
+                        'icon' => 'eicon-v-align-middle',
+                    ],
+                    'flex-end' => [
+                        'title' => __('Bottom', 'magical-posts-display'),
+                        'icon' => 'eicon-v-align-bottom',
+                    ],
+                ],
+                'default' => 'center',
+                'selectors' => [
+                    '{{WRAPPER}} .mgps-layout-style_two .mgps-style-two-content' => 'justify-content: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->end_controls_section();
+
+        $this->start_controls_section(
             'mgps_style_content',
             [
                 'label' => __('Slide Content', 'magical-posts-display'),
@@ -691,6 +967,9 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'label' => __('Content Padding', 'magical-posts-display'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
+                'condition' => [
+                    'mgps_layout_style' => 'style_one',
+                ],
                 'selectors' => [
                     '{{WRAPPER}} .mgps-main .mgs-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
@@ -702,6 +981,9 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             [
                 'name' => 'mgps_content_background',
                 'selector' => '{{WRAPPER}} .mgps-main .mgs-content',
+                'condition' => [
+                    'mgps_layout_style' => 'style_one',
+                ],
                 'exclude' => [
                     'image'
                 ]
@@ -713,6 +995,9 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'label' => __('Content Border Radius', 'magical-posts-display'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
+                'condition' => [
+                    'mgps_layout_style' => 'style_one',
+                ],
                 'selectors' => [
                     '{{WRAPPER}} .mgps-main .mgs-content' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}; overflow: hidden;',
                 ],
@@ -736,6 +1021,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'size_units' => ['px', '%'],
                 'selectors' => [
                     '{{WRAPPER}} span.slide-cat a' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mgps-style-two-content span.slide-cat' => 'margin-bottom: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -747,6 +1033,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} span.slide-cat a' => 'color: {{VALUE}}',
+                    '{{WRAPPER}} .mgps-style-two-content span.slide-cat a' => 'color: {{VALUE}}',
                 ],
             ]
         );
@@ -755,7 +1042,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             Group_Control_Typography::get_type(),
             [
                 'name' => 'mgps_cat_typo',
-                'selector' => '{{WRAPPER}} span.slide-cat a',
+                'selector' => '{{WRAPPER}} span.slide-cat a, {{WRAPPER}} .mgps-style-two-content span.slide-cat a',
             ]
         );
         $this->add_group_control(
@@ -763,14 +1050,14 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             [
                 'name' => 'mgps_cat_shadow',
                 'label' => __('Title Text Shadow', 'plugin-domain'),
-                'selector' => '{{WRAPPER}} span.slide-cat a',
+                'selector' => '{{WRAPPER}} span.slide-cat a, {{WRAPPER}} .mgps-style-two-content span.slide-cat a',
             ]
         );
         $this->add_group_control(
             Group_Control_Border::get_type(),
             [
                 'name' => 'mgps_cat_border',
-                'selector' => '{{WRAPPER}} span.slide-cat a',
+                'selector' => '{{WRAPPER}} span.slide-cat a, {{WRAPPER}} .mgps-style-two-content span.slide-cat a',
             ]
         );
         $this->add_responsive_control(
@@ -781,6 +1068,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'size_units' => ['px', 'em', '%'],
                 'selectors' => [
                     '{{WRAPPER}} span.slide-cat a' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .mgps-style-two-content span.slide-cat a' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -801,6 +1089,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'size_units' => ['px'],
                 'selectors' => [
                     '{{WRAPPER}} .mgs-content .mgs-title' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mgps-style-two-content .mgs-title' => 'margin-bottom: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -812,6 +1101,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mgs-content .mgs-title' => 'color: {{VALUE}}',
+                    '{{WRAPPER}} .mgps-style-two-content .mgs-title' => 'color: {{VALUE}}',
                 ],
             ]
         );
@@ -820,7 +1110,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             Group_Control_Typography::get_type(),
             [
                 'name' => 'mgps_title_typo',
-                'selector' => '{{WRAPPER}} .mgs-content .mgs-title',
+                'selector' => '{{WRAPPER}} .mgs-content .mgs-title, {{WRAPPER}} .mgps-style-two-content .mgs-title',
             ]
         );
         $this->add_group_control(
@@ -828,7 +1118,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             [
                 'name' => 'mgps_title_shadow',
                 'label' => __('Title Text Shadow', 'plugin-domain'),
-                'selector' => '{{WRAPPER}} .mgs-content .mgs-title',
+                'selector' => '{{WRAPPER}} .mgs-content .mgs-title, {{WRAPPER}} .mgps-style-two-content .mgs-title',
             ]
         );
 
@@ -849,6 +1139,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'size_units' => ['px'],
                 'selectors' => [
                     '{{WRAPPER}} .mgs-content .mgs-subtitle' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mgps-style-two-content .mgs-subtitle' => 'margin-bottom: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -860,6 +1151,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mgs-content .mgs-subtitle' => 'color: {{VALUE}}',
+                    '{{WRAPPER}} .mgps-style-two-content .mgs-subtitle' => 'color: {{VALUE}}',
                 ],
             ]
         );
@@ -868,7 +1160,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             Group_Control_Typography::get_type(),
             [
                 'name' => 'mgps_subtitle',
-                'selector' => '{{WRAPPER}} .mgs-content .mgs-subtitle',
+                'selector' => '{{WRAPPER}} .mgs-content .mgs-subtitle, {{WRAPPER}} .mgps-style-two-content .mgs-subtitle',
             ]
         );
         $this->add_group_control(
@@ -876,7 +1168,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             [
                 'name' => 'mgps_subtitle_shadow',
                 'label' => __('Title Text Shadow', 'plugin-domain'),
-                'selector' => '{{WRAPPER}} .mgs-content .mgs-subtitle',
+                'selector' => '{{WRAPPER}} .mgs-content .mgs-subtitle, {{WRAPPER}} .mgps-style-two-content .mgs-subtitle',
             ]
         );
 
@@ -897,6 +1189,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'size_units' => ['px', 'em', '%'],
                 'selectors' => [
                     '{{WRAPPER}} .mgps-main a.mp-post-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+                    '{{WRAPPER}} .mgps-style-two-content a.mp-post-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
                 ],
             ]
         );
@@ -908,6 +1201,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'size_units' => ['px', 'em', '%'],
                 'selectors' => [
                     '{{WRAPPER}} .mgps-main a.mp-post-btn' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+                    '{{WRAPPER}} .mgps-style-two-content a.mp-post-btn' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
                 ],
             ]
         );
@@ -916,7 +1210,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             \Elementor\Group_Control_Typography::get_type(),
             [
                 'name' => 'mgps_btn_typography',
-                'selector' => '{{WRAPPER}} .mgps-main a.mp-post-btn',
+                'selector' => '{{WRAPPER}} .mgps-main a.mp-post-btn, {{WRAPPER}} .mgps-style-two-content a.mp-post-btn',
             ]
         );
 
@@ -924,7 +1218,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             \Elementor\Group_Control_Border::get_type(),
             [
                 'name' => 'mgps_btn_border',
-                'selector' => '{{WRAPPER}} .mgps-main a.mp-post-btn',
+                'selector' => '{{WRAPPER}} .mgps-main a.mp-post-btn, {{WRAPPER}} .mgps-style-two-content a.mp-post-btn',
             ]
         );
 
@@ -936,6 +1230,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'size_units' => ['px', '%'],
                 'selectors' => [
                     '{{WRAPPER}} .mgps-main a.mp-post-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+                    '{{WRAPPER}} .mgps-style-two-content a.mp-post-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
                 ],
             ]
         );
@@ -944,7 +1239,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             \Elementor\Group_Control_Box_Shadow::get_type(),
             [
                 'name' => 'mgps_btn_box_shadow',
-                'selector' => '{{WRAPPER}} .mgps-main a.mp-post-btn',
+                'selector' => '{{WRAPPER}} .mgps-main a.mp-post-btn, {{WRAPPER}} .mgps-style-two-content a.mp-post-btn',
             ]
         );
         $this->add_control(
@@ -973,6 +1268,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'default' => '',
                 'selectors' => [
                     '{{WRAPPER}} .mgps-main a.mp-post-btn' => 'color: {{VALUE}} !important;',
+                    '{{WRAPPER}} .mgps-style-two-content a.mp-post-btn' => 'color: {{VALUE}} !important;',
                 ],
             ]
         );
@@ -984,6 +1280,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mgps-main a.mp-post-btn' => 'background-color: {{VALUE}} !important;',
+                    '{{WRAPPER}} .mgps-style-two-content a.mp-post-btn' => 'background-color: {{VALUE}} !important;',
                 ],
             ]
         );
@@ -1001,7 +1298,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             \Elementor\Group_Control_Box_Shadow::get_type(),
             [
                 'name' => 'mgps_btnhover_boxshadow',
-                'selector' => '{{WRAPPER}} .mgps-main a.mp-post-btn:hover',
+                'selector' => '{{WRAPPER}} .mgps-main a.mp-post-btn:hover, {{WRAPPER}} .mgps-style-two-content a.mp-post-btn:hover',
             ]
         );
 
@@ -1012,6 +1309,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mgps-main a.mp-post-btn:hover, {{WRAPPER}} .mgps-main a.mp-post-btn:focus' => 'color: {{VALUE}} !important;',
+                    '{{WRAPPER}} .mgps-style-two-content a.mp-post-btn:hover, {{WRAPPER}} .mgps-style-two-content a.mp-post-btn:focus' => 'color: {{VALUE}} !important;',
                 ],
             ]
         );
@@ -1023,6 +1321,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .mgps-main a.mp-post-btn:hover, {{WRAPPER}} .mgps-main a.mp-post-btn:focus' => 'background-color: {{VALUE}} !important;',
+                    '{{WRAPPER}} .mgps-style-two-content a.mp-post-btn:hover, {{WRAPPER}} .mgps-style-two-content a.mp-post-btn:focus' => 'background-color: {{VALUE}} !important;',
                 ],
             ]
         );
@@ -1037,6 +1336,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 ],
                 'selectors' => [
                     '{{WRAPPER}} .mgps-main a.mp-post-btn:hover, {{WRAPPER}} .mgps-main a.mp-post-btn:focus' => 'border-color: {{VALUE}} !important;',
+                    '{{WRAPPER}} .mgps-style-two-content a.mp-post-btn:hover, {{WRAPPER}} .mgps-style-two-content a.mp-post-btn:focus' => 'border-color: {{VALUE}} !important;',
                 ],
             ]
         );
@@ -1055,67 +1355,8 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             ]
         );
 
-        $this->add_control(
-            'mgps_arrow_position_toggle',
-            [
-                'label' => __('Position', 'magical-posts-display'),
-                'type' => Controls_Manager::POPOVER_TOGGLE,
-                'label_off' => __('None', 'magical-posts-display'),
-                'label_on' => __('Custom', 'magical-posts-display'),
-                'return_value' => 'yes',
-            ]
-        );
-
-        $this->start_popover();
-
         $this->add_responsive_control(
-            'mgps_arrow_positiony',
-            [
-                'label' => __('Vertical', 'magical-posts-display'),
-                'type' => Controls_Manager::SLIDER,
-                'size_units' => ['px', '%'],
-                // 'condition' => [
-                //     'arrow_position_toggle' => 'yes'
-                // ],
-                'range' => [
-                    'px' => [
-                        'min' => -50,
-                        'max' => 500,
-                    ],
-
-                ],
-
-                'selectors' => [
-                    '{{WRAPPER}} .swiper-button-next,{{WRAPPER}} .swiper-button-prev' => 'top: {{SIZE}}{{UNIT}};',
-                ],
-            ]
-        );
-
-        $this->add_responsive_control(
-            'mgps_arrow_position_x',
-            [
-                'label' => __('Horizontal', 'magical-posts-display'),
-                'type' => Controls_Manager::SLIDER,
-                'size_units' => ['px', '%'],
-                // 'condition' => [
-                //     'arrow_position_toggle' => 'yes'
-                // ],
-                'range' => [
-                    'px' => [
-                        'min' => -10,
-                        'max' => 250,
-                    ],
-                ],
-                'selectors' => [
-                    '{{WRAPPER}} .swiper-button-prev, {{WRAPPER}} .swiper-rtl .swiper-button-next' => 'left: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .swiper-button-next,{{WRAPPER}} .swiper-rtl .swiper-button-prev' => 'right: {{SIZE}}{{UNIT}};',
-                ],
-            ]
-        );
-
-        $this->end_popover();
-        $this->add_responsive_control(
-            'mgps_arrow_border',
+            'mgps_arrow_padding',
             [
                 'label' => __('Padding', 'magical-posts-display'),
                 'type' => Controls_Manager::DIMENSIONS,
@@ -1194,7 +1435,8 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'label' => __('Text Color', 'magical-posts-display'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .slick-prev:hover, {{WRAPPER}} .slick-next:hover' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .swiper-button-prev:hover i, {{WRAPPER}} .swiper-button-next:hover i' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .swiper-button-prev:hover svg, {{WRAPPER}} .swiper-button-next:hover svg' => 'fill: {{VALUE}};',
                 ],
             ]
         );
@@ -1205,7 +1447,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'label' => __('Background Color', 'magical-posts-display'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .slick-prev:hover, {{WRAPPER}} .slick-next:hover' => 'background-color: {{VALUE}};',
+                    '{{WRAPPER}} .swiper-button-prev:hover, {{WRAPPER}} .swiper-button-next:hover' => 'background-color: {{VALUE}};',
                 ],
             ]
         );
@@ -1216,10 +1458,10 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 'label' => __('Border Color', 'magical-posts-display'),
                 'type' => Controls_Manager::COLOR,
                 'condition' => [
-                    'arrow_border_border!' => '',
+                    'mgps_arrow_border_border!' => '',
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .slick-prev:hover, {{WRAPPER}} .slick-next:hover' => 'border-color: {{VALUE}};',
+                    '{{WRAPPER}} .swiper-button-prev:hover, {{WRAPPER}} .swiper-button-next:hover' => 'border-color: {{VALUE}};',
                 ],
             ]
         );
@@ -1448,7 +1690,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
 
 ?>
 
-            <div class="mgps-main swiper swiper-container" data-loop="<?php echo esc_attr($mgps_loop); ?>" data-effect="<?php echo esc_attr($settings['mgps_slide_effect']); ?>" data-direction="<?php echo esc_attr($settings['mgps_slide_direction']); ?>" data-speed="<?php echo esc_attr($mgps_animation_speed); ?>" data-autoplay="<?php echo esc_attr($mgps_autoplay); ?>" data-auto-delay="<?php echo esc_attr($settings['mgps_autoplay_speed']); ?>" data-grab-cursor="<?php echo esc_attr($mgps_grab_cursor); ?>" data-nav="<?php echo esc_attr($mgps_navigation); ?>" data-dots="<?php echo esc_attr($mgps_dots); ?>">
+            <div class="mgps-main mgps-layout-<?php echo esc_attr($settings['mgps_layout_style']); ?> swiper swiper-container" data-loop="<?php echo esc_attr($mgps_loop); ?>" data-effect="<?php echo esc_attr($settings['mgps_slide_effect']); ?>" data-direction="<?php echo esc_attr($settings['mgps_slide_direction']); ?>" data-speed="<?php echo esc_attr($mgps_animation_speed); ?>" data-autoplay="<?php echo esc_attr($mgps_autoplay); ?>" data-auto-delay="<?php echo esc_attr($settings['mgps_autoplay_speed']); ?>" data-grab-cursor="<?php echo esc_attr($mgps_grab_cursor); ?>" data-nav="<?php echo esc_attr($mgps_navigation); ?>" data-dots="<?php echo esc_attr($mgps_dots); ?>">
                 <!-- Additional required wrapper -->
                 <div class="swiper-wrapper mgps-<?php echo esc_attr($settings['mgps_slide_effect']); ?>">
                     <?php
@@ -1498,6 +1740,17 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
         $mgps_usebtn_icon = $settings['mgps_usebtn_icon'];
         $mgps_btn_icon_position = $settings['mgps_btn_icon_position'];
         $mgps_btn_target = $settings['mgps_btn_target'];
+        $mgps_layout_style = $settings['mgps_layout_style'];
+        
+        if ($mgps_layout_style === 'style_two') {
+            $this->render_style_two($settings, $mgpslide_category, $mgps_post_btn, $mgps_btn_title, $mgps_usebtn_icon, $mgps_btn_icon_position, $mgps_btn_target);
+        } else {
+            $this->render_style_one($settings, $mgpslide_category, $mgps_post_btn, $mgps_btn_title, $mgps_usebtn_icon, $mgps_btn_icon_position, $mgps_btn_target);
+        }
+    }
+
+    private function render_style_one($settings, $mgpslide_category, $mgps_post_btn, $mgps_btn_title, $mgps_usebtn_icon, $mgps_btn_icon_position, $mgps_btn_target)
+    {
         ?>
         <!-- Slides -->
         <div class="swiper-slide mgs-item">
@@ -1546,6 +1799,61 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             <?php endif; //content end 
             ?>
         </div>
-<?php
+        <?php
+    }
+
+    private function render_style_two($settings, $mgpslide_category, $mgps_post_btn, $mgps_btn_title, $mgps_usebtn_icon, $mgps_btn_icon_position, $mgps_btn_target)
+    {
+        ?>
+        <!-- Slides Style Two -->
+        <div class="swiper-slide mgs-item mgs-item-style-two">
+            <div class="mgps-style-two-container">
+                <div class="mgps-style-two-image">
+                    <?php if (has_post_thumbnail()) : ?>
+                        <?php the_post_thumbnail($settings['thumbnail_size'], array('class' => 'mgps-img')); ?>
+                    <?php else : ?>
+                        <div class="mgps-no-img noimg-set"></div>
+                    <?php endif; ?>
+                </div>
+                <?php if ($settings['mgps_content_show']) : ?>
+                    <div class="mgps-style-two-content">
+                        <?php if ($mgpslide_category && $settings['mgps_category_show']) : ?>
+                            <span class="slide-cat"><a href="<?php echo esc_url(get_category_link($mgpslide_category)); ?>"><?php echo esc_html($mgpslide_category->name); ?></a>
+                            </span>
+                        <?php endif; ?>
+                        <?php if ($settings['mgps_title_show']) : ?>
+                            <h2 class="mgs-title" data-swiper-parallax-scale="0.15"><?php echo esc_html(wp_trim_words(get_the_title(), $settings['mgps_crop_title'], '')); ?></h2>
+                        <?php endif; //title end 
+                        ?>
+                        <?php if ($settings['mgps_desc_show']) : ?>
+                            <p class="mgs-subtitle" data-swiper-parallax-opacity="0.5">
+                                <?php
+                                if (has_excerpt()) {
+                                    echo esc_html(wp_trim_words(get_the_excerpt(), $settings['mgps_crop_desc'], ''));
+                                } else {
+                                    echo esc_html(wp_trim_words(get_the_content(), $settings['mgps_crop_desc'], ''));
+                                }
+                                ?>
+                            </p>
+                        <?php endif; //subtitle end 
+                        ?>
+                        <?php
+                        if ($mgps_post_btn) {
+                            mp_post_btn(
+                                $text = $mgps_btn_title,
+                                $icon_show = $mgps_usebtn_icon,
+                                $icon = $settings['mgps_btn_icon'],
+                                $icon_position = $mgps_btn_icon_position,
+                                $target = $mgps_btn_target,
+                                $class = $settings['mgps_link_type']
+                            );
+                        }
+                        ?>
+                    </div>
+                <?php endif; //content end 
+                ?>
+            </div>
+        </div>
+        <?php
     }
 }
