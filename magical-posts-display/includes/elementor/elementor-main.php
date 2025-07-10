@@ -59,9 +59,16 @@ class mgPostsElementorMain
 		// Advanced Posts ad grid one
 		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/advanced-posts-grid1.php');
 		$widgets_manager->register(new \mgpdAdPostsGrid1());
-		// Advanced Posts ad grid one
+		// Advanced Posts ad grid two
 		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/advanced-posts-grid2.php');
 		$widgets_manager->register(new \mgpdAdPostsGrid2());
+		// News Magazine Grid
+		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/news-magazine-grid.php');
+		$widgets_manager->register(new \mgpdNewsMagazineGrid());
+		
+		// News Magazine Image Grid
+		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/news-magazine-img-grid.php');
+		$widgets_manager->register(new \mgpdNewsMagazineImgGrid());
 	}
 
 	public function register_new_category(\Elementor\Elements_Manager $elements_manager)
@@ -117,6 +124,12 @@ class mgPostsElementorMain
 		wp_enqueue_style("mp-accordion-style", MAGICAL_POSTS_DISPLAY_ASSETS . 'css/widget-style/mp-accordion.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
 
 		wp_enqueue_style("mp-tab-style", MAGICAL_POSTS_DISPLAY_ASSETS . 'css/widget-style/mp-tabs.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
+		
+		// Register News Magazine Grid styles
+		wp_register_style('magical-news-magazine-grid', MAGICAL_POSTS_DISPLAY_ASSETS . 'css/news-magazine-grid.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
+		
+		// Register News Magazine Image Grid styles
+		wp_register_style('magical-news-magazine-img-grid', MAGICAL_POSTS_DISPLAY_ASSETS . 'css/news-magazine-img-grid.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
 	}
 
 

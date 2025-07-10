@@ -26,7 +26,7 @@ With Magical Posts Display, you get fantastic features like the Dynamic Site Bui
 ### See Short video
 [youtube https://www.youtube.com/watch?v=7BCThHcUSHk]
 
-Magical Posts Display comes with a range of awesome Elementor widgets that make it easy to display your posts in unique and visually appealing ways.
+Magical Posts Display comes with a range of awesome Elementor widgets that make it easy to display your posts in unique and visually appealing ways. The latest addition includes the powerful News/Magazine Image Grid widget, featuring 5 distinct layout styles perfect for news, magazine, and blog websites.
 <p>Magical Posts Display is a user-friendly addon that offers many different ways to display your site posts. Our Elementor widgets allow you to customize and set new options for each Magical Posts item, giving you complete control over your content display. In addition, our addon supports post meta, categories, tags, comments, timestamps, and more, making it easy to create a personalized and engaging user experience for your visitors. </p>
 
 <h4>Most powerful features: </h4>
@@ -41,6 +41,8 @@ Magical Posts Display comes with a range of awesome Elementor widgets that make 
  	<li><strong>Posts Ticker (Latest News) <a href="https://mpd.wpcolors.net/new-posts-ticker-pro/" target="_blank">Live preview</a></strong></li>
  	<li><strong>Posts carousel. <a href="https://mpd.wpcolors.net/pro-posts-carousel-2" target="_blank">Live preview</a> | <a href="https://youtu.be/oZJYe4HEI4A" target="_blank">Video Tutorial</a></strong></li>
  	<li><strong>Posts grid card. <a href="https://mpd.wpcolors.net/posts-grid-pro/" target="_blank">Live preview</a> | <a href="https://youtu.be/0z5JoFWRyw0" target="_blank">Video Tutorial</a></strong></li>
+ 	<li><strong>News/Magazine Image Grid - Modern magazine-style layouts with image overlays and 5 unique styles (Classic Magazine, Grid Layout, Compact Grid, Featured Focus, Equal Heights)</strong></li>
+ 	<li><strong>News/Magazine Grid - Modern News-style layouts with image and 4 unique styles </strong></li>
  	<li><strong>Posts Accordion. <a href="https://mpd.wpcolors.net/pro-posts-accordion/" target="_blank">Live preview</a> | <a href="https://youtu.be/Y3btoJtd0h8" target="_blank">Video Tutorial</a></strong></li>
  	<li><strong>Posts Tab. <a href="https://mpd.wpcolors.net/pro-posts-tab-2/" target="_blank">Live preview</a> | <a href="https://youtu.be/itaSNU8_Zr8" target="_blank">Video Tutorial</a></strong></li>
  	<li><strong>Awesome Posts list. <a href="https://mpd.wpcolors.net/awesome-new-posts-list-pro/" target="_blank">Live preview</a> | <a href="https://youtu.be/a2NPlkreH7Y" target="_blank">Video Tutorial</a></strong></li>
@@ -134,6 +136,11 @@ Yes, Magical Posts Display supports posts categories, allowing you to display po
 
 
 == Changelog ==
+
+= 1.2.51 =
+ * Added News/Magazine Grid Elementor widget with 5 layout styles
+ * Added News/Magazine Image Grid Elementor widget with 5 layout styles
+ * Enhanced responsive design across all device breakpoints
 
 = 1.2.50 =
  * Added new style for posts slider
