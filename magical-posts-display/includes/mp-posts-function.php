@@ -16,7 +16,7 @@ if (!function_exists('mp_post_title')) {
                 <?php
                 printf(
                     '<%1$s class="mgp-ptitle">%2$s</%1$s>',
-                    tag_escape($tag),
+                    mpd_validate_html_tag($tag),
                     esc_html(wp_trim_words(get_the_title(), $crop_title))
                 );
                 ?>
@@ -150,4 +150,18 @@ function mpd_check_plugin_active($plugin_path)
 {
     $active_plugins = apply_filters('active_plugins', get_option('active_plugins'));
     return in_array($plugin_path, $active_plugins);
+}
+
+
+function mpd_validate_html_tag($tag, $default_tag = 'h2', $allowed_tags = array()) {
+    // Use the provided whitelist or fall back to a predefined set of safe tags
+    $safe_tags = !empty($allowed_tags) ? $allowed_tags : array(
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'
+    );
+
+    // Make sure we're working with a string
+    $tag = is_string($tag) ? strtolower(trim($tag)) : '';
+
+    // Return the validated tag or default
+    return in_array($tag, $safe_tags, true) ? $tag : $default_tag;
 }

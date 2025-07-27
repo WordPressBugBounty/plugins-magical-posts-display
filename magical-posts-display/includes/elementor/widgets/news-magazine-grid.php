@@ -1394,9 +1394,9 @@ class mgpdNewsMagazineGrid extends \Elementor\Widget_Base
                 $title = wp_trim_words($title, $title_crop, '...');
             }
             
-            echo '<' . esc_attr($title_tag) . ' class="mgp-post-title">';
+            echo '<' . mpd_validate_html_tag($title_tag) . ' class="mgp-post-title">';
             echo '<a href="' . esc_url(get_permalink()) . '">' . esc_html($title) . '</a>';
-            echo '</' . esc_attr($title_tag) . '>';
+            echo '</' . mpd_validate_html_tag($title_tag) . '>';
         }
         // Meta (below TITLE)
         if ($settings['mgps_nmg_big_post_meta'] === 'yes') {
@@ -1454,9 +1454,9 @@ class mgpdNewsMagazineGrid extends \Elementor\Widget_Base
                 $title = wp_trim_words($title, $title_crop, '...');
             }
             
-            echo '<' . esc_attr($title_tag) . ' class="mgp-post-title">';
+            echo '<' . mpd_validate_html_tag($title_tag) . ' class="mgp-post-title">';
             echo '<a href="' . esc_url(get_permalink()) . '">' . esc_html($title) . '</a>';
-            echo '</' . esc_attr($title_tag) . '>';
+            echo '</' . mpd_validate_html_tag($title_tag) . '>';
         }
         
         // Excerpt
@@ -1513,9 +1513,9 @@ class mgpdNewsMagazineGrid extends \Elementor\Widget_Base
                 $title = wp_trim_words($title, $title_crop, '...');
             }
             
-            echo '<' . esc_attr($title_tag) . ' class="mgp-post-title">';
+            echo '<' . mpd_validate_html_tag($title_tag) . ' class="mgp-post-title">';
             echo '<a href="' . esc_url(get_permalink()) . '">' . esc_html($title) . '</a>';
-            echo '</' . esc_attr($title_tag) . '>';
+            echo '</' . mpd_validate_html_tag($title_tag) . '>';
         }
         
         // Excerpt
@@ -1592,9 +1592,9 @@ class mgpdNewsMagazineGrid extends \Elementor\Widget_Base
                 $title = wp_trim_words($title, $title_crop, '...');
             }
             
-            echo '<' . esc_attr($title_tag) . ' class="mgp-post-title">';
+            echo '<' . mpd_validate_html_tag($title_tag) . ' class="mgp-post-title">';
             echo '<a href="' . esc_url(get_permalink()) . '">' . esc_html($title) . '</a>';
-            echo '</' . esc_attr($title_tag) . '>';
+            echo '</' . mpd_validate_html_tag($title_tag) . '>';
         }
         
         // Excerpt
@@ -1652,9 +1652,9 @@ class mgpdNewsMagazineGrid extends \Elementor\Widget_Base
                 $title = wp_trim_words($title, $title_crop, '...');
             }
             
-            echo '<' . esc_attr($title_tag) . ' class="mgp-post-title">';
+            echo '<' . mpd_validate_html_tag($title_tag) . ' class="mgp-post-title">';
             echo '<a href="' . esc_url(get_permalink()) . '">' . esc_html($title) . '</a>';
-            echo '</' . esc_attr($title_tag) . '>';
+            echo '</' . mpd_validate_html_tag($title_tag) . '>';
         }
         
         // Excerpt
@@ -1711,9 +1711,9 @@ class mgpdNewsMagazineGrid extends \Elementor\Widget_Base
                 $title = wp_trim_words($title, $title_crop, '...');
             }
             
-            echo '<' . esc_attr($title_tag) . ' class="mgp-post-title">';
+            echo '<' . mpd_validate_html_tag($title_tag) . ' class="mgp-post-title">';
             echo '<a href="' . esc_url(get_permalink()) . '">' . esc_html($title) . '</a>';
-            echo '</' . esc_attr($title_tag) . '>';
+            echo '</' . mpd_validate_html_tag($title_tag) . '>';
         }
         
         // Excerpt
@@ -1789,9 +1789,9 @@ class mgpdNewsMagazineGrid extends \Elementor\Widget_Base
                 $title = wp_trim_words($title, $title_crop, '...');
             }
             
-            echo '<' . esc_attr($title_tag) . ' class="mgp-post-title">';
+            echo '<' . mpd_validate_html_tag($title_tag) . ' class="mgp-post-title">';
             echo '<a href="' . esc_url(get_permalink()) . '">' . esc_html($title) . '</a>';
-            echo '</' . esc_attr($title_tag) . '>';
+            echo '</' . mpd_validate_html_tag($title_tag) . '>';
         }
         
         // Excerpt
@@ -1848,9 +1848,9 @@ class mgpdNewsMagazineGrid extends \Elementor\Widget_Base
                 $title = wp_trim_words($title, $title_crop, '...');
             }
             
-            echo '<' . esc_attr($title_tag) . ' class="mgp-post-title">';
+            echo '<' . mpd_validate_html_tag($title_tag) . ' class="mgp-post-title">';
             echo '<a href="' . esc_url(get_permalink()) . '">' . esc_html($title) . '</a>';
-            echo '</' . esc_attr($title_tag) . '>';
+            echo '</' . mpd_validate_html_tag($title_tag) . '>';
         }
         
         // Excerpt
@@ -1907,9 +1907,9 @@ class mgpdNewsMagazineGrid extends \Elementor\Widget_Base
                 $title = wp_trim_words($title, $title_crop, '...');
             }
             
-            echo '<' . esc_attr($title_tag) . ' class="mgp-post-title">';
+            echo '<' . mpd_validate_html_tag($title_tag) . ' class="mgp-post-title">';
             echo '<a href="' . esc_url(get_permalink()) . '">' . esc_html($title) . '</a>';
-            echo '</' . esc_attr($title_tag) . '>';
+            echo '</' . mpd_validate_html_tag($title_tag) . '>';
         }
         
         // Excerpt

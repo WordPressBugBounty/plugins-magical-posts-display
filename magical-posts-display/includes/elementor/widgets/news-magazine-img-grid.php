@@ -1291,11 +1291,11 @@ class mgpdNewsMagazineImgGrid extends \Elementor\Widget_Base
                         $title = wp_trim_words($title, $title_word_limit, '...');
                     }
                 ?>
-                    <<?php echo $title_tag; ?> class="mgp-post-title">
+                    <<?php echo mpd_validate_html_tag($title_tag); ?> class="mgp-post-title">
                         <a href="<?php echo esc_url(get_permalink($post->ID)); ?>">
                             <?php echo esc_html($title); ?>
                         </a>
-                    </<?php echo $title_tag; ?>>
+                    </<?php echo mpd_validate_html_tag($title_tag); ?>>
                 <?php endif; ?>
 
                 <?php if ($show_excerpt) : 

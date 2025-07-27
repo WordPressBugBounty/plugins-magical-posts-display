@@ -137,6 +137,9 @@ Yes, Magical Posts Display supports posts categories, allowing you to display po
 
 == Changelog ==
 
+= 1.2.53 =
+ * Fixed News/Magazine title tag security issue
+
 = 1.2.51 =
  * Added News/Magazine Grid Elementor widget with 5 layout styles
  * Added News/Magazine Image Grid Elementor widget with 5 layout styles
