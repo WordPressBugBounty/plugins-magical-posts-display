@@ -1674,7 +1674,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
         $mgps_autoplay_speed = $settings['mgps_autoplay_speed'] ? $settings['mgps_autoplay_speed'] : 3000;
 
         $product_ids = !empty($settings['mgps_product_id']) ? $settings['mgps_product_id'] : array();
-        $sanitized_product_ids = array_filter(array_map('absint', $product_ids));
+        $sanitized_product_ids = mp_display_resolve_post_ids($product_ids, 'post');
         // Query Argument
         $args = array(
             'post_type'             => 'post',
@@ -1699,7 +1699,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                         $this->posts_slider_item_output($settings);
 
                     endwhile;
-                    wp_reset_query();
+                    wp_reset_postdata();
                     wp_reset_postdata();
                     ?>
                 </div>
@@ -1741,7 +1741,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
         $mgps_btn_icon_position = $settings['mgps_btn_icon_position'];
         $mgps_btn_target = $settings['mgps_btn_target'];
         $mgps_layout_style = $settings['mgps_layout_style'];
-        
+
         if ($mgps_layout_style === 'style_two') {
             $this->render_style_two($settings, $mgpslide_category, $mgps_post_btn, $mgps_btn_title, $mgps_usebtn_icon, $mgps_btn_icon_position, $mgps_btn_target);
         } else {
@@ -1799,12 +1799,12 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             <?php endif; //content end 
             ?>
         </div>
-        <?php
+    <?php
     }
 
     private function render_style_two($settings, $mgpslide_category, $mgps_post_btn, $mgps_btn_title, $mgps_usebtn_icon, $mgps_btn_icon_position, $mgps_btn_target)
     {
-        ?>
+    ?>
         <!-- Slides Style Two -->
         <div class="swiper-slide mgs-item mgs-item-style-two">
             <div class="mgps-style-two-container">
@@ -1854,6 +1854,6 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 ?>
             </div>
         </div>
-        <?php
+<?php
     }
 }

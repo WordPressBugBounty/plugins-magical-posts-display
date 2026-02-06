@@ -65,7 +65,7 @@ class mgPostsElementorMain
 		// News Magazine Grid
 		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/news-magazine-grid.php');
 		$widgets_manager->register(new \mgpdNewsMagazineGrid());
-		
+
 		// News Magazine Image Grid
 		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/news-magazine-img-grid.php');
 		$widgets_manager->register(new \mgpdNewsMagazineImgGrid());
@@ -75,35 +75,34 @@ class mgPostsElementorMain
 	{
 
 		$category_prefix = 'mgp-';
-			$category_slug   = $category_prefix . 'mgposts';
+		$category_slug   = $category_prefix . 'mgposts';
 
-			$elements_manager->add_category( $category_slug, [
-				'title' => esc_html__( 'Magical Posts Display', 'magical-posts-display' ),
-				'icon'  => 'fa fa-magic',
-			] );
+		$elements_manager->add_category($category_slug, [
+			'title' => esc_html__('Magical Posts Display', 'magical-posts-display'),
+			'icon'  => 'fa fa-magic',
+		]);
 
-			// Get all existing categories
-			$categories = $elements_manager->get_categories();
+		// Get all existing categories
+		$categories = $elements_manager->get_categories();
 
-			// Remove your custom category from the list to reposition it
-			$magical_category = $categories[ $category_slug ] ?? null;
-			unset( $categories[ $category_slug ] );
+		// Remove your custom category from the list to reposition it
+		$magical_category = $categories[$category_slug] ?? null;
+		unset($categories[$category_slug]);
 
-			if ( ! $magical_category ) {
-				return; // Stop if not found
-			}
+		if (! $magical_category) {
+			return; // Stop if not found
+		}
 
-			// Insert at index 3 (4th position)
-			$before    = array_slice( $categories, 0, 3, true );
-			$after     = array_slice( $categories, 3, null, true );
-			$reordered = $before + [ $category_slug => $magical_category ] + $after;
+		// Insert at index 3 (4th position)
+		$before    = array_slice($categories, 0, 4, true);
+		$after     = array_slice($categories, 4, null, true);
+		$reordered = $before + [$category_slug => $magical_category] + $after;
 
-			// Use reflection to inject reordered categories
-			$reflection = new \ReflectionClass( $elements_manager );
-			$property   = $reflection->getProperty( 'categories' );
-			$property->setAccessible( true );
-			$property->setValue( $elements_manager, $reordered );
-
+		// Use reflection to inject reordered categories
+		$reflection = new \ReflectionClass($elements_manager);
+		$property   = $reflection->getProperty('categories');
+		$property->setAccessible(true);
+		$property->setValue($elements_manager, $reordered);
 	}
 
 
@@ -124,10 +123,10 @@ class mgPostsElementorMain
 		wp_enqueue_style("mp-accordion-style", MAGICAL_POSTS_DISPLAY_ASSETS . 'css/widget-style/mp-accordion.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
 
 		wp_enqueue_style("mp-tab-style", MAGICAL_POSTS_DISPLAY_ASSETS . 'css/widget-style/mp-tabs.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
-		
+
 		// Register News Magazine Grid styles
 		wp_register_style('magical-news-magazine-grid', MAGICAL_POSTS_DISPLAY_ASSETS . 'css/news-magazine-grid.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
-		
+
 		// Register News Magazine Image Grid styles
 		wp_register_style('magical-news-magazine-img-grid', MAGICAL_POSTS_DISPLAY_ASSETS . 'css/news-magazine-img-grid.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
 	}

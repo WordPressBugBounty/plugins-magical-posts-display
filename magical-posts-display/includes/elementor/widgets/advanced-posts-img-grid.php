@@ -3,6 +3,7 @@
 
 class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
 {
+    use Query_Controls_Trait;
 
     /**
      * Get widget name.
@@ -163,6 +164,9 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'step'    => 1,
             ]
         );
+
+        // Post Position Control
+        $this->register_post_position_control('mgpla_posts_filter');
 
         $this->add_control(
             'mgpla_grid_categories',
@@ -1332,7 +1336,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'label' => __('Normal', 'magical-posts-display'),
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_description_padding',
             [
@@ -1344,7 +1348,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_description_margin',
             [
@@ -1356,7 +1360,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_description_color',
             [
@@ -1367,7 +1371,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_description_bgcolor',
             [
@@ -1378,7 +1382,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_description_radius',
             [
@@ -1390,9 +1394,9 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->end_controls_tab(); // End of Normal Tab
-        
+
         // Hover Tab
         $this->start_controls_tab(
             'mgpg_description_hover',
@@ -1400,7 +1404,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'label' => __('Hover', 'magical-posts-display'),
             ]
         );
-        
+
         $this->add_control(
             'mgpg_description_hover_color',
             [
@@ -1411,7 +1415,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_description_hover_bgcolor',
             [
@@ -1422,7 +1426,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_des_hover_transition',
             [
@@ -1440,11 +1444,11 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->end_controls_tab(); // End of Hover Tab
-        
+
         $this->end_controls_tabs();
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
             [
@@ -1453,7 +1457,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mgomg-items .mgomg-plus-gtext p',
             ]
         );
-        
+
         $this->end_controls_section();
         $this->start_controls_section(
             'mgpla_meta_bstyle',
@@ -1477,8 +1481,8 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
 
 
 
- $this->start_controls_tabs('mgpg_meta_cat_tabs');
-        
+        $this->start_controls_tabs('mgpg_meta_cat_tabs');
+
         // Normal Tab
         $this->start_controls_tab(
             'mgpg_meta_cat_normal',
@@ -1486,7 +1490,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'label' => __('Normal', 'magical-posts-display'),
             ]
         );
-        
+
         $this->add_control(
             'mgpg_meta_cat_text_color',
             [
@@ -1497,7 +1501,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_meta_cat_bg_color',
             [
@@ -1508,7 +1512,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_meta_cat_margin',
             [
@@ -1519,7 +1523,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_meta_cat_padding',
             [
@@ -1530,7 +1534,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-                
+
         $this->add_control(
             'mgpg_meta_cat_border_radius',
             [
@@ -1542,7 +1546,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Border::get_type(),
             [
@@ -1551,7 +1555,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-post-cat a',
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Box_Shadow::get_type(),
             [
@@ -1560,9 +1564,9 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-post-cat a',
             ]
         );
-        
+
         $this->end_controls_tab(); // End Normal Tab
-        
+
         // Hover Tab
         $this->start_controls_tab(
             'mgpg_meta_cat_hover',
@@ -1570,7 +1574,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'label' => __('Hover', 'magical-posts-display'),
             ]
         );
-        
+
         $this->add_control(
             'mgpg_meta_cat_text_color_hover',
             [
@@ -1581,7 +1585,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_meta_cat_bg_color_hover',
             [
@@ -1592,7 +1596,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Border::get_type(),
             [
@@ -1601,7 +1605,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-post-cat a:hover',
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Box_Shadow::get_type(),
             [
@@ -1610,11 +1614,11 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-post-cat a:hover',
             ]
         );
-        
+
         $this->end_controls_tab(); // End Hover Tab
-        
+
         $this->end_controls_tabs(); // End Tabs
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
             [
@@ -1642,7 +1646,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_author_style_section',
             [
@@ -1652,9 +1656,9 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
             ]
         );
 
-        
+
         $this->start_controls_tabs('mgpg_author_tabs');
-        
+
         // Normal Tab
         $this->start_controls_tab(
             'mgpg_author_normal_tab',
@@ -1662,7 +1666,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'label' => __('Normal', 'magical-posts-display'),
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
             [
@@ -1701,7 +1705,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_author_background_color',
             [
@@ -1712,7 +1716,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Border::get_type(),
             [
@@ -1721,7 +1725,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-meta .byline',
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_author_margin',
             [
@@ -1732,7 +1736,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_author_padding',
             [
@@ -1743,9 +1747,9 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->end_controls_tab();
-        
+
         // Hover Tab
         $this->start_controls_tab(
             'mgpg_author_hover_tab',
@@ -1753,7 +1757,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'label' => __('Hover', 'magical-posts-display'),
             ]
         );
-        
+
         $this->add_control(
             'mgpg_author_hover_text_color',
             [
@@ -1764,7 +1768,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_author_hover_background_color',
             [
@@ -1775,7 +1779,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Box_Shadow::get_type(),
             [
@@ -1784,7 +1788,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-meta .byline:hover',
             ]
         );
-        
+
         $this->add_control(
             'mgpg_author_transition_duration',
             [
@@ -1802,11 +1806,11 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->end_controls_tab();
-        
+
         $this->end_controls_tabs();
-        
+
 
 
         $this->add_control(
@@ -1931,10 +1935,10 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 break;
         }
         if ($mgpla_filter === 'show_byid' && !empty($settings['mgpla_post_id'])) {
-            $args['post__in'] = array_map('absint', $settings['mgpla_post_id']);
+            $args['post__in'] = mp_display_resolve_post_ids($settings['mgpla_post_id'], $mgpla_post_type);
         } elseif ($mgpla_filter === 'show_byid_manually') {
-            $post_ids = array_map('absint', explode(',', $settings['mgpla_post_ids_manually']));
-            $args['post__in'] = array_filter($post_ids);
+            $post_ids = array_map('trim', explode(',', $settings['mgpla_post_ids_manually']));
+            $args['post__in'] = mp_display_resolve_post_ids($post_ids, $mgpla_post_type);
         }
 
         // Custom Order
@@ -1964,6 +1968,9 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
         //grid layout
         $mgpla_gpost_style = $this->get_settings('mgpla_gpost_style');
 
+        // Apply post position settings
+        $args = $this->apply_post_position_to_query($args, $settings, 'mgpla_posts_filter');
+
         $mgpla_posts = new WP_Query($args);
         $mgpla_count = 0;
 
@@ -1973,7 +1980,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
 
                 <div class="mgomg-items mgomg-style<?php echo esc_attr($mgpla_gpost_style); ?> ">
                     <?php if ($mgpla_gpost_style == 1) : ?>
-                        <div class="row" data-masonry='{"percentPosition": true }'>
+                        <div class="mgp-row" data-masonry='{"percentPosition": true }'>
                         <?php endif; ?>
                         <?php
                         while ($mgpla_posts->have_posts()) : $mgpla_posts->the_post();
@@ -1989,7 +1996,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                                 }
                             }
                         endwhile;
-                        wp_reset_query();
+                        wp_reset_postdata();
                         wp_reset_postdata();
                         ?>
                         <?php if ($mgpla_gpost_style == 1) : ?> </div>
@@ -2011,14 +2018,14 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
     public function free_image_posts($settings)
     {
         if ($settings['mgpla_rownumber'] == '12') {
-            $column_set = 'col-lg-12';
+            $column_set = 'mgp-col-lg-12';
         } else {
-            $column_set = 'col-lg-' . $settings['mgpla_rownumber'] . ' col-md-6';
+            $column_set = 'mgp-col-lg-' . $settings['mgpla_rownumber'] . ' mgp-col-md-6';
         }
         $mgpg_post_type = !empty($settings['mgpg_post_type']) ? $settings['mgpg_post_type'] : 'post';
 
         ?>
-        <div class="<?php echo esc_attr($column_set); ?> bsgrid-item mb-4">
+        <div class="<?php echo esc_attr($column_set); ?> bsgrid-item mgp-mb-4">
             <div class="mgomg-pimg">
                 <?php
                 if (has_post_thumbnail()) :

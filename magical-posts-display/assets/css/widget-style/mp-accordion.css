@@ -1,8 +1,47 @@
-.accordion.mgaccordion{
+/* ===================================
+   Collapse/Accordion Animation Styles
+   =================================== */
+
+/* Base collapse styles - hidden by default */
+.collapse,
+.mgp-collapse {
+    display: none;
     overflow: hidden;
 }
 
-.card-header.mg-accordion-title {
+/* Show state */
+.collapse.show,
+.collapse.mgp-show,
+.mgp-collapse.show,
+.mgp-collapse.mgp-show {
+    display: block;
+}
+
+/* Collapsing animation state */
+.mgp-collapsing {
+    display: block !important;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+/* Accordion wrapper */
+.accordion.mgaccordion,
+.mgaccordion {
+    overflow: hidden;
+}
+
+/* Accordion card spacing */
+.mgaccordion .mgp-card {
+    margin-bottom: 10px;
+}
+
+/* Clickable title cursor */
+.mgrc-title {
+    cursor: pointer;
+}
+
+.mgp-card-header.mg-accordion-title {
     padding: 0;
     position: relative;
     background: transparent;
@@ -17,7 +56,7 @@
     margin-top: 3rem;
     margin-bottom: 1rem;
 }
-.mg-curve-shape .card {
+.mg-curve-shape .mgp-card {
     border: none;
     box-shadow: inherit;
 }
@@ -29,7 +68,7 @@
 .mg-curve-shape .mgrc-title {
     border-radius: 20px 20px 0 0;
 }
-.eacolor .card-header.mg-accordion-title .mgrc-title{
+.eacolor .mgp-card-header.mg-accordion-title .mgrc-title{
     background: linear-gradient(190deg, #130D6F 0%, #952598 80%);
     color: #fff;
 }
@@ -76,18 +115,32 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    height: 100%; 
+    position: absolute;
+    right: 50%;
+    top: 0;
 }
 .mgaccordion .mgrc-title .mgc-icon svg {
     width: 16px;
     fill: #fff;
 }
-.collapsed .mgc-icon.mgc-icon-top {
-    display: flex;
-}
+
+/* Icon toggle for collapsed/expanded states */
 .mgc-icon.mgc-icon-top {
     display: none;
 }
+.collapsed .mgc-icon.mgc-icon-top,
+.mgp-collapsed .mgc-icon.mgc-icon-top {
+    display: flex;
+}
+.collapsed .mgc-icon.mgc-icon-bottom,
+.mgp-collapsed .mgc-icon.mgc-icon-bottom {
+    display: none;
+}
+.mgc-icon.mgc-icon-bottom {
+    display: flex;
+}
+
 .mgc-left-icon .mgc-icon {
     position: absolute;
     left: 0;
@@ -103,20 +156,24 @@
     transform: translateY(-55%);
 }
 
- .mgrc-title.collapsed .mgc-close {
-    opacity: 1;
-}
+/* Open/Close icon transitions */
 .mgrc-title .mgc-close {
     opacity: 0;
-    transition: 0.2s
-}
-.mgrc-title.collapsed .mgc-open {
-    opacity: 0;
+    transition: opacity 0.2s ease;
 }
 .mgrc-title .mgc-open {
     opacity: 1;
-    transition: 0.2s
-} 
+    transition: opacity 0.2s ease;
+}
+.mgrc-title.collapsed .mgc-close,
+.mgrc-title.mgp-collapsed .mgc-close {
+    opacity: 1;
+}
+.mgrc-title.collapsed .mgc-open,
+.mgrc-title.mgp-collapsed .mgc-open {
+    opacity: 0;
+}
+
 .mgrc-item-right-right .mgrc-title {
     padding-right: 75px;
 } 
@@ -142,28 +199,39 @@
     transform: rotate(45deg);
 }
 
-.card-body.mgac-content.mgac-effect1 {
+.mgp-card-body.mgac-content.mgac-effect1 {
     transform: rotateY(90deg);
-    transition: 0.5s;
+    transition: transform 0.5s ease;
 }
 
-.show .card-body.mgac-content.mgac-effect1 {
+.show .mgp-card-body.mgac-content.mgac-effect1,
+.mgp-show .mgp-card-body.mgac-content.mgac-effect1,
+.mgp-card-body.mgac-content.mgac-effect1.show,
+.mgp-card-body.mgac-content.mgac-effect1.mgp-show {
     transform: rotateY(0);
 }
-.card-body.mgac-content.mgac-effect2 {
+
+.mgp-card-body.mgac-content.mgac-effect2 {
     transform: rotateX(90deg);
-    transition: 0.5s;
+    transition: transform 0.5s ease;
 }
 
-.show .card-body.mgac-content.mgac-effect2 {
+.show .mgp-card-body.mgac-content.mgac-effect2,
+.mgp-show .mgp-card-body.mgac-content.mgac-effect2,
+.mgp-card-body.mgac-content.mgac-effect2.show,
+.mgp-card-body.mgac-content.mgac-effect2.mgp-show {
     transform: rotateX(0);
 }
-.card-body.mgac-content.mgac-effect3 {
+
+.mgp-card-body.mgac-content.mgac-effect3 {
     transform: scale(0);
-    transition: 0.5s;
+    transition: transform 0.5s ease;
 }
 
-.show .card-body.mgac-content.mgac-effect3 {
+.show .mgp-card-body.mgac-content.mgac-effect3,
+.mgp-show .mgp-card-body.mgac-content.mgac-effect3,
+.mgp-card-body.mgac-content.mgac-effect3.show,
+.mgp-card-body.mgac-content.mgac-effect3.mgp-show {
     transform: scale(1);
 }
 /* Products style in accordion*/

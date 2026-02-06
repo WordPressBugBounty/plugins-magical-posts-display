@@ -3,6 +3,7 @@
 
 class mgpdEAwesomePostsList extends \Elementor\Widget_Base
 {
+    use Query_Controls_Trait;
 
     /**
      * Get widget name.
@@ -158,6 +159,9 @@ class mgpdEAwesomePostsList extends \Elementor\Widget_Base
                 'step'    => 1,
             ]
         );
+
+        // Post Position Control
+        $this->register_post_position_control('mgpl_posts_filter');
 
         $this->add_control(
             'mgpl_grid_categories',
@@ -516,7 +520,7 @@ class mgpdEAwesomePostsList extends \Elementor\Widget_Base
                 ],
                 'selectors' => [
                     '{{WRAPPER}} .mgpdl-list-item .mpdl-img img' => 'width: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .row.mgpo-yes .col-sm-auto:first-child' => 'flex: 0 0 {{SIZE}}{{UNIT}};'
+                    '{{WRAPPER}} .row.mgpo-yes .mgp-col-sm-auto:first-child' => 'flex: 0 0 {{SIZE}}{{UNIT}};'
                 ],
             ]
         );
@@ -649,7 +653,7 @@ class mgpdEAwesomePostsList extends \Elementor\Widget_Base
 
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .row.mgpo-yes .col-sm-auto:first-child' => 'flex: 0 0 {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .row.mgpo-yes .mgp-col-sm-auto:first-child' => 'flex: 0 0 {{SIZE}}{{UNIT}};',
                     '{{WRAPPER}} .mpdl-img,{{WRAPPER}} .mpdl-date' => 'width: {{SIZE}}{{UNIT}};'
                 ],
             ]
@@ -1216,10 +1220,10 @@ class mgpdEAwesomePostsList extends \Elementor\Widget_Base
                         break;
                 }
                 if ($mgpl_filter === 'show_byid' && !empty($settings['mgpl_post_id'])) {
-                    $args['post__in'] = array_map('absint', $settings['mgpl_post_id']);
+                    $args['post__in'] = mp_display_resolve_post_ids($settings['mgpl_post_id'], $mgpg_post_type);
                 } elseif ($mgpl_filter === 'show_byid_manually') {
-                    $post_ids = array_map('absint', explode(',', $settings['mgpl_post_ids_manually']));
-                    $args['post__in'] = array_filter($post_ids);
+                    $post_ids = array_map('trim', explode(',', $settings['mgpl_post_ids_manually']));
+                    $args['post__in'] = mp_display_resolve_post_ids($post_ids, $mgpg_post_type);
                 }
 
 
@@ -1247,7 +1251,8 @@ class mgpdEAwesomePostsList extends \Elementor\Widget_Base
                     }
                 }
 
-
+                // Apply post position settings
+                $args = $this->apply_post_position_to_query($args, $settings, 'mgpl_posts_filter');
 
                 $mp_loop = new WP_Query($args);
                 if ($mp_loop->have_posts()) :
@@ -1255,13 +1260,13 @@ class mgpdEAwesomePostsList extends \Elementor\Widget_Base
                         $mpdl_column = 'auto';
                         $mpdl_column_meta = 'auto';
                 ?>
-                        <li class="mgpdl-list-item mgbb mb-1 pb-1 text-<?php if ($mgpl_post_img_position == 'right') : ?>right<?php else : ?>left<?php endif; ?>">
-                            <div class="row mgpo-<?php echo esc_attr($settings['mgpl_post_inline']);
+                        <li class="mgpdl-list-item mgbb mgp-mb-1 mgp-pb-1 text-<?php if ($mgpl_post_img_position == 'right') : ?>right<?php else : ?>left<?php endif; ?>">
+                            <div class="mgp-row mgpo-<?php echo esc_attr($settings['mgpl_post_inline']);
                                                     if ($mgpl_post_img_position == 'right') : ?> mgpdl-hright<?php endif; ?>">
                                 <?php if ($mgpl_post_style != 'hide') : ?>
                                     <?php if ($mgpl_post_style == 'show_date' || !has_post_thumbnail()) : ?>
-                                        <div class="col-sm-<?php echo esc_attr($mpdl_column_meta); ?>">
-                                            <div class="mpdl-date bg-info text-center">
+                                        <div class="mgp-col-sm-<?php echo esc_attr($mpdl_column_meta); ?>">
+                                            <div class="mpdl-date mgp-bg-info mgp-text-center">
                                                 <span class="mp-day"><?php echo esc_html(get_the_date('l')); ?></span>
                                                 <span class="mp-month"><?php echo esc_html(get_the_date('M j')); ?></span>
                                                 <span class="mp-year"><?php echo esc_html(get_the_date('Y')); ?></span>
@@ -1270,7 +1275,7 @@ class mgpdEAwesomePostsList extends \Elementor\Widget_Base
                                     <?php
                                     else :
                                     ?>
-                                        <div class="col-sm-<?php echo esc_attr($mpdl_column_meta); ?>">
+                                        <div class="mgp-col-sm-<?php echo esc_attr($mpdl_column_meta); ?>">
                                             <div class="mpdl-img">
                                                 <a href="<?php the_permalink(); ?>">
                                                     <?php the_post_thumbnail($mgpl_post_img_size); ?>
@@ -1281,7 +1286,7 @@ class mgpdEAwesomePostsList extends \Elementor\Widget_Base
                                     endif; // check post meta or image 
                                     ?>
                                 <?php endif; ?>
-                                <div class="col-sm-<?php echo esc_attr($mpdl_column); ?>">
+                                <div class="mgp-col-sm-<?php echo esc_attr($mpdl_column); ?>">
                                     <div class="mpdl-text">
                                         <?php if ($settings['mgpl_post_catshow'] && $mgpg_post_type == 'post') : ?>
                                             <div class="mp-meta cat-list">
@@ -1304,7 +1309,7 @@ class mgpdEAwesomePostsList extends \Elementor\Widget_Base
                                             </h3>
                                         <?php endif; ?>
                                         <?php if ($settings['mgpl_show_author'] || $settings['mgpl_date_show']) : ?>
-                                            <div class="mp-meta bottom-meta mb-2">
+                                            <div class="mp-meta bottom-meta mgp-mb-2">
                                                 <?php
                                                 if ($settings['mgpl_show_author']) {
                                                     mp_display_posted_by();

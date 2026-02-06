@@ -3,6 +3,7 @@
 
 class mgpdEPostsList extends \Elementor\Widget_Base
 {
+    use Query_Controls_Trait;
 
     /**
      * Get widget name.
@@ -166,6 +167,9 @@ class mgpdEPostsList extends \Elementor\Widget_Base
                 'step'    => 1,
             ]
         );
+
+        // Post Position Control
+        $this->register_post_position_control('mgpl_posts_filter');
 
         $this->add_control(
             'mgpl_grid_categories',
@@ -393,7 +397,7 @@ class mgpdEPostsList extends \Elementor\Widget_Base
                 'default' => 'left',
                 'classes' => 'flex-{{VALUE}}',
                 'selectors' => [
-                    '{{WRAPPER}} .mgpdl-item .card-body.mgpdl-text' => 'text-align: {{VALUE}};',
+                    '{{WRAPPER}} .mgpdl-item .mgp-card-body.mgpdl-text' => 'text-align: {{VALUE}};',
                 ],
             ]
         );
@@ -1752,11 +1756,12 @@ class mgpdEPostsList extends \Elementor\Widget_Base
                 break;
 
             case 'show_byid':
-                $args['post__in'] = $settings['mgpl_post_id'];
+                $args['post__in'] = mp_display_resolve_post_ids($settings['mgpl_post_id'], $mgpla_post_type);
                 break;
 
             case 'show_byid_manually':
-                $args['post__in'] = explode(',', $settings['mgpl_post_ids_manually']);
+                $post_ids = array_map('trim', explode(',', $settings['mgpl_post_ids_manually']));
+                $args['post__in'] = mp_display_resolve_post_ids($post_ids, $mgpla_post_type);
                 break;
 
             default: /* Recent */
@@ -1810,6 +1815,8 @@ class mgpdEPostsList extends \Elementor\Widget_Base
         $mgpl_btn_icon_position = $this->get_settings('mgpl_btn_icon_position');
         $mgpl_wrap = $this->get_settings('mgpl_wrap');
 
+        // Apply post position settings
+        $args = $this->apply_post_position_to_query($args, $settings, 'mgpl_posts_filter');
 
         $mgpl_posts = new WP_Query($args);
 
@@ -1818,8 +1825,8 @@ class mgpdEPostsList extends \Elementor\Widget_Base
             <div id="mglp-items" class="mgpd mp-display-list mgpdl style<?php echo esc_attr($mgpl_post_style); ?>">
                 <div class="mgpdl-items">
                     <?php while ($mgpl_posts->have_posts()) : $mgpl_posts->the_post(); ?>
-                        <div class="mgpdl-item mgpd-list mb-4 <?php if (has_post_thumbnail() && $mgpl_post_img_show) : ?>mgpdl-hasimg<?php endif; ?>">
-                            <div class="card mgpdl-card <?php if ($mgpl_wrap) : ?>no-wrap<?php endif; ?>">
+                        <div class="mgpdl-item mgpd-list mgp-mb-4 <?php if (has_post_thumbnail() && $mgpl_post_img_show) : ?>mgpdl-hasimg<?php endif; ?>">
+                            <div class="mgp-card mgpdl-card <?php if ($mgpl_wrap) : ?>no-wrap<?php endif; ?>">
                                 <?php if (has_post_thumbnail() && $mgpl_post_img_show) : ?>
                                     <div class="mgpdl-img">
                                         <figure>
@@ -1829,7 +1836,7 @@ class mgpdEPostsList extends \Elementor\Widget_Base
                                         </figure>
                                     </div>
                                 <?php endif; ?>
-                                <div class="card-body mgpdl-text">
+                                <div class="mgp-card-body mgpdl-text">
                                     <?php
                                     // display category
                                     if ($mgpla_post_type == 'post') {
@@ -1877,7 +1884,7 @@ class mgpdEPostsList extends \Elementor\Widget_Base
                         </div>
                     <?php
                     endwhile;
-                    wp_reset_query();
+                    wp_reset_postdata();
                     wp_reset_postdata();
                     ?>
                 </div>

@@ -77,7 +77,7 @@ if (!function_exists('mp_post_cat_display')) {
             <div class="mppost-cats mpcat-all <?php echo esc_attr($class); ?>">
                 <?php
                 // translators: %s: list of categories
-                $categories_text = sprintf(esc_html__('%s', 'magical-addons-for-elementor'), $mpg_cat_list);
+                $categories_text = sprintf(esc_html__('%s', 'magical-posts-display'), $mpg_cat_list);
                 printf('<span class="mgp-post-cats">%s</span>', wp_kses_post($categories_text));
                 ?>
             </div>
@@ -153,10 +153,19 @@ function mpd_check_plugin_active($plugin_path)
 }
 
 
-function mpd_validate_html_tag($tag, $default_tag = 'h2', $allowed_tags = array()) {
+function mpd_validate_html_tag($tag, $default_tag = 'h2', $allowed_tags = array())
+{
     // Use the provided whitelist or fall back to a predefined set of safe tags
     $safe_tags = !empty($allowed_tags) ? $allowed_tags : array(
-        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'div',
+        'span',
+        'p'
     );
 
     // Make sure we're working with a string

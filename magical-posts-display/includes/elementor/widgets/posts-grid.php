@@ -1,8 +1,10 @@
 <?php
 
-
 class mgpdEPostsGrid extends \Elementor\Widget_Base
 {
+    use SVG_Icons_Trait;
+    use Advanced_Media_Trait;
+    use Query_Controls_Trait;
 
     /**
      * Get widget name.
@@ -125,6 +127,9 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                     'random_order' => esc_html__('Random Posts', 'magical-posts-display'),
                     'show_byid' => esc_html__('Show By Id (Post Only)', 'magical-posts-display'),
                     'show_byid_manually' => esc_html__('Add ID Manually', 'magical-posts-display'),
+                    'advanced_query' => esc_html__('Advanced Query Builder (Pro Only)', 'magical-posts-display'),
+                    'custom_fields' => esc_html__('Custom Fields Filter (Pro Only)', 'magical-posts-display'),
+                    'exclude_current' => esc_html__('Exclude Current Post (Pro Only)', 'magical-posts-display'),
                 ],
             ]
         );
@@ -166,6 +171,9 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'step'    => 1,
             ]
         );
+
+        // Post Position Control
+        $this->register_post_position_control('mgpg_posts_filter');
 
         $this->add_control(
             'mgpg_grid_categories',
@@ -238,6 +246,36 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
             ]
         );
         $this->add_control(
+            'mgpg_layout_type',
+            [
+                'label'   => __('Layout Type', 'magical-posts-display'),
+                'type'    => \Elementor\Controls_Manager::SELECT,
+                'default' => 'static',
+                'options' => [
+                    'static'   => __('Static', 'magical-posts-display'),
+                    'masonry'  => __('Masonry', 'magical-posts-display'),
+                ],
+                'description' => __('Choose between static grid layout or masonry layout. Masonry creates a dynamic, Pinterest-style layout. <strong>Note: Masonry only works on frontend, not in editor preview.</strong>', 'magical-posts-display'),
+            ]
+        );
+        $this->add_control(
+            'mgpg_masonry_style',
+            [
+                'label'   => __('Masonry Style', 'magical-posts-display'),
+                'type'    => \Elementor\Controls_Manager::SELECT,
+                'default' => 'style1',
+                'options' => [
+                    'style1'   => __('Style 1 - Default Heights', 'magical-posts-display'),
+                    'style2'   => __('Style 2 - Alternating Heights', 'magical-posts-display'),
+                    'style3'   => __('Style 3 - Pattern Heights', 'magical-posts-display'),
+                ],
+                'condition' => [
+                    'mgpg_layout_type' => 'masonry',
+                ],
+                'description' => __('Choose different image height patterns for masonry layout. <strong>Note: Masonry preview only works on frontend.</strong>', 'magical-posts-display'),
+            ]
+        );
+        $this->add_control(
             'mgpg_post_style',
             [
                 'label'   => __('Grid Style', 'magical-posts-display'),
@@ -283,6 +321,65 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'default' => 'yes',
             ]
         );
+
+        $this->add_control(
+            'mgpg_media_source',
+            [
+                'label' => __('Advanced Media Source (Pro Only)', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'options' => [
+                    'featured' => __('Featured Image Only', 'magical-posts-display'),
+                    'content' => __('First Content Image (Pro Only)', 'magical-posts-display'),
+                    'video' => __('Video Embed (YouTube/Vimeo) (Pro Only)', 'magical-posts-display'),
+                    'priority' => __('Priority Fallback (Pro Only)', 'magical-posts-display'),
+                ],
+                'default' => 'featured',
+                'description' => __('Choose media source with priority fallback system (Pro Only)', 'magical-posts-display'),
+                'classes' => 'mpd-pro-control',
+                'condition' => [
+                    'mgpg_post_img_show' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_media_priority',
+            [
+                'label' => __('Priority Order (Pro Only)', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SELECT2,
+                'multiple' => true,
+                'options' => [
+                    'video' => __('Video Embed', 'magical-posts-display'),
+                    'featured' => __('Featured Image', 'magical-posts-display'),
+                    'content' => __('First Content Image', 'magical-posts-display'),
+                    'placeholder' => __('Placeholder Image', 'magical-posts-display'),
+                ],
+                'default' => ['video', 'featured', 'content', 'placeholder'],
+                'description' => __('Set priority order for media fallback. First available source will be used (Pro Only)', 'magical-posts-display'),
+                'classes' => 'mpd-pro-control',
+                'condition' => [
+                    'mgpg_post_img_show' => 'yes',
+                    'mgpg_media_source' => 'priority',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_video_play_icon',
+            [
+                'label' => __('Show Video Play Icon', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'default' => 'yes',
+                'description' => __('Display play icon overlay on video thumbnails (Pro Only)', 'magical-posts-display'),
+                'classes' => 'mpd-pro-control',
+                'condition' => [
+                    'mgpg_post_img_show' => 'yes',
+                    'mgpg_media_source' => ['video', 'priority'],
+                ],
+                'condition_type' => 'or',
+            ]
+        );
+
         $this->add_control(
             'mgpg_show_title',
             [
@@ -374,7 +471,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'default' => 'left',
                 'classes' => 'flex-{{VALUE}}',
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body' => 'text-align: {{VALUE}};',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body' => 'text-align: {{VALUE}};',
                 ],
             ]
         );
@@ -589,6 +686,124 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
             ]
         );
         $this->end_controls_section();
+
+        // Premium Features Section
+        $this->start_controls_section(
+            'mgpg_premium_features',
+            [
+                'label' => sprintf('%s %s', __('Premium Features', 'magical-posts-display'), mp_display__pro_only_text()),
+                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            ]
+        );
+        if (empty(mp_display_check_main_ok())) {
+            $this->add_control(
+                'mgpg_premium_info',
+                [
+                    'type' => \Elementor\Controls_Manager::RAW_HTML,
+                    'raw' => sprintf('<span style="color:red">%s</span>', __('These advanced features are only available in the Pro version.', 'magical-posts-display')),
+                ]
+            );
+        }
+        $this->add_control(
+            'mgpg_ajax_filter',
+            [
+                'label' => __('AJAX Category Filter', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'description' => __('Enable dynamic category filtering without page reload (Pro Only)', 'magical-posts-display'),
+                'classes' => 'mpd-pro-control',
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_infinite_scroll',
+            [
+                'label' => __('Infinite Scroll', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'description' => __('Load more posts automatically when scrolling (Pro Only)', 'magical-posts-display'),
+                'classes' => 'mpd-pro-control',
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_reading_time',
+            [
+                'label' => __('Reading Time Display', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'description' => __('Show estimated reading time for each post (Pro Only)', 'magical-posts-display'),
+                'classes' => 'mpd-pro-control',
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_view_count',
+            [
+                'label' => __('Post Views Counter', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'description' => __('Display post view counts with analytics (Pro Only)', 'magical-posts-display'),
+                'classes' => 'mpd-pro-control',
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_social_share',
+            [
+                'label' => __('Social Share Buttons', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'description' => __('Add social sharing buttons to each post card (Pro Only)', 'magical-posts-display'),
+                'classes' => 'mpd-pro-control',
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_premium_features_style',
+            [
+                'label' => __('Premium Features Display Style', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'options' => [
+                    'default' => __('Default (Below Content)', 'magical-posts-display'),
+                    'image-top' => __('Top of Image (Pro Only)', 'magical-posts-display'),
+                    'image-overlay' => __('Image Overlay on Hover (Pro Only)', 'magical-posts-display'),
+                ],
+                'default' => 'default',
+                'description' => __('Choose where to display reading time, views, and social buttons (Pro Only)', 'magical-posts-display'),
+                'classes' => 'mpd-pro-control',
+                'condition' => [
+                    'mgpg_reading_time' => 'yes',
+                    'mgpg_view_count' => 'yes',
+                    'mgpg_social_share' => 'yes',
+                ],
+                'condition_type' => 'or',
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_hover_effects',
+            [
+                'label' => __('Advanced Hover Effects', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'options' => [
+                    'none' => __('None', 'magical-posts-display'),
+                    'zoom' => __('Zoom Effect (Pro Only)', 'magical-posts-display'),
+                    'slide' => __('Slide Effect (Pro Only)', 'magical-posts-display'),
+                    'fade' => __('Fade Effect (Pro Only)', 'magical-posts-display'),
+                    'rotate' => __('Rotate Effect (Pro Only)', 'magical-posts-display'),
+                ],
+                'default' => 'none',
+                'description' => __('Choose advanced hover animations for post cards (Pro Only)', 'magical-posts-display'),
+                'classes' => 'mpd-pro-control',
+            ]
+        );
+        if (mp_display_check_main_ok()) {
+            $this->add_control(
+                'mgpg_ajax_info',
+                [
+                    'type' => \Elementor\Controls_Manager::RAW_HTML,
+                    'raw' => sprintf('<span style="color:red">%s</span>', __('All Ajax features only work in the frontend', 'magical-posts-display')),
+                ]
+            );
+        }
+        $this->end_controls_section();
+
         $this->start_controls_section(
             'mgpg_pagination',
             [
@@ -932,6 +1147,234 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         );
         $this->end_controls_section();
 
+        // Filter Buttons Style Section
+        $this->start_controls_section(
+            'mgpd_filter_buttons_style',
+            [
+                'label' => __('Filter Buttons', 'magical-posts-display'),
+                'tab'   => \Elementor\Controls_Manager::TAB_STYLE,
+                'condition' => [
+                    'mgpg_ajax_filter' => 'yes',
+                ]
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgpd_filter_align',
+            [
+                'label' => __('Alignment', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::CHOOSE,
+                'options' => [
+                    'left' => [
+                        'title' => __('Left', 'magical-posts-display'),
+                        'icon' => 'eicon-text-align-left',
+                    ],
+                    'center' => [
+                        'title' => __('Center', 'magical-posts-display'),
+                        'icon' => 'eicon-text-align-center',
+                    ],
+                    'right' => [
+                        'title' => __('Right', 'magical-posts-display'),
+                        'icon' => 'eicon-text-align-right',
+                    ],
+                ],
+                'default' => 'center',
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-filter-buttons' => 'text-align: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgpd_filter_spacing',
+            [
+                'label' => __('Buttons Spacing', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 50,
+                        'step' => 1,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn' => 'margin: 0 {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgpd_filter_margin',
+            [
+                'label' => __('Container Margin', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', 'em', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-filter-buttons' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgpd_filter_padding',
+            [
+                'label' => __('Container Padding', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', 'em', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-filter-buttons' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        // Button Tabs for Normal and Active states
+        $this->start_controls_tabs('mgpd_filter_btn_tabs');
+
+        // Normal State Tab
+        $this->start_controls_tab(
+            'mgpd_filter_btn_normal',
+            [
+                'label' => __('Normal', 'magical-posts-display'),
+            ]
+        );
+
+        $this->add_group_control(
+            \Elementor\Group_Control_Typography::get_type(),
+            [
+                'name' => 'mgpd_filter_btn_typography',
+                'selector' => '{{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn',
+            ]
+        );
+
+        $this->add_control(
+            'mgpd_filter_btn_color',
+            [
+                'label' => __('Text Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'default' => '#333333',
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            \Elementor\Group_Control_Background::get_type(),
+            [
+                'name' => 'mgpd_filter_btn_bg',
+                'label' => __('Background', 'magical-posts-display'),
+                'types' => ['classic', 'gradient'],
+                'selector' => '{{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn',
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgpd_filter_btn_padding',
+            [
+                'label' => __('Padding', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', 'em', '%'],
+                'default' => [
+                    'top' => 10,
+                    'right' => 20,
+                    'bottom' => 10,
+                    'left' => 20,
+                    'unit' => 'px',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpd_filter_btn_border_radius',
+            [
+                'label' => __('Border Radius', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            \Elementor\Group_Control_Border::get_type(),
+            [
+                'name' => 'mgpd_filter_btn_border',
+                'selector' => '{{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn',
+            ]
+        );
+
+        $this->add_group_control(
+            \Elementor\Group_Control_Box_Shadow::get_type(),
+            [
+                'name' => 'mgpd_filter_btn_shadow',
+                'selector' => '{{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn',
+            ]
+        );
+
+        $this->end_controls_tab();
+
+        // Active/Hover State Tab
+        $this->start_controls_tab(
+            'mgpd_filter_btn_active',
+            [
+                'label' => __('Active/Hover', 'magical-posts-display'),
+            ]
+        );
+
+        $this->add_control(
+            'mgpd_filter_btn_active_color',
+            [
+                'label' => __('Text Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'default' => '#ffffff',
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn.active' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn:hover' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            \Elementor\Group_Control_Background::get_type(),
+            [
+                'name' => 'mgpd_filter_btn_active_bg',
+                'label' => __('Background', 'magical-posts-display'),
+                'types' => ['classic', 'gradient'],
+                'selector' => '{{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn.active, {{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn:hover',
+            ]
+        );
+
+        $this->add_control(
+            'mgpd_filter_btn_active_border_color',
+            [
+                'label' => __('Border Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn.active' => 'border-color: {{VALUE}};',
+                    '{{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn:hover' => 'border-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            \Elementor\Group_Control_Box_Shadow::get_type(),
+            [
+                'name' => 'mgpd_filter_btn_active_shadow',
+                'selector' => '{{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn.active, {{WRAPPER}} .mgpd-filter-buttons .mgpd-filter-btn:hover',
+            ]
+        );
+
+        $this->end_controls_tab();
+
+        $this->end_controls_tabs();
+
+        $this->end_controls_section();
+
         $this->start_controls_section(
             'mgpg_title_style',
             [
@@ -939,10 +1382,10 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'tab'   => \Elementor\Controls_Manager::TAB_STYLE,
             ]
         );
-        
+
         // Adding Tabs for Normal and Hover
         $this->start_controls_tabs('mgpg_title_tabs');
-        
+
         // Normal Tab
         $this->start_controls_tab(
             'mgpg_title_normal',
@@ -950,7 +1393,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'label' => __('Normal', 'magical-posts-display'),
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_title_padding',
             [
@@ -962,7 +1405,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_title_margin',
             [
@@ -974,7 +1417,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_title_color',
             [
@@ -985,7 +1428,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_title_bgcolor',
             [
@@ -996,7 +1439,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_descb_radius',
             [
@@ -1008,7 +1451,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
             [
@@ -1017,9 +1460,9 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mgp-card .mgp-ptitle',
             ]
         );
-        
+
         $this->end_controls_tab();
-        
+
         // Hover Tab
         $this->start_controls_tab(
             'mgpg_title_hover',
@@ -1027,7 +1470,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'label' => __('Hover', 'magical-posts-display'),
             ]
         );
-        
+
         $this->add_control(
             'mgpg_hover_transition',
             [
@@ -1056,7 +1499,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_title_hover_bgcolor',
             [
@@ -1067,7 +1510,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_descb_hover_radius',
             [
@@ -1079,11 +1522,11 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
-        $this->end_controls_tab(); 
+
+        $this->end_controls_tab();
         $this->end_controls_tabs();
         $this->end_controls_section();
-        
+
 
         $this->start_controls_section(
             'mgpg_description_style',
@@ -1092,9 +1535,9 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'tab'   => \Elementor\Controls_Manager::TAB_STYLE,
             ]
         );
-        
+
         $this->start_controls_tabs('mgpg_description_tabs');
-        
+
         // Normal Tab
         $this->start_controls_tab(
             'mgpg_description_normal',
@@ -1102,7 +1545,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'label' => __('Normal', 'magical-posts-display'),
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_description_padding',
             [
@@ -1110,11 +1553,11 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body p' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_description_margin',
             [
@@ -1122,33 +1565,33 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body p' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_description_color',
             [
                 'label' => __('Text Color', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body p' => 'color: {{VALUE}};',
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_description_bgcolor',
             [
                 'label' => __('Background Color', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p' => 'background-color: {{VALUE}};',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body p' => 'background-color: {{VALUE}};',
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_description_radius',
             [
@@ -1156,13 +1599,13 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body p' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
-        
+
         $this->end_controls_tab(); // End of Normal Tab
-        
+
         // Hover Tab
         $this->start_controls_tab(
             'mgpg_description_hover',
@@ -1170,29 +1613,29 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'label' => __('Hover', 'magical-posts-display'),
             ]
         );
-        
+
         $this->add_control(
             'mgpg_description_hover_color',
             [
                 'label' => __('Hover Text Color', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p:hover' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body p:hover' => 'color: {{VALUE}};',
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_description_hover_bgcolor',
             [
                 'label' => __('Hover Background Color', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p:hover' => 'background-color: {{VALUE}};',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body p:hover' => 'background-color: {{VALUE}};',
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_des_hover_transition',
             [
@@ -1206,26 +1649,26 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                     ],
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p' => 'transition: all {{SIZE}}s ease;',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body p' => 'transition: all {{SIZE}}s ease;',
                 ],
             ]
         );
-        
+
         $this->end_controls_tab(); // End of Hover Tab
-        
+
         $this->end_controls_tabs();
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
             [
                 'name' => 'mgpg_description_typography',
                 'label' => __('Typography', 'magical-posts-display'),
-                'selector' => '{{WRAPPER}} .mgp-card .mg-card-text.card-body p',
+                'selector' => '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body p',
             ]
         );
-        
+
         $this->end_controls_section();
-        
+
         $this->start_controls_section(
             'mgpg_meta_style',
             [
@@ -1245,9 +1688,9 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->start_controls_tabs('mgpg_meta_cat_tabs');
-        
+
         // Normal Tab
         $this->start_controls_tab(
             'mgpg_meta_cat_normal',
@@ -1255,7 +1698,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'label' => __('Normal', 'magical-posts-display'),
             ]
         );
-        
+
         $this->add_control(
             'mgpg_meta_cat_text_color',
             [
@@ -1266,7 +1709,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_meta_cat_bg_color',
             [
@@ -1277,7 +1720,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_meta_cat_margin',
             [
@@ -1288,7 +1731,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_meta_cat_padding',
             [
@@ -1299,7 +1742,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_meta_cat_border_radius',
             [
@@ -1320,7 +1763,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-post-cat',
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Box_Shadow::get_type(),
             [
@@ -1329,9 +1772,9 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-post-cat',
             ]
         );
-        
+
         $this->end_controls_tab(); // End Normal Tab
-        
+
         // Hover Tab
         $this->start_controls_tab(
             'mgpg_meta_cat_hover',
@@ -1339,7 +1782,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'label' => __('Hover', 'magical-posts-display'),
             ]
         );
-        
+
         $this->add_control(
             'mgpg_meta_cat_text_color_hover',
             [
@@ -1350,7 +1793,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_meta_cat_bg_color_hover',
             [
@@ -1361,7 +1804,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Border::get_type(),
             [
@@ -1370,7 +1813,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-post-cat:hover',
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Box_Shadow::get_type(),
             [
@@ -1379,11 +1822,11 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-post-cat:hover',
             ]
         );
-        
+
         $this->end_controls_tab(); // End Hover Tab
-        
+
         $this->end_controls_tabs(); // End Tabs
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
             [
@@ -1433,7 +1876,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_author_style_section',
             [
@@ -1441,14 +1884,14 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::HEADING,
                 'separator' => 'before',
                 'condition' => [
-                            'mgpg_author_show' => 'yes',
+                    'mgpg_author_show' => 'yes',
                 ],
             ]
         );
 
-        
+
         $this->start_controls_tabs('mgpg_author_tabs');
-        
+
         // Normal Tab
         $this->start_controls_tab(
             'mgpg_author_normal_tab',
@@ -1456,7 +1899,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'label' => __('Normal', 'magical-posts-display'),
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
             [
@@ -1495,7 +1938,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_author_background_color',
             [
@@ -1506,7 +1949,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Border::get_type(),
             [
@@ -1515,7 +1958,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-meta .byline',
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_author_margin',
             [
@@ -1526,7 +1969,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_author_padding',
             [
@@ -1537,9 +1980,9 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->end_controls_tab();
-        
+
         // Hover Tab
         $this->start_controls_tab(
             'mgpg_author_hover_tab',
@@ -1547,7 +1990,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'label' => __('Hover', 'magical-posts-display'),
             ]
         );
-        
+
         $this->add_control(
             'mgpg_author_hover_text_color',
             [
@@ -1558,7 +2001,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_author_hover_background_color',
             [
@@ -1569,7 +2012,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Box_Shadow::get_type(),
             [
@@ -1578,7 +2021,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-meta .byline:hover',
             ]
         );
-        
+
         $this->add_control(
             'mgpg_author_transition_duration',
             [
@@ -1596,13 +2039,13 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
-        $this->end_controls_tab();
-        
-        $this->end_controls_tabs();
-        
 
-        
+        $this->end_controls_tab();
+
+        $this->end_controls_tabs();
+
+
+
         $this->add_control(
             'mgpg_meta_date',
             [
@@ -1620,7 +2063,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         $this->start_controls_tab('mgpg_meta_date_normal', [
             'label' => __('Normal', 'magical-posts-display'),
         ]);
-        
+
         $this->add_control(
             'mgpg_meta_date_color',
             [
@@ -1631,7 +2074,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_meta_date_background_color',
             [
@@ -1642,7 +2085,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_meta_date_margin',
             [
@@ -1653,7 +2096,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_meta_date_padding',
             [
@@ -1664,7 +2107,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Border::get_type(),
             [
@@ -1672,7 +2115,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-posts-date, {{WRAPPER}} .mgp-time',
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Box_Shadow::get_type(),
             [
@@ -1680,14 +2123,14 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-posts-date, {{WRAPPER}} .mgp-time',
             ]
         );
-        
+
         $this->end_controls_tab();
-        
+
         // Hover Tab
         $this->start_controls_tab('mgpg_meta_date_hover', [
             'label' => __('Hover', 'magical-posts-display'),
         ]);
-        
+
         $this->add_control(
             'mgpg_meta_date_hover_color',
             [
@@ -1698,7 +2141,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_meta_date_hover_background_color',
             [
@@ -1709,7 +2152,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Border::get_type(),
             [
@@ -1717,7 +2160,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-posts-date:hover, {{WRAPPER}} .mgp-time:hover',
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Box_Shadow::get_type(),
             [
@@ -1725,7 +2168,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-posts-date:hover, {{WRAPPER}} .mgp-time:hover',
             ]
         );
-        
+
         $this->add_control(
             'mgpg_meta_date_transition',
             [
@@ -1744,10 +2187,10 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->end_controls_tab();
         $this->end_controls_tabs();
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
             [
@@ -1756,8 +2199,8 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mp-posts-date, {{WRAPPER}} .mgp-time',
             ]
         );
-        
-        
+
+
         $this->add_responsive_control(
             'mgpg_meta_date_icon_size',
             [
@@ -1775,7 +2218,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                     '{{WRAPPER}} .mgp-time svg, {{WRAPPER}} .mp-posts-date svg, .mgp_there_style-time > span:first-of-type svg' => 'width: {{SIZE}}{{UNIT}};',
                 ],
             ]
-        ); 
+        );
 
         $this->add_control(
             'mgpg_meta_tag',
@@ -1795,7 +2238,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         $this->start_controls_tab('mgpg_meta_tag_normal', [
             'label' => __('Normal', 'magical-posts-display'),
         ]);
-        
+
         $this->add_control(
             'mgpg_meta_tag_color',
             [
@@ -1807,7 +2250,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_meta_tag_background_color',
             [
@@ -1818,7 +2261,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_meta_tag_margin',
             [
@@ -1830,7 +2273,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_responsive_control(
             'mgpg_meta_tag_padding',
             [
@@ -1842,7 +2285,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Border::get_type(),
             [
@@ -1850,7 +2293,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mpg-tags-links',
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Box_Shadow::get_type(),
             [
@@ -1858,14 +2301,14 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mpg-tags-links',
             ]
         );
-        
+
         $this->end_controls_tab();
-        
+
         // Hover Tab
         $this->start_controls_tab('mgpg_meta_tag_hover', [
             'label' => __('Hover', 'magical-posts-display'),
         ]);
-        
+
         $this->add_control(
             'mgpg_meta_tag_hover_color',
             [
@@ -1877,7 +2320,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_control(
             'mgpg_meta_tag_hover_background_color',
             [
@@ -1888,7 +2331,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Border::get_type(),
             [
@@ -1896,7 +2339,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mpg-tags-links:hover',
             ]
         );
-        
+
         $this->add_group_control(
             \Elementor\Group_Control_Box_Shadow::get_type(),
             [
@@ -1904,7 +2347,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'selector' => '{{WRAPPER}} .mpg-tags-links:hover',
             ]
         );
-        
+
         $this->add_control(
             'mgpg_meta_tag_transition',
             [
@@ -1923,7 +2366,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
-        
+
         $this->end_controls_tab();
         $this->end_controls_tabs();
 
@@ -1962,7 +2405,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                     'mgpg_tag_show' => 'yes',
                 ],
             ]
-        ); 
+        );
 
         $this->end_controls_section();
 
@@ -2015,7 +2458,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ],
             ]
         );
- 
+
         $this->add_group_control(
             \Elementor\Group_Control_Typography::get_type(),
             [
@@ -2377,6 +2820,631 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         $this->end_controls_tab();
         $this->end_controls_tabs();
         $this->end_controls_section();
+
+        // Premium Features Style Section
+        $this->start_controls_section(
+            'mgpg_premium_style',
+            [
+                'label' => sprintf('%s %s', __('✨ Premium Features Style', 'magical-posts-display'), mp_display__pro_only_text()),
+                'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+            ]
+        );
+
+        if (empty(mp_display_check_main_ok())) {
+            $this->add_control(
+                'mgpg_premium_style_info',
+                [
+                    'label' => sprintf('<span style="color:red">%s</span>', __('Premium features styling only works with pro version.', 'magical-posts-display')),
+                    'type' => \Elementor\Controls_Manager::HEADING,
+                    'separator' => 'before',
+                ]
+            );
+        }
+
+        // Reading Time Style
+        $this->add_control(
+            'mgpg_reading_time_heading',
+            [
+                'label' => __('Reading Time', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_reading_time_color',
+            [
+                'label' => __('Text Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-reading-time' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_reading_time_bg',
+            [
+                'label' => __('Background Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-reading-time' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            \Elementor\Group_Control_Typography::get_type(),
+            [
+                'name' => 'mgpg_reading_time_typography',
+                'label' => __('Typography', 'magical-posts-display'),
+                'selector' => '{{WRAPPER}} .mgpd-reading-time',
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgpg_reading_time_padding',
+            [
+                'label' => __('Padding', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', 'em', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-reading-time' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgpg_reading_time_margin',
+            [
+                'label' => __('Margin', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', 'em', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-reading-time' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgpg_reading_time_border_radius',
+            [
+                'label' => __('Border Radius', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-reading-time' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        // View Count Style
+        $this->add_control(
+            'mgpg_view_count_heading',
+            [
+                'label' => __('View Count', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_view_count_color',
+            [
+                'label' => __('Text Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-view-count' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_view_count_bg',
+            [
+                'label' => __('Background Color', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-view-count' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            \Elementor\Group_Control_Typography::get_type(),
+            [
+                'name' => 'mgpg_view_count_typography',
+                'label' => __('Typography', 'magical-posts-display'),
+                'selector' => '{{WRAPPER}} .mgpd-view-count',
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgpg_view_count_padding',
+            [
+                'label' => __('Padding', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', 'em', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-view-count' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgpg_view_count_margin',
+            [
+                'label' => __('Margin', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', 'em', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-view-count' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgpg_view_count_border_radius',
+            [
+                'label' => __('Border Radius', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-view-count' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        // Social Share Buttons Style
+        $this->add_control(
+            'mgpg_social_share_heading',
+            [
+                'label' => __('Social Share Buttons', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgpg_social_share_size',
+            [
+                'label' => __('Button Size', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range' => [
+                    'px' => [
+                        'min' => 20,
+                        'max' => 60,
+                        'step' => 1,
+                    ],
+                ],
+                'default' => [
+                    'unit' => 'px',
+                    'size' => 32,
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-social-share a' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgpg_social_share_gap',
+            [
+                'label' => __('Gap Between Buttons', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 30,
+                        'step' => 1,
+                    ],
+                ],
+                'default' => [
+                    'unit' => 'px',
+                    'size' => 8,
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-social-share' => 'gap: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'mgpg_social_share_margin',
+            [
+                'label' => __('Margin', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', 'em', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-social-share' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        // Social Button Colors with Tabs
+        $this->add_control(
+            'mgpg_social_colors_heading',
+            [
+                'label' => __('Individual Button Colors', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->start_controls_tabs('mgpg_social_colors_tabs');
+
+        // Normal State Tab
+        $this->start_controls_tab(
+            'mgpg_social_normal_tab',
+            [
+                'label' => __('Normal', 'magical-posts-display'),
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_social_facebook_color',
+            [
+                'label' => __('Facebook', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-share-facebook' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_social_twitter_color',
+            [
+                'label' => __('X (Twitter)', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-share-twitter' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_social_linkedin_color',
+            [
+                'label' => __('LinkedIn', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-share-linkedin' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_social_pinterest_color',
+            [
+                'label' => __('Pinterest', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-share-pinterest' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_social_instagram_color',
+            [
+                'label' => __('Instagram', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-share-instagram' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->end_controls_tab();
+
+        // Hover State Tab
+        $this->start_controls_tab(
+            'mgpg_social_hover_tab',
+            [
+                'label' => __('Hover', 'magical-posts-display'),
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_social_facebook_hover_color',
+            [
+                'label' => __('Facebook', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-share-facebook:hover' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_social_twitter_hover_color',
+            [
+                'label' => __('X (Twitter)', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-share-twitter:hover' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_social_linkedin_hover_color',
+            [
+                'label' => __('LinkedIn', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-share-linkedin:hover' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_social_pinterest_hover_color',
+            [
+                'label' => __('Pinterest', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-share-pinterest:hover' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_social_instagram_hover_color',
+            [
+                'label' => __('Instagram', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-share-instagram:hover' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->end_controls_tab();
+        $this->end_controls_tabs();
+
+        // Hover Effects
+        $this->add_control(
+            'mgpg_social_hover_heading',
+            [
+                'label' => __('Hover Effects', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_social_hover_scale',
+            [
+                'label' => __('Scale on Hover', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'label_on' => __('Yes', 'magical-posts-display'),
+                'label_off' => __('No', 'magical-posts-display'),
+                'return_value' => 'yes',
+                'default' => 'yes',
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-social-share a:hover' => 'transform: scale(1.1);',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_social_transition_speed',
+            [
+                'label' => __('Transition Speed (ms)', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => [
+                        'min' => 100,
+                        'max' => 1000,
+                        'step' => 50,
+                    ],
+                ],
+                'default' => [
+                    'size' => 300,
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .mgpd-social-share a' => 'transition: all {{SIZE}}ms ease;',
+                ],
+            ]
+        );
+
+        $this->end_controls_section();
+    }
+
+    /**
+     * Render premium features content
+     * 
+     * @param string $reading_time Show reading time
+     * @param string $view_count Show view count
+     * @param string $social_share Show social share
+     */
+    private function render_premium_features_content($reading_time, $view_count, $social_share)
+    {
+
+        if ($reading_time || $view_count) {
+            echo '<div class="mgpd-time-count-wrap">';
+            // Reading Time Display
+            if ($reading_time) {
+                $content = get_the_content();
+                $word_count = str_word_count(wp_strip_all_tags($content));
+                $reading_time_value = ceil($word_count / 200); // Average reading speed: 200 words per minute
+                echo '<div class="mgpd-reading-time">' . $this->get_reading_time_icon(16) . ' ' . $reading_time_value . ' min read</div>';
+            }
+
+            // Post Views Counter
+            if ($view_count) {
+                $post_views = get_post_meta(get_the_ID(), 'mp_post_post_viewed', true);
+                $post_views = $post_views ? $post_views : 0;
+                echo '<div class="mgpd-view-count">' . $this->get_view_count_icon(16) . ' ' . number_format($post_views) . ' views</div>';
+            }
+            echo '</div>';
+        }
+        // Social Share Buttons
+        if ($social_share) {
+            $post_url = get_permalink();
+            $post_title = get_the_title();
+            echo '<div class="mgpd-social-share">';
+            echo $this->get_all_social_share_buttons($post_url, $post_title, null, 20);
+            echo '</div>';
+        }
+    }
+
+    /**
+     * Render single post item
+     * Reusable method for both normal render and AJAX responses
+     * 
+     * @param array $settings Widget settings
+     * @param string $item_class CSS classes for the item wrapper
+     */
+    public function render_single_post_item($settings, $item_class = '')
+    {
+        $mgpg_post_style = $settings['mgpg_post_style'];
+        $mgpg_post_type = $settings['mgpg_post_type'];
+        $mgpg_post_img_show = $settings['mgpg_post_img_show'];
+        $mgpg_media_source = $settings['mgpg_media_source'] ?? 'featured';
+        $mgpg_premium_features_style = $settings['mgpg_premium_features_style'] ?? 'default';
+        $mgpg_show_title = $settings['mgpg_show_title'];
+        $mgpg_title_tag = $settings['mgpg_title_tag'];
+        $mgpg_crop_title = $settings['mgpg_crop_title'];
+        $mgpg_desc_show = $settings['mgpg_desc_show'];
+        $mgpg_crop_desc = $settings['mgpg_crop_desc'];
+        $mgpg_post_btn = $settings['mgpg_post_btn'];
+        $mgpg_btn_title = $settings['mgpg_btn_title'];
+        $mgpg_usebtn_icon = $settings['mgpg_usebtn_icon'];
+        $mgpg_btn_icon_position = $settings['mgpg_btn_icon_position'] ?? 'right';
+        $mgpg_btn_target = $settings['mgpg_btn_target'];
+        $mgpg_reading_time = $settings['mgpg_reading_time'] ?? false;
+        $mgpg_view_count = $settings['mgpg_view_count'] ?? false;
+        $mgpg_social_share = $settings['mgpg_social_share'] ?? false;
+?>
+        <div class="<?php echo esc_attr($item_class); ?>">
+            <div class="mgp-card mg-card mg-shadow mgp-mb-4">
+                <?php
+                if ($mgpg_post_img_show) {
+                    echo '<div class="mp-post-img">';
+
+                    // Check if using advanced media source (Pro Only)
+                    if (mp_display_check_main_ok() && $mgpg_media_source && $mgpg_media_source !== 'featured') {
+                        $media_settings = array(
+                            'mgpg_media_source' => $mgpg_media_source,
+                            'mgpg_media_priority' => $settings['mgpg_media_priority'] ?? array('video', 'featured', 'content', 'placeholder'),
+                            'mgpg_video_play_icon' => $settings['mgpg_video_play_icon'] ?? 'yes'
+                        );
+                        echo $this->get_advanced_media(get_the_ID(), $media_settings);
+                    } else {
+                        // Use default featured image
+                        mp_post_thumbnail($mgpg_post_img_show);
+                    }
+
+                    // Premium features - Image Top style
+                    if (mp_display_check_main_ok() && $mgpg_premium_features_style === 'image-top') {
+                        echo '<div class="mgpd-premium-features">';
+                        $this->render_premium_features_content($mgpg_reading_time, $mgpg_view_count, $mgpg_social_share);
+                        echo '</div>';
+                    }
+
+                    // Premium features - Image Overlay style
+                    if (mp_display_check_main_ok() && $mgpg_premium_features_style === 'image-overlay') {
+                        echo '<div class="mgpd-premium-features">';
+                        $this->render_premium_features_content($mgpg_reading_time, $mgpg_view_count, $mgpg_social_share);
+                        echo '</div>';
+                    }
+
+                    echo '</div>';
+                }
+                ?>
+                <div class="mg-card-text mgp-card-body">
+                    <?php
+                    if ($mgpg_post_style == '3') {
+                    ?>
+                        <div class="magical-post-authon-category">
+                            <?php
+                            mpd_posts_meta($settings['mgpg_author_show']);
+                            mp_post_cat_display($settings['mgpg_category_show']);
+                            ?>
+                        </div>
+                    <?php
+                    }
+                    if ($mgpg_post_type == 'post' && ($mgpg_post_style == '1' || $mgpg_post_style == '2')) {
+                        mp_post_cat_display($settings['mgpg_category_show'], $settings['mgpg_cat_type'] ?? 'one', ', ');
+                    }
+                    ?>
+                    <?php
+                    mp_post_title($mgpg_show_title, $mgpg_title_tag, $mgpg_crop_title);
+                    ?>
+                    <?php
+                    if ($mgpg_post_style == '1') {
+                        mpd_posts_meta($settings['mgpg_author_show'], $settings['mgpg_date_show'], $settings['mgpg_comment_icon_show']);
+                    }
+                    ?>
+                    <?php if ($mgpg_desc_show) : ?>
+                        <p><?php
+                            if (has_excerpt()) {
+                                echo esc_html(wp_trim_words(get_the_excerpt(), $mgpg_crop_desc, '...'));
+                            } else {
+                                echo esc_html(wp_trim_words(get_the_content(), $mgpg_crop_desc, '...'));
+                            }
+                            ?>
+                        </p>
+                    <?php endif; ?>
+
+                    <?php
+                    // Premium Features Content (Pro Only) - Only show in default position
+                    if (mp_display_check_main_ok() && (!$mgpg_premium_features_style || $mgpg_premium_features_style === 'default')) {
+                        $this->render_premium_features_content($mgpg_reading_time, $mgpg_view_count, $mgpg_social_share);
+                    }
+                    ?>
+
+                    <?php
+                    if ($mgpg_post_style == '3') {
+                    ?>
+                        <div class="mgp_there_style-time">
+                            <span>
+                                <i class="fa-regular fa-calendar-days"></i>
+                                <?php echo esc_html(get_the_date('d M Y')); ?>
+                            </span>
+                            <?php
+                            if ($mgpg_post_btn && ($mgpg_post_style == '3')) {
+                                mp_post_btn(
+                                    $text = $mgpg_btn_title,
+                                    $icon_show = $mgpg_usebtn_icon,
+                                    $icon = $settings['mgpg_btn_icon'],
+                                    $icon_position = $mgpg_btn_icon_position,
+                                    $target = $mgpg_btn_target,
+                                    $class = $settings['mgpg_link_type'] ?? ''
+                                );
+                            }
+                            ?>
+                        </div>
+                    <?php
+                    }
+                    if ($mgpg_post_btn && ($mgpg_post_style == '1' || $mgpg_post_style == '2')) {
+                        mp_post_btn(
+                            $text = $mgpg_btn_title,
+                            $icon_show = $mgpg_usebtn_icon,
+                            $icon = $settings['mgpg_btn_icon'],
+                            $icon_position = $mgpg_btn_icon_position,
+                            $target = $mgpg_btn_target,
+                            $class = $settings['mgpg_link_type'] ?? ''
+                        );
+                    }
+
+                    if ($mgpg_post_style == '2') {
+                        mpd_posts_meta_author_date($settings['mgpg_author_show'], $settings['mgpg_date_show']);
+                    }
+
+                    mpd_post_tags($settings['mgpg_tag_show']);
+
+                    ?>
+                </div>
+
+            </div>
+        </div>
+        <?php
     }
 
     /**
@@ -2446,10 +3514,10 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 break;
         }
         if ($mgpg_filter === 'show_byid' && !empty($settings['mgpg_post_id'])) {
-            $args['post__in'] = array_map('absint', $settings['mgpg_post_id']);
+            $args['post__in'] = mp_display_resolve_post_ids($settings['mgpg_post_id'], $mgpg_post_type);
         } elseif ($mgpg_filter === 'show_byid_manually') {
-            $post_ids = array_map('absint', explode(',', $settings['mgpg_post_ids_manually']));
-            $args['post__in'] = array_filter($post_ids);
+            $post_ids = array_map('trim', explode(',', $settings['mgpg_post_ids_manually']));
+            $args['post__in'] = mp_display_resolve_post_ids($post_ids, $mgpg_post_type);
         }
 
 
@@ -2480,6 +3548,8 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
 
 
         //grid layout
+        $mgpg_layout_type = $this->get_settings('mgpg_layout_type');
+        $mgpg_masonry_style = $this->get_settings('mgpg_masonry_style');
         $mgpg_post_style = $this->get_settings('mgpg_post_style');
         $mgpg_rownumber = $this->get_settings('mgpg_rownumber');
         // grid content
@@ -2495,120 +3565,391 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         $mgpg_btn_title = $this->get_settings('mgpg_btn_title');
         $mgpg_btn_target = $this->get_settings('mgpg_btn_target');
         $mgpg_btn_icon = $this->get_settings('mgpg_btn_icon');
+
+        // Premium Features Settings (Pro Only)
+        $mgpg_ajax_filter = $this->get_settings('mgpg_ajax_filter');
+        $mgpg_infinite_scroll = $this->get_settings('mgpg_infinite_scroll');
+        $mgpg_reading_time = $this->get_settings('mgpg_reading_time');
+        $mgpg_view_count = $this->get_settings('mgpg_view_count');
+        $mgpg_social_share = $this->get_settings('mgpg_social_share');
+        $mgpg_hover_effects = $this->get_settings('mgpg_hover_effects');
+        $mgpg_premium_features_style = $this->get_settings('mgpg_premium_features_style');
+        $mgpg_media_source = $this->get_settings('mgpg_media_source');
         $mgpg_btn_icon_position = $this->get_settings('mgpg_btn_icon_position');
 
-
+        // Apply post position settings
+        $args = $this->apply_post_position_to_query($args, $settings, 'mgpg_posts_filter');
 
         $mgpg_posts = new WP_Query($args);
 
         if ($mgpg_posts->have_posts()) :
 
             if ($mgpg_rownumber == '12') {
-                $column_set = 'col-lg-12';
+                $column_set = 'mgp-col-lg-12';
             } else {
-                $column_set = 'col-lg-' . $mgpg_rownumber . ' col-md-6';
+                $column_set = 'mgp-col-lg-' . $mgpg_rownumber . ' mgp-col-md-6';
             }
-?>
-<div id="mgp-items" class="mgpd mgp-items style<?php echo esc_attr($mgpg_post_style); ?>">
-    <div class="row" data-masonry='{"percentPosition": true }'>
-        <?php while ($mgpg_posts->have_posts()) : $mgpg_posts->the_post(); ?>
-        <div class="<?php echo esc_attr($column_set); ?>">
-            <div class="card mg-card mg-shadow mgp-card mb-4">
-                <?php mp_post_thumbnail($mgpg_post_img_show); ?>
-                <div class="mg-card-text card-body">
-                    <?php
-                    if ($mgpg_post_style == '3') {
-                    ?>
-                    <div class="magical-post-authon-category">
-                        <?php                                             
-                        mpd_posts_meta($settings['mgpg_author_show']);
-                        mp_post_cat_display($settings['mgpg_category_show']);
-                    ?>
-                    </div>
-                    <?php
-                        }
-                            if ($mgpg_post_type == 'post' && ($mgpg_post_style == '1' || $mgpg_post_style == '2')) {
-                            mp_post_cat_display($settings['mgpg_category_show'], $settings['mgpg_cat_type'], ', ');
-                            }
-                        ?>
-                    <?php
-                        mp_post_title($mgpg_show_title, $mgpg_title_tag, $mgpg_crop_title);
-                        ?>
-                    <?php
-                        if ($mgpg_post_style == '1') {
-                            mpd_posts_meta($settings['mgpg_author_show'], $settings['mgpg_date_show'], $settings['mgpg_comment_icon_show']);
-                        }
-                    ?>
-                    <?php if ($mgpg_desc_show) : ?>
-                    <p><?php
-                        if (has_excerpt()) {
-                            echo esc_html(wp_trim_words(get_the_excerpt(), $mgpg_crop_desc, '...'));
-                        } else {
-                            echo esc_html(wp_trim_words(get_the_content(), $mgpg_crop_desc, '...'));
-                        }
-                        ?>
-                    </p>
-                    <?php endif; ?>
-                    <?php
-                        if ($mgpg_post_style == '3') {
-                        ?>
-                    <div class="mgp_there_style-time">
-                        <span>
-                            <i class="fa-regular fa-calendar-days"></i>
-                            <?php echo esc_html(get_the_date('d M Y')); ?>
-                        </span>
-                        <?php
-                                if ($mgpg_post_btn && ($mgpg_post_style == '3')) {
-                                mp_post_btn(
-                                    $text = $mgpg_btn_title,
-                                    $icon_show = $mgpg_usebtn_icon,
-                                    $icon = $settings['mgpg_btn_icon'],
-                                    $icon_position = $mgpg_btn_icon_position,
-                                    $target = $mgpg_btn_target,
-                                    $class = $settings['mgpg_link_type']
-                                );
-                            }
-                            ?>
-                    </div>
-                    <?php
-                            }
-                            if ($mgpg_post_btn && ($mgpg_post_style == '1' || $mgpg_post_style == '2')) {
-                                mp_post_btn(
-                                    $text = $mgpg_btn_title,
-                                    $icon_show = $mgpg_usebtn_icon,
-                                    $icon = $settings['mgpg_btn_icon'],
-                                    $icon_position = $mgpg_btn_icon_position,
-                                    $target = $mgpg_btn_target,
-                                    $class = $settings['mgpg_link_type']
-                                );
-                            }
 
-                        if ($mgpg_post_style == '2') {
-                            mpd_posts_meta_author_date($settings['mgpg_author_show'], $settings['mgpg_date_show']);
-                        }
+            // Add masonry specific classes
+            $container_class = 'mgpd mgp-items style' . esc_attr($mgpg_post_style);
+            $row_class = 'mgp-row';
+            $item_class = $column_set;
 
-                        mpd_post_tags($settings['mgpg_tag_show']);
+            // Add premium feature classes
+            if ($mgpg_ajax_filter === 'yes' && mp_display_check_main_ok()) {
+                $container_class .= ' mgpd-ajax-filter-enabled';
+            }
+            if ($mgpg_infinite_scroll === 'yes' && mp_display_check_main_ok()) {
+                $container_class .= ' mgpd-infinite-scroll';
+            }
+            if ($mgpg_hover_effects && $mgpg_hover_effects !== 'none' && mp_display_check_main_ok()) {
+                $container_class .= ' mgpd-hover-' . esc_attr($mgpg_hover_effects);
+            }
+            // Add premium features style class
+            if ($mgpg_premium_features_style && $mgpg_premium_features_style !== 'default' && mp_display_check_main_ok()) {
+                $container_class .= ' mgpd-premium-' . esc_attr($mgpg_premium_features_style);
+            }
 
-                        ?>
-                </div>
+            if ($mgpg_layout_type === 'masonry') {
+                $masonry_style = $mgpg_masonry_style ? $mgpg_masonry_style : 'style1';
+                $container_class .= ' mgpd-masonry-container mgpd-masonry-' . esc_attr($masonry_style);
+                $row_class .= ' mgpd-masonry';
+                $item_class .= ' mgpd-masonry-item';
+            }
+        ?>
 
-            </div>
-        </div>
-        <?php
-            endwhile;
-            wp_reset_query();
-            wp_reset_postdata();
+            <?php
+            // Premium Features - Category Filter (Pro Only) - Move to top
+            if (mp_display_check_main_ok() && $mgpg_ajax_filter === 'yes' && $mgpg_post_type == 'post') {
+                $categories = get_categories(array('hide_empty' => true));
+                if (!empty($categories)) {
+                    echo '<div class="mgpd-ajax-filter-container">';
+                    echo '<div class="mgpd-filter-buttons">';
+                    echo '<button class="mgpd-filter-btn active" data-category="all">' . __('All', 'magical-posts-display') . '</button>';
+                    foreach ($categories as $category) {
+                        echo '<button class="mgpd-filter-btn" data-category="' . esc_attr($category->slug) . '">' . esc_html($category->name) . '</button>';
+                    }
+                    echo '</div>';
+                    echo '</div>';
+                }
+            }
             ?>
-    </div>
-</div>
 
-<?php
+            <div id="mgp-items" class="<?php echo esc_attr($container_class); ?>">
+                <div class="<?php echo esc_attr($row_class); ?>">
+                    <?php while ($mgpg_posts->have_posts()) : $mgpg_posts->the_post(); ?>
+                        <?php $this->render_single_post_item($settings, $item_class); ?>
+                    <?php
+                    endwhile;
+                    wp_reset_postdata();
+                    wp_reset_postdata();
+                    ?>
+                </div>
+            </div>
+
+            <?php
+            // Inline Masonry Initialization Script for better compatibility
+            if ($mgpg_layout_type === 'masonry') {
+                $widget_id = uniqid('mgpd_masonry_');
+            ?>
+                <script type="text/javascript">
+                    (function() {
+                        // Initialize masonry for this specific widget
+                        function initMasonry<?php echo $widget_id; ?>() {
+                            var container = document.querySelector('.mgpd-masonry-container');
+                            if (container && typeof Masonry !== 'undefined' && typeof imagesLoaded !== 'undefined') {
+                                var masonryGrid = container.querySelector('.mgpd-masonry');
+                                if (masonryGrid) {
+                                    // Force all images to load first
+                                    imagesLoaded(masonryGrid, function() {
+                                        // Clear any existing height to let masonry calculate properly
+                                        masonryGrid.style.height = '';
+
+                                        // Initialize masonry
+                                        var masonry = new Masonry(masonryGrid, {
+                                            itemSelector: '.mgpd-masonry-item',
+                                            columnWidth: '.mgpd-masonry-item',
+                                            percentPosition: true,
+                                            transitionDuration: 0
+                                        });
+
+                                        // Store instance for global access
+                                        window.mgpdMasonryInstance = masonry;
+
+                                        // Force layout calculation after a brief delay
+                                        setTimeout(function() {
+                                            masonry.layout();
+                                        }, 100);
+                                    });
+                                }
+                            }
+                        }
+
+                        // Initialize when DOM is ready
+                        if (document.readyState === 'loading') {
+                            document.addEventListener('DOMContentLoaded', initMasonry<?php echo $widget_id; ?>);
+                        } else {
+                            initMasonry<?php echo $widget_id; ?>();
+                        }
+
+                        // Also initialize on window load as fallback
+                        window.addEventListener('load', initMasonry<?php echo $widget_id; ?>);
+                    })();
+                </script>
+            <?php
+            }
+            ?>
+
+            <?php
             if ($mgpg_pagination_show) {
                 mp_display_pagination($paged, $mgpg_posts, $settings['mgpg_pagination_style']);
             }
             ?>
+
+            <?php
+            // Premium Features JavaScript & HTML (Pro Only)
+            if (mp_display_check_main_ok()) {
+
+                // Infinite Scroll Trigger
+                if ($mgpg_infinite_scroll === 'yes') {
+                    echo '<div class="mgpd-infinite-scroll-trigger" style="height: 1px; margin-top: 50px;"></div>';
+                    echo '<div class="mgpd-loading-spinner" style="display: none; text-align: center; padding: 20px;">';
+                    echo $this->get_loading_spinner_icon(40);
+                    echo '<span>' . __('Loading more posts...', 'magical-posts-display') . '</span>';
+                    echo '</div>';
+                }
+
+                // Only localize script if any premium features are enabled
+                if ($mgpg_ajax_filter === 'yes' || $mgpg_infinite_scroll === 'yes' || ($mgpg_hover_effects && $mgpg_hover_effects !== 'none')) {
+                    // Convert switcher values to proper booleans for JS
+                    $ajax_filter_bool = ($mgpg_ajax_filter === 'yes' && $mgpg_post_type == 'post');
+                    $infinite_scroll_bool = ($mgpg_infinite_scroll === 'yes');
+                    $hover_effects_bool = ($mgpg_hover_effects && $mgpg_hover_effects !== 'none');
+                    
+                    // Localize script data for JavaScript
+                    wp_localize_script('mgpd-premium-features', 'mgpd_ajax', array(
+                        'ajaxurl' => admin_url('admin-ajax.php'),
+                        'nonce' => wp_create_nonce('mgpd_ajax_nonce'),
+                        'settings' => $settings,
+                        'layout_type' => $mgpg_layout_type,
+                        'ajax_filter_enabled' => $ajax_filter_bool,
+                        'infinite_scroll_enabled' => $infinite_scroll_bool,
+                        'hover_effects_enabled' => $hover_effects_bool,
+                        'current_page' => $paged,
+                        'max_pages' => $mgpg_posts->max_num_pages,
+                        'post_type' => $mgpg_post_type,
+                        'texts' => array(
+                            'error_loading' => __('Error loading posts. Please try again.', 'magical-posts-display'),
+                            'loading_more' => __('Loading more posts...', 'magical-posts-display')
+                        )
+                    ));
+                }
+            }
+            ?>
+
 <?php else :
             mp_display_posts_not_found($settings['mgpg_post_type']);
         endif;
+    }
+
+    /**
+     * AJAX handler for category filtering
+     * Static method to be called from WordPress AJAX hooks
+     */
+    public static function ajax_filter_posts()
+    {
+        // Check nonce for security
+        if (!isset($_POST['nonce']) || !wp_verify_nonce(wp_unslash($_POST['nonce']), 'mgpd_ajax_nonce')) {
+            wp_die(__('Security check failed', 'magical-posts-display'));
+        }
+
+        // Check if pro version is active
+        if (!mp_display_check_main_ok()) {
+            wp_send_json_error(__('Premium feature requires pro version', 'magical-posts-display'));
+        }
+
+        $category = isset($_POST['category']) ? sanitize_text_field(wp_unslash($_POST['category'])) : '';
+        $settings = isset($_POST['settings']) ? wp_unslash($_POST['settings']) : array();
+        $post_type = isset($_POST['post_type']) ? sanitize_text_field(wp_unslash($_POST['post_type'])) : 'post';
+
+        // Sanitize settings array - ensure it's an array
+        if (!is_array($settings)) {
+            $settings = array();
+        }
+
+        // Set default settings if not provided
+        $default_settings = array(
+            'mgpg_posts_count' => 6,
+            'mgpg_rownumber' => '4',
+            'mgpg_layout_type' => 'grid',
+            'mgpg_post_style' => '1',
+            'mgpg_post_type' => 'post',
+            'mgpg_post_img_show' => 'yes',
+            'mgpg_show_title' => 'yes',
+            'mgpg_title_tag' => 'h3',
+            'mgpg_crop_title' => '',
+            'mgpg_desc_show' => 'yes',
+            'mgpg_crop_desc' => '',
+            'mgpg_post_btn' => 'yes',
+            'mgpg_btn_title' => __('Read More', 'magical-posts-display'),
+            'mgpg_usebtn_icon' => '',
+            'mgpg_btn_icon_position' => 'right',
+            'mgpg_btn_target' => '_self',
+            'mgpg_category_show' => 'yes',
+            'mgpg_date_show' => 'yes',
+            'mgpg_author_show' => 'yes',
+            'mgpg_media_source' => 'featured',
+            'mgpg_premium_features_style' => 'default',
+            'mgpg_reading_time' => '',
+            'mgpg_view_count' => '',
+            'mgpg_social_share' => '',
+        );
+        $settings = wp_parse_args($settings, $default_settings);
+
+        // Build query args
+        $args = array(
+            'post_type' => $post_type,
+            'post_status' => 'publish',
+            'posts_per_page' => isset($settings['mgpg_posts_count']) ? absint($settings['mgpg_posts_count']) : 6,
+            'ignore_sticky_posts' => 1
+        );
+
+        // Add category filter if not "all"
+        if ($category !== 'all' && $post_type === 'post') {
+            $args['tax_query'] = array(
+                array(
+                    'taxonomy' => 'category',
+                    'field' => 'slug',
+                    'terms' => $category
+                )
+            );
+        }
+
+        $query = new WP_Query($args);
+        $output = '';
+
+        if ($query->have_posts()) {
+            // Instantiate widget to reuse render method
+            $widget = new self();
+
+            // Calculate item class - consistent with render() method
+            $mgpg_rownumber = isset($settings['mgpg_rownumber']) ? $settings['mgpg_rownumber'] : '4';
+            $mgpg_layout_type = isset($settings['mgpg_layout_type']) ? $settings['mgpg_layout_type'] : 'grid';
+
+            if ($mgpg_rownumber == '12') {
+                $item_class = 'mgp-col-lg-12';
+            } else {
+                $item_class = 'mgp-col-lg-' . $mgpg_rownumber . ' mgp-col-md-6';
+            }
+
+            if ($mgpg_layout_type === 'masonry') {
+                $item_class .= ' mgpd-masonry-item';
+            }
+
+            while ($query->have_posts()) {
+                $query->the_post();
+                ob_start();
+                $widget->render_single_post_item($settings, $item_class);
+                $output .= ob_get_clean();
+            }
+            wp_reset_postdata();
+        }
+
+        wp_send_json_success($output);
+    }
+
+    /**
+     * AJAX handler for infinite scroll
+     * Static method to be called from WordPress AJAX hooks
+     */
+    public static function ajax_infinite_scroll()
+    {
+        // Check nonce for security
+        if (!isset($_POST['nonce']) || !wp_verify_nonce(wp_unslash($_POST['nonce']), 'mgpd_ajax_nonce')) {
+            wp_die(__('Security check failed', 'magical-posts-display'));
+        }
+
+        // Check if pro version is active
+        if (!mp_display_check_main_ok()) {
+            wp_send_json_error(__('Premium feature requires pro version', 'magical-posts-display'));
+        }
+
+        $page = isset($_POST['page']) ? absint($_POST['page']) : 1;
+        $settings = isset($_POST['settings']) ? wp_unslash($_POST['settings']) : array();
+        $post_type = isset($_POST['post_type']) ? sanitize_text_field(wp_unslash($_POST['post_type'])) : 'post';
+
+        // Sanitize settings array - ensure it's an array
+        if (!is_array($settings)) {
+            $settings = array();
+        }
+
+        // Set default settings if not provided
+        $default_settings = array(
+            'mgpg_posts_count' => 6,
+            'mgpg_rownumber' => '4',
+            'mgpg_layout_type' => 'grid',
+            'mgpg_post_style' => '1',
+            'mgpg_post_type' => 'post',
+            'mgpg_post_img_show' => 'yes',
+            'mgpg_show_title' => 'yes',
+            'mgpg_title_tag' => 'h3',
+            'mgpg_crop_title' => '',
+            'mgpg_desc_show' => 'yes',
+            'mgpg_crop_desc' => '',
+            'mgpg_post_btn' => 'yes',
+            'mgpg_btn_title' => __('Read More', 'magical-posts-display'),
+            'mgpg_usebtn_icon' => '',
+            'mgpg_btn_icon_position' => 'right',
+            'mgpg_btn_target' => '_self',
+            'mgpg_category_show' => 'yes',
+            'mgpg_date_show' => 'yes',
+            'mgpg_author_show' => 'yes',
+            'mgpg_media_source' => 'featured',
+            'mgpg_premium_features_style' => 'default',
+            'mgpg_reading_time' => '',
+            'mgpg_view_count' => '',
+            'mgpg_social_share' => '',
+        );
+        $settings = wp_parse_args($settings, $default_settings);
+
+        // Build query args
+        $args = array(
+            'post_type' => $post_type,
+            'post_status' => 'publish',
+            'posts_per_page' => isset($settings['mgpg_posts_count']) ? absint($settings['mgpg_posts_count']) : 6,
+            'paged' => $page,
+            'ignore_sticky_posts' => 1
+        );
+
+        $query = new WP_Query($args);
+        $output = '';
+
+        if ($query->have_posts()) {
+            // Instantiate widget
+            $widget = new self();
+
+            // Calculate item class - consistent with render() method
+            $mgpg_rownumber = isset($settings['mgpg_rownumber']) ? $settings['mgpg_rownumber'] : '4';
+            $mgpg_layout_type = isset($settings['mgpg_layout_type']) ? $settings['mgpg_layout_type'] : 'grid';
+
+            if ($mgpg_rownumber == '12') {
+                $item_class = 'mgp-col-lg-12';
+            } else {
+                $item_class = 'mgp-col-lg-' . $mgpg_rownumber . ' mgp-col-md-6';
+            }
+
+            if ($mgpg_layout_type === 'masonry') {
+                $item_class .= ' mgpd-masonry-item';
+            }
+
+            while ($query->have_posts()) {
+                $query->the_post();
+                ob_start();
+                $widget->render_single_post_item($settings, $item_class);
+                $output .= ob_get_clean();
+            }
+            wp_reset_postdata();
+        }
+        wp_send_json_success($output);
     }
 }

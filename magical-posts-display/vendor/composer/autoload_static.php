@@ -4,12 +4,16 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb08bd5d3acd39cec2ae5415713ba3c31
+class ComposerStaticInitf31f6578ca9c7ce157b61993857c8afc
 {
+    public static $files = array (
+        '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
-        'C' => 
+        'M' => 
         array (
-            'Carbon_Fields\\' => 14,
+            'MagicalPostsDisplay\\' => 20,
         ),
         'A' => 
         array (
@@ -18,9 +22,9 @@ class ComposerStaticInitb08bd5d3acd39cec2ae5415713ba3c31
     );
 
     public static $prefixDirsPsr4 = array (
-        'Carbon_Fields\\' => 
+        'MagicalPostsDisplay\\' => 
         array (
-            0 => __DIR__ . '/..' . '/htmlburger/carbon-fields/core',
+            0 => __DIR__ . '/../..' . '/includes',
         ),
         'Appsero\\' => 
         array (
@@ -35,9 +39,9 @@ class ComposerStaticInitb08bd5d3acd39cec2ae5415713ba3c31
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb08bd5d3acd39cec2ae5415713ba3c31::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb08bd5d3acd39cec2ae5415713ba3c31::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb08bd5d3acd39cec2ae5415713ba3c31::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf31f6578ca9c7ce157b61993857c8afc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf31f6578ca9c7ce157b61993857c8afc::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf31f6578ca9c7ce157b61993857c8afc::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -2,6 +2,7 @@
 
 class mgpdNewsMagazineImgGrid extends \Elementor\Widget_Base
 {
+    use Query_Controls_Trait;
     /**
      * Get widget name.
      */
@@ -135,6 +136,9 @@ class mgpdNewsMagazineImgGrid extends \Elementor\Widget_Base
             ]
         );
 
+        // Post Position Control
+        $this->register_post_position_control('mgpnig_posts_filter');
+
         $this->add_control(
             'mgpnig_grid_categories',
             [
@@ -239,7 +243,7 @@ class mgpdNewsMagazineImgGrid extends \Elementor\Widget_Base
             ]
         );
 
-         $this->add_responsive_control(
+        $this->add_responsive_control(
             'mgpnig_big_post_height',
             [
                 'label' => esc_html__('Big Post Height', 'magical-posts-display'),
@@ -1132,6 +1136,9 @@ class mgpdNewsMagazineImgGrid extends \Elementor\Widget_Base
         // Build query arguments
         $query_args = $this->build_query_args($settings);
 
+        // Apply post position settings
+        $query_args = $this->apply_post_position_to_query($query_args, $settings, 'mgpnig_posts_filter');
+
         // Get posts
         $posts_query = new WP_Query($query_args);
 
@@ -1147,12 +1154,12 @@ class mgpdNewsMagazineImgGrid extends \Elementor\Widget_Base
         // Layout classes
         $layout_class = 'mgp-layout-' . esc_attr($settings['mgpnig_layout_style']);
         $columns_class = '';
-        
+
         if (in_array($settings['mgpnig_layout_style'], ['style2', 'style3', 'style5'])) {
             $columns_class = 'mgp-' . esc_attr($settings['mgpnig_small_posts_columns']) . '-columns';
         }
 
-        ?>
+?>
         <div class="mgp-news-magazine-img-grid <?php echo esc_attr($layout_class . ' ' . $columns_class); ?>">
             <?php if ($big_post) : ?>
                 <div class="mgp-big-post">
@@ -1170,7 +1177,7 @@ class mgpdNewsMagazineImgGrid extends \Elementor\Widget_Base
                 </div>
             <?php endif; ?>
         </div>
-        <?php
+    <?php
 
         wp_reset_postdata();
     }
@@ -1196,15 +1203,15 @@ class mgpdNewsMagazineImgGrid extends \Elementor\Widget_Base
         switch ($settings['mgpnig_posts_filter']) {
             case 'show_byid':
                 if (!empty($settings['mgpnig_post_id'])) {
-                    $args['post__in'] = array_map('absint', $settings['mgpnig_post_id']);
+                    $args['post__in'] = mp_display_resolve_post_ids($settings['mgpnig_post_id'], 'post');
                     $args['orderby'] = 'post__in';
                 }
                 break;
 
             case 'show_byid_manually':
                 if (!empty($settings['mgpnig_post_ids_manually'])) {
-                    $manual_ids = explode(',', $settings['mgpnig_post_ids_manually']);
-                    $args['post__in'] = array_map('absint', $manual_ids);
+                    $manual_ids = array_map('trim', explode(',', $settings['mgpnig_post_ids_manually']));
+                    $args['post__in'] = mp_display_resolve_post_ids($manual_ids, 'post');
                     $args['orderby'] = 'post__in';
                 }
                 break;
@@ -1235,9 +1242,20 @@ class mgpdNewsMagazineImgGrid extends \Elementor\Widget_Base
                 $args['order'] = 'DESC';
         }
 
-        // Categories
+        // Categories - support both term_id and slug
         if (!empty($settings['mgpnig_grid_categories']) && $settings['mgpnig_post_type'] === 'post') {
-            $args['category__in'] = array_map('absint', $settings['mgpnig_grid_categories']);
+            $post_cats = $settings['mgpnig_grid_categories'];
+            if (is_array($post_cats) && count($post_cats) > 0) {
+                $field_name = is_numeric($post_cats[0]) ? 'term_id' : 'slug';
+                $args['tax_query'] = array(
+                    array(
+                        'taxonomy' => 'category',
+                        'terms' => $post_cats,
+                        'field' => $field_name,
+                        'include_children' => false
+                    )
+                );
+            }
         }
 
         // Custom order
@@ -1264,64 +1282,66 @@ class mgpdNewsMagazineImgGrid extends \Elementor\Widget_Base
         $excerpt_word_limit = absint($settings['mgpnig_' . $size . '_excerpt_word_limit']);
         $title_tag = esc_attr($settings['mgpnig_' . $size . '_title_tag']);
 
-        ?>
+    ?>
         <div class="mgp-post-item">
-            <?php if ($show_image && has_post_thumbnail($post->ID)) : ?>
-                <div class="mgp-post-image">
+            <div class="mgp-post-image">
+                <?php if ($show_image && has_post_thumbnail($post->ID)) : ?>
                     <a href="<?php echo esc_url(get_permalink($post->ID)); ?>">
                         <?php echo get_the_post_thumbnail($post->ID, $size === 'big' ? 'large' : 'medium', ['class' => 'img-fluid']); ?>
                     </a>
-                    <?php if ($show_category) : ?>
-                        <div class="mgp-post-category">
-                            <?php
-                            $categories = get_the_category($post->ID);
-                            if (!empty($categories)) {
-                                echo '<a href="' . esc_url(get_category_link($categories[0]->term_id)) . '">' . esc_html($categories[0]->name) . '</a>';
-                            }
-                            ?>
+                <?php endif; ?>
+                <?php if ($show_category) : ?>
+                    <div class="mgp-post-category">
+                        <?php
+                        $categories = get_the_category($post->ID);
+                        if (!empty($categories)) {
+                            echo '<a href="' . esc_url(get_category_link($categories[0]->term_id)) . '">' . esc_html($categories[0]->name) . '</a>';
+                        }
+                        ?>
+                    </div>
+                <?php endif; ?>
+                <div class="mgp-post-content">
+                    <?php if ($show_title) :
+                        $title = get_the_title($post->ID);
+                        if ($title_word_limit > 0) {
+                            $title = wp_trim_words($title, $title_word_limit, '...');
+                        }
+                    ?>
+                        <<?php echo mpd_validate_html_tag($title_tag); ?> class="mgp-post-title">
+                            <a href="<?php echo esc_url(get_permalink($post->ID)); ?>">
+                                <?php echo esc_html($title); ?>
+                            </a>
+                        </<?php echo mpd_validate_html_tag($title_tag); ?>>
+                    <?php endif; ?>
+
+                    <?php if ($show_excerpt) :
+                        $excerpt = get_the_excerpt($post->ID);
+                        if ($excerpt_word_limit > 0) {
+                            $excerpt = wp_trim_words($excerpt, $excerpt_word_limit, '...');
+                        }
+                    ?>
+                        <div class="mgp-post-excerpt">
+                            <?php echo esc_html($excerpt); ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($show_meta) : ?>
+                        <div class="mgp-post-meta">
+                            <span class="mgp-post-date"><?php echo esc_html(get_the_date('', $post->ID)); ?></span>
+                            <span class="mgp-meta-separator"> • </span>
+                            <span class="mgp-post-author">
+                                <a href="<?php echo esc_url(get_author_posts_url(get_post_field('post_author', $post->ID))); ?>">
+                                    <?php echo esc_html(get_the_author_meta('display_name', get_post_field('post_author', $post->ID))); ?>
+                                </a>
+                            </span>
                         </div>
                     <?php endif; ?>
                 </div>
-            <?php endif; ?>
-
-            <div class="mgp-post-content">
-                <?php if ($show_title) : 
-                    $title = get_the_title($post->ID);
-                    if ($title_word_limit > 0) {
-                        $title = wp_trim_words($title, $title_word_limit, '...');
-                    }
-                ?>
-                    <<?php echo mpd_validate_html_tag($title_tag); ?> class="mgp-post-title">
-                        <a href="<?php echo esc_url(get_permalink($post->ID)); ?>">
-                            <?php echo esc_html($title); ?>
-                        </a>
-                    </<?php echo mpd_validate_html_tag($title_tag); ?>>
-                <?php endif; ?>
-
-                <?php if ($show_excerpt) : 
-                    $excerpt = get_the_excerpt($post->ID);
-                    if ($excerpt_word_limit > 0) {
-                        $excerpt = wp_trim_words($excerpt, $excerpt_word_limit, '...');
-                    }
-                ?>
-                    <div class="mgp-post-excerpt">
-                        <?php echo esc_html($excerpt); ?>
-                    </div>
-                <?php endif; ?>
-
-                <?php if ($show_meta) : ?>
-                    <div class="mgp-post-meta">
-                        <span class="mgp-post-date"><?php echo esc_html(get_the_date('', $post->ID)); ?></span>
-                        <span class="mgp-meta-separator"> • </span>
-                        <span class="mgp-post-author">
-                            <a href="<?php echo esc_url(get_author_posts_url(get_post_field('post_author', $post->ID))); ?>">
-                                <?php echo esc_html(get_the_author_meta('display_name', get_post_field('post_author', $post->ID))); ?>
-                            </a>
-                        </span>
-                    </div>
-                <?php endif; ?>
             </div>
+
+
+
         </div>
-        <?php
+<?php
     }
 }

@@ -6,6 +6,6 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Carbon_Fields\\' => array($vendorDir . '/htmlburger/carbon-fields/core'),
+    'MagicalPostsDisplay\\' => array($baseDir . '/includes'),
     'Appsero\\' => array($vendorDir . '/appsero/client/src'),
 );

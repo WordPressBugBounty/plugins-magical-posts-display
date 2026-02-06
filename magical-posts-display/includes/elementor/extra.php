@@ -10,18 +10,18 @@
 
 
 if (!class_exists('mpd_posts_meta_author_date')) {
-    function mpd_posts_meta_author_date($author = '', $date = '', $class = 'mt-3 text-right')
+    function mpd_posts_meta_author_date($author = '', $date = '', $class = 'mgp-mt-3 mgp-text-right')
     {
 ?>
         <div class="mp-meta mgp-ms2 <?php echo esc_attr($class); ?>">
-            <div class="row">
+            <div class="mgp-row">
                 <?php if ($author) : ?>
-                    <div class="col-auto">
+                    <div class="mgp-col-auto">
                         <?php mp_display_posted_by(); ?>
                     </div>
                 <?php endif; ?>
                 <?php if ($date) : ?>
-                    <div class="col-auto ml-auto text-right">
+                    <div class="mgp-col-auto mgp-ml-auto mgp-text-right">
                         <span class="mgp-time">
                             <i class="icon-mp-clock"></i>
                             <?php echo esc_html(get_the_date('d M Y')); ?>
@@ -47,7 +47,7 @@ function mp_display_check_main_ok()
 }
 
 if (!class_exists('mpd_posts_meta')) {
-    function mpd_posts_meta($author = '', $date = '', $comment = '', $class = 'mb-2')
+    function mpd_posts_meta($author = '', $date = '', $comment = '', $class = 'mgp-mb-2')
     {
     ?>
         <div class="mp-meta bottom-meta <?php echo esc_attr($class); ?>">
@@ -153,23 +153,56 @@ if (!function_exists('mp_display_product_catlist')) {
 }
 
 /**
- * Get Post List
- * return array
+ * Get Post List - returns slugs as keys (with backward compatibility for IDs)
+ * @return array
  */
 if (!function_exists('mp_display_posts_name')) {
     function mp_display_posts_name($post_type = 'post')
     {
         $options = array();
         $options['0'] = __('Select', 'magical-posts-display');
-        // $perpage = mp_display_get_option( 'loadproductlimit', 'mp_display_others_tabs', '20' );
         $all_post = array('posts_per_page' => -1, 'post_type' => $post_type);
         $post_terms = get_posts($all_post);
         if (!empty($post_terms) && !is_wp_error($post_terms)) {
             foreach ($post_terms as $term) {
+                // Use slug as key for new selections
+                $options[$term->post_name] = $term->post_title;
+                // Also keep ID as key for backward compatibility with old saved values
                 $options[$term->ID] = $term->post_title;
             }
             return $options;
         }
+    }
+}
+
+/**
+ * Resolve post values (IDs or slugs) to post IDs for WP_Query
+ * Handles backward compatibility for both numeric IDs and string slugs
+ * @param array $values Array of post IDs or slugs
+ * @param string $post_type Post type to query
+ * @return array Array of post IDs
+ */
+if (!function_exists('mp_display_resolve_post_ids')) {
+    function mp_display_resolve_post_ids($values, $post_type = 'post')
+    {
+        if (empty($values) || !is_array($values)) {
+            return array();
+        }
+
+        $post_ids = array();
+        foreach ($values as $value) {
+            if (is_numeric($value)) {
+                // It's already a post ID
+                $post_ids[] = absint($value);
+            } else {
+                // It's a slug, get the post by slug
+                $post = get_page_by_path($value, OBJECT, $post_type);
+                if ($post) {
+                    $post_ids[] = $post->ID;
+                }
+            }
+        }
+        return array_filter($post_ids);
     }
 }
 if (!function_exists('mp_display_posts_by_slug')) {
@@ -193,6 +226,10 @@ if (!function_exists('mp_display_posts_by_slug')) {
  *  Taxonomy List
  * @return array
  */
+/**
+ *  Taxonomy List - returns slugs as keys (with backward compatibility for IDs)
+ * @return array
+ */
 if (!function_exists('mp_display_taxonomy_list')) {
     function mp_display_taxonomy_list($taxonomy = 'category')
     {
@@ -203,7 +240,9 @@ if (!function_exists('mp_display_taxonomy_list')) {
         $options = array();
         if (!empty($terms) && !is_wp_error($terms)) {
             foreach ($terms as $term) {
-                //  $options[ $term->slug ] = $term->name;
+                // Use slug as key for new selections
+                $options[$term->slug] = $term->name;
+                // Also keep term_id as key for backward compatibility with old saved values
                 $options[$term->term_id] = $term->name;
             }
             return $options;
@@ -419,11 +458,11 @@ function mp_display_posts_not_found($settings)
 {
     if ($settings == 'post' || $settings == 'page') :
     ?>
-        <div class="alert alert-danger text-center mt-5 mb-5" role="alert">
+        <div class="mgp-alert mgp-alert-danger mgp-text-center mgp-mt-5 mgp-mb-5" role="alert">
             <?php echo esc_html('No Posts found this query. Please try another way!!', 'magical-posts-display'); ?>
         </div>
     <?php else : ?>
-        <div class="alert alert-danger text-center mt-5 mb-5" role="alert">
+        <div class="mgp-alert mgp-alert-danger mgp-text-center mgp-mt-5 mgp-mb-5" role="alert">
             <?php printf(esc_html('Get The Post Type Access and More - %s', 'magical-posts-display'), '<a href="https://wpthemespace.com/product/magical-posts-display-pro/" target="_blank">' . esc_html__('Upgrade Now', 'magical-posts-display') . '</a>');  ?>
         </div>
 <?php

@@ -62,7 +62,7 @@
 .mgp-grid-grid_style_1 .mgp-big-post .mgp-post-image {
     position: relative;
     overflow: hidden;
-    height: 250px;
+    min-height: 250px;
 }
 
 .mgp-grid-grid_style_1 .mgp-big-post .mgp-post-image img {
@@ -108,7 +108,7 @@
 }
 
 .mgp-grid-grid_style_1 .mgp-big-post .mgp-post-title a {
-    color: #333;
+    color: #ffffff;
     text-decoration: none;
     font-weight: 600;
 }
@@ -119,7 +119,7 @@
 
 .mgp-grid-grid_style_1 .mgp-big-post .mgp-post-excerpt {
     font-size: 15px;
-    color: #666;
+    color: #e9e9e9;
     line-height: 1.5;
     margin: 10px 0;
 }
@@ -128,10 +128,9 @@
     margin-bottom: 5px;
     padding-bottom: 5px;
     font-size: 13px;
-    color: #666;
+    color: #e9e9e9;
     display: flex;
     align-items: center;
-    gap: 15px;
 }
 
 /* Grid Style 1 - Small Posts */
@@ -194,7 +193,7 @@
 }
 
 .mgp-grid-grid_style_1 .mgp-small-post .mgp-post-title a {
-    color: #333;
+    color: #ffffff;
     text-decoration: none;
     font-weight: 600;
 }
@@ -213,7 +212,7 @@
 .mgp-grid-grid_style_1 .mgp-small-post .mgp-post-meta {
     margin-top: 8px;
     font-size: 11px;
-    color: #999;
+    color: #f1f1f1;
 }
 
 /* ===========================================

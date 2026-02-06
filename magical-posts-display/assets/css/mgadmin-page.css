@@ -83,13 +83,25 @@ section.sec-wel {
     margin: 10px;
 }
 a.button.button-mgp1 {
-    background: #000;
+    background: #000000;
     color: #fff;
-    padding: 5px 25px;
-    margin-top: 10px;
+    padding: 12px 45px;
+    margin: 10px;
     font-size: 1rem;
     min-height: 38px;
     display: inline-block;
+    border-radius: 5px;
+    transition: 0.5s;
+    border: none;
+    font-weight: 600;
+}
+a.button.button-mgp1.btnprohas {
+    background: #700000;
+    color: #fff;
+}
+a.button.button-mgp1.btnprohas:hover {
+    background: #460000;
+    color: #fff;
 }
 .mgftext {
     padding: 50px 30px;

@@ -3,6 +3,7 @@
 
 class mgpdEPostsTicker extends \Elementor\Widget_Base
 {
+    use Query_Controls_Trait;
 
     /**
      * Get widget name.
@@ -175,6 +176,9 @@ class mgpdEPostsTicker extends \Elementor\Widget_Base
                 'step'    => 1,
             ]
         );
+
+        // Post Position Control
+        $this->register_post_position_control('mgptik_posts_filter');
 
         $this->add_control(
             'mgptik_grid_categories',
@@ -620,10 +624,10 @@ class mgpdEPostsTicker extends \Elementor\Widget_Base
         }
 
         if ($mgptik_filter === 'show_byid' && !empty($settings['mgptik_post_id'])) {
-            $args['post__in'] = array_map('absint', $settings['mgptik_post_id']);
+            $args['post__in'] = mp_display_resolve_post_ids($settings['mgptik_post_id'], $mgpla_post_type);
         } elseif ($mgptik_filter === 'show_byid_manually') {
-            $post_ids = array_map('absint', explode(',', $settings['mgptik_post_ids_manually']));
-            $args['post__in'] = array_filter($post_ids);
+            $post_ids = array_map('trim', explode(',', $settings['mgptik_post_ids_manually']));
+            $args['post__in'] = mp_display_resolve_post_ids($post_ids, $mgpla_post_type);
         }
 
         // Custom Order
@@ -661,7 +665,8 @@ class mgpdEPostsTicker extends \Elementor\Widget_Base
 
         $mgptik_mouse_pause = $mgptik_pause_mouse ? true : false;
 
-
+        // Apply post position settings
+        $args = $this->apply_post_position_to_query($args, $settings, 'mgptik_posts_filter');
 
         $rand_num = wp_rand(987564, 365298);
 
@@ -685,7 +690,7 @@ class mgpdEPostsTicker extends \Elementor\Widget_Base
 
                         <?php
                         endwhile;
-                        wp_reset_query();
+                        wp_reset_postdata();
                         wp_reset_postdata();
                         ?>
                     </ul>

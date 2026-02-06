@@ -2,8 +2,8 @@
 Contributors: nalam
 Donate link: https://wpthemespace.com/donation
 Tags: post display, Page display, custom Post, elementor widget, post slider
-Requires at least: 5.0
-Tested up to: 6.8
+Requires at least: 6.0
+Tested up to: 6.9
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -56,6 +56,9 @@ Magical Posts Display comes with a range of awesome Elementor widgets that make 
  	<li><strong>Posts tag show.</strong></li>
  	<li><strong>All options show hide features. </strong></li>
  	<li><strong>User-friendly Editor.</strong></li>
+	<li><strong>Ajax Loadmore button.</strong></li>
+	<li><strong>Ajax Categories filter.</strong></li>
+	<li><strong>Post Position Control - Select specific posts (1st, 2nd, 3rd, 4th) or offset from any position for grid layouts.</strong></li>
  	
 </ul>
 
@@ -136,6 +139,34 @@ Yes, Magical Posts Display supports posts categories, allowing you to display po
 
 
 == Changelog ==
+
+= 1.2.6 =
+ * Added Post Position Control feature to all query-based widgets
+ * New dropdown to select specific posts (1st, 2nd, 3rd, 4th) or offset from specific positions
+ * Supports "All Posts", individual post selection, and "Posts from 2nd/3rd/4th/5th/6th" options
+ * Implemented using PHP Trait for better code maintainability
+ * Updated 10 Elementor widgets with the new post position feature
+
+= 1.2.56 =
+ * updtae widges style
+ * fixed php error
+ * update posts query id to slug
+
+= 1.2.55 =
+ * Fixed security issue
+ * Removed Bootstrap dependency
+ * Removed cmb2 dependency
+ * Removed carbon fields dependency
+
+= 1.2.54 =
+ * Enhanced Security: Added comprehensive nonce verification and input sanitization across all AJAX handlers
+ * Premium Features: Reading Time, View Count, and Social Share Buttons
+ * Code Quality: Refactored AJAX methods following WordPress coding standards
+ * Advanced Media Support: Video, Gallery with priority fallback system
+ * Hover Effects added: Zoom, Lift, Tilt animations for cards
+ * Categories Filter Buttons Added 
+ * Improved: Better error handling and default values for AJAX requests
+ * Performance: Optimized category filtering and infinite scroll functionality
 
 = 1.2.53 =
  * Fixed News/Magazine title tag security issue

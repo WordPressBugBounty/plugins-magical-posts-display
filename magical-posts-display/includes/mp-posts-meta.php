@@ -97,7 +97,7 @@ if (!function_exists('mp_display_single_comment_icon')) :
 	function mp_display_single_comment_icon()
 	{
 		if (!post_password_required() && (comments_open() && get_comments_number())) {
-			echo '<span class="single-comments-link ml-2">';
+			echo '<span class="single-comments-link mgp-ml-2">';
 			comments_popup_link(
 				sprintf(
 					wp_kses(
@@ -111,8 +111,8 @@ if (!function_exists('mp_display_single_comment_icon')) :
 					),
 					get_the_title()
 				),
-				'<i class="far fa-comments"></i> ' . __('1 ', 'magical-posts-display'),
-				'<i class="far fa-comments"></i>' . __(' % ', 'magical-posts-display'),
+				'<svg class="mgp-comment-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> ' . __('1 ', 'magical-posts-display'),
+				'<svg class="mgp-comment-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>' . __(' % ', 'magical-posts-display'),
 				'comments-link',
 				' '
 			);

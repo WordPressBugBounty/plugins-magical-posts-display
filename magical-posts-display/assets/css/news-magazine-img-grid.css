@@ -150,13 +150,6 @@
     z-index: 1;
 }
 
-.mgp-big-post .mgp-post-category {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 3;
-}
-
 .mgp-big-post .mgp-post-category a {
     background: rgba(255, 255, 255, 0.95);
     color: #1a1a1a;
@@ -338,7 +331,7 @@
 
 .mgp-small-post .mgp-post-content {
     position: absolute;
-    bottom: 0;
+    bottom: 10px;
     left: 0;
     right: 0;
     padding: 16px;
@@ -565,7 +558,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100% !important;
 }
 
 /* Responsive image width and height handling */

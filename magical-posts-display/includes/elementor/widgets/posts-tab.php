@@ -443,7 +443,7 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                 'default' => 'left',
                 'classes' => 'flex-{{VALUE}}',
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body' => 'text-align: {{VALUE}};',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body' => 'text-align: {{VALUE}};',
                 ],
             ]
         );
@@ -1360,7 +1360,7 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body p' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -1371,7 +1371,7 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body p' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -1381,7 +1381,7 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                 'label' => __('Text Color', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body p' => 'color: {{VALUE}};',
                 ],
             ]
         );
@@ -1391,7 +1391,7 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                 'label' => __('Background Color', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p' => 'background-color: {{VALUE}};',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body p' => 'background-color: {{VALUE}};',
                 ],
             ]
         );
@@ -1402,7 +1402,7 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body p' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body p' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -1412,7 +1412,7 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
             [
                 'name' => 'mapt_description_typography',
                 'label' => __('Typography', 'magical-posts-display'),
-                'selector' => '{{WRAPPER}} .mgp-card .mg-card-text.card-body p',
+                'selector' => '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body p',
             ]
         );
 
@@ -1949,30 +1949,35 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
 
                 <!-- Horijontal tab start -->
                 <?php if ($settings['mapt_type'] == 'vertical') : ?>
-                    <div class="row">
-                        <div class="col-md-3 vertical-tab">
+                    <div class="mgp-row">
+                        <div class="mgp-col-md-3 vertical-tab">
                             <!-- Horijontal tab end -->
                         <?php endif; ?>
 
 
                         <div class="mpdtab-nav-wrap bsknav-<?php if ($settings['mapt_full_width'] == 'yes') : ?>full<?php else : ?>fit navalign-<?php echo esc_attr($settings['mapt_nav_align']); ?><?php endif; ?>">
-                            <ul class="nav nav-tabs <?php if ($settings['mapt_full_width'] == 'yes' && $settings['mapt_type'] == 'horizontal') : ?>nav-justified<?php endif; ?>" id="myTab" role="tablist">
+                            <ul class="mgp-nav mgp-nav-tabs <?php if ($settings['mapt_full_width'] == 'yes' && $settings['mapt_type'] == 'horizontal') : ?>mgp-nav-justified<?php endif; ?>" id="myTab" role="tablist">
 
                                 <?php
                                 foreach ($mapt_cats as $index => $cats_id) :
-                                    //	$cat_info = get_term_by('id', $cats_id, 'post');
-                                    $cat_info = get_the_category_by_ID($cats_id);
-                                    if ($index == 0) {
-                                        $bsklink_class = 'nav-link active';
+                                    // Support both term_id and slug for tab names
+                                    if (is_numeric($cats_id)) {
+                                        $cat_info = get_the_category_by_ID($cats_id);
                                     } else {
-                                        $bsklink_class = 'nav-link';
+                                        $term_obj = get_term_by('slug', $cats_id, 'category');
+                                        $cat_info = $term_obj ? $term_obj->name : '';
+                                    }
+                                    if ($index == 0) {
+                                        $bsklink_class = 'mgp-nav-link mgp-active';
+                                    } else {
+                                        $bsklink_class = 'mgp-nav-link';
                                     }
                                     $term_name = empty($cat_info) ? __('Select Category', 'magical-posts-display') : $cat_info;
 
                                 ?>
 
-                                    <li class="nav-item" role="presentation">
-                                        <a class="<?php echo esc_attr($bsklink_class); ?>" id="tab-<?php echo esc_attr($mapt_rand . $index); ?>" data-bs-toggle="tab" data-bs-target="#mapt_<?php echo esc_attr($mapt_rand . $index); ?>" href="#" role="tab" aria-controls="mapt_<?php echo esc_attr($mapt_rand . $index); ?>" aria-selected="<?php if ($index == 0) : ?>true<?php else : ?>false<?php endif; ?>">
+                                    <li class="mgp-nav-item" role="presentation">
+                                        <a class="<?php echo esc_attr($bsklink_class); ?>" id="tab-<?php echo esc_attr($mapt_rand . $index); ?>" data-mgbs-toggle="tab" data-mgbs-target="#mapt_<?php echo esc_attr($mapt_rand . $index); ?>" href="#" role="tab" aria-controls="mapt_<?php echo esc_attr($mapt_rand . $index); ?>" aria-selected="<?php if ($index == 0) : ?>true<?php else : ?>false<?php endif; ?>">
                                             <?php /* if($settings['mapt_icon_show'] == 'yes' && ($settings['mapt_icon_position'] == 'left' || $settings['mapt_icon_position'] == 'top')  ): ?>
     	 <span class="mpdtabs-icon-<?php echo esc_attr( $settings['mapt_icon_position']); ?>">
     			    <?php \Elementor\Icons_Manager::render_icon( $settings['mapt_selected_icon'] ); ?>
@@ -1995,11 +2000,11 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                         <!-- Horijontal tab start -->
                         <?php if ($settings['mapt_type'] == 'vertical') : ?>
                         </div>
-                        <div class="col-md-9 vertical-content">
+                        <div class="mgp-col-md-9 vertical-content">
                             <!-- Horijontal tab end -->
                         <?php endif; ?>
                         <?php $mgp_unque_num = wp_rand('8652397', '5832471'); ?>
-                        <div class="tab-content mpdtab-content">
+                        <div class="mgp-tab-content mpdtab-content">
                             <?php if ($settings['mapt_custom_css']) : ?>
                                 <style>
                                     <?php echo esc_html($settings['mapt_custom_css']); ?>
@@ -2007,13 +2012,20 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                             <?php endif; ?>
                             <?php
                             foreach ($mapt_cats as $index => $cats_id) :
-                                $pcat_obj = get_term_by('id', $cats_id, 'category');
-                                $pcat_slug = empty($pcat_obj->slug) ? null : $pcat_obj->slug;
+                                // Support both term_id and slug
+                                if (is_numeric($cats_id)) {
+                                    $pcat_obj = get_term_by('id', $cats_id, 'category');
+                                    $pcat_term = empty($pcat_obj->slug) ? null : $pcat_obj->slug;
+                                    $pcat_field = 'slug';
+                                } else {
+                                    $pcat_term = $cats_id; // Already a slug
+                                    $pcat_field = 'slug';
+                                }
                             ?>
-                                <div id="mapt_<?php echo esc_attr($mapt_rand . $index); ?>" class="tab-pane fade in <?php if ($index == 0) : ?>show active<?php endif; ?>" role="tabpanel" aria-labelledby="home-tab">
+                                <div id="mapt_<?php echo esc_attr($mapt_rand . $index); ?>" class="mgp-tab-pane mgp-fade in <?php if ($index == 0) : ?>mgp-show mgp-active<?php endif; ?>" role="tabpanel" aria-labelledby="home-tab">
                                     <div <?php if ($settings['mapt_attr_id']) : ?> id="<?php echo esc_attr($settings['mapt_attr_id']); ?>" <?php endif; ?> class="mgp-unique<?php echo esc_attr($mgp_unque_num); ?> mgpostd mgpde-items style<?php echo esc_attr($mapt_post_style); ?> mgpostd-grid <?php echo esc_attr($settings['mapt_attr_calss']); ?>">
 
-                                        <div class="row">
+                                        <div class="mgp-row">
 
 
                                             <?php
@@ -2025,8 +2037,8 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                                                 'tax_query' => array(
                                                     array(
                                                         'taxonomy' => 'category',
-                                                        'field'    => 'slug',
-                                                        'terms'    => $pcat_slug,
+                                                        'field'    => $pcat_field,
+                                                        'terms'    => $pcat_term,
                                                     ),
                                                 ),
                                             );
@@ -2035,10 +2047,10 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                                             if ($mgpteb_item_posts->have_posts()) :
                                                 while ($mgpteb_item_posts->have_posts()) : $mgpteb_item_posts->the_post();
                                             ?>
-                                                    <div class="col-lg-<?php echo esc_attr($mapt_column); ?>">
-                                                        <div class="card mg-card mg-shadow mgp-card mb-4">
+                                                    <div class="mgp-col-lg-<?php echo esc_attr($mapt_column); ?>">
+                                                        <div class="mgp-card mg-card mg-shadow mgp-card mgp-mb-4">
                                                             <?php mp_post_thumbnail($mapt_post_img_show, $settings['mapt_img_size']); ?>
-                                                            <div class="mg-card-text card-body">
+                                                            <div class="mg-card-text mgp-card-body">
                                                                 <?php
                                                                 mp_post_cat_display($settings['mapt_category_show'], $settings['mapt_cat_type'], ', ');
                                                                 ?>
@@ -2093,7 +2105,7 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                                                     </div>
                                                 <?php
                                                 endwhile;
-                                                wp_reset_query();
+                                                wp_reset_postdata();
                                                 wp_reset_postdata();
                                                 ?>
                                             <?php endif; ?>
@@ -2118,7 +2130,7 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
 
             </div>
         <?php else : ?>
-            <div class="alert alert-danger text-center">
+            <div class="mgp-alert mgp-alert-danger mgp-text-center">
                 <?php echo esc_html('Please select posts categories for display the Tab.'); ?>
             </div>
         <?php endif; //Check tab item 

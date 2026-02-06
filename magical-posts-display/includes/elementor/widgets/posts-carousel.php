@@ -3,6 +3,7 @@
 
 class mgPosts_carousel extends \Elementor\Widget_Base
 {
+    use Query_Controls_Trait;
 
     /**
      * Get widget name.
@@ -179,6 +180,9 @@ class mgPosts_carousel extends \Elementor\Widget_Base
                 'step'    => 1,
             ]
         );
+
+        // Post Position Control
+        $this->register_post_position_control('mgpcar_posts_filter');
 
         $this->add_control(
             'mgpcar_grid_categories',
@@ -573,7 +577,7 @@ class mgPosts_carousel extends \Elementor\Widget_Base
                 'default' => 'left',
                 'classes' => 'flex-{{VALUE}}',
                 'selectors' => [
-                    '{{WRAPPER}} .mgp-card .mg-card-text.card-body' => 'text-align: {{VALUE}};',
+                    '{{WRAPPER}} .mgp-card .mg-card-text.mgp-card-body' => 'text-align: {{VALUE}};',
                 ],
             ]
         );
@@ -2219,10 +2223,10 @@ class mgPosts_carousel extends \Elementor\Widget_Base
                 break;
         }
         if ($mgpcar_filter === 'show_byid' && !empty($settings['mgpcar_post_id'])) {
-            $args['post__in'] = array_map('absint', $settings['mgpcar_post_id']);
+            $args['post__in'] = mp_display_resolve_post_ids($settings['mgpcar_post_id'], $mgpla_post_type);
         } elseif ($mgpcar_filter === 'show_byid_manually') {
-            $post_ids = array_map('absint', explode(',', $settings['mgpcar_post_ids_manually']));
-            $args['post__in'] = array_filter($post_ids);
+            $post_ids = array_map('trim', explode(',', $settings['mgpcar_post_ids_manually']));
+            $args['post__in'] = mp_display_resolve_post_ids($post_ids, $mgpla_post_type);
         }
 
 
@@ -2265,6 +2269,8 @@ class mgPosts_carousel extends \Elementor\Widget_Base
             $mgpcar_autoplay_speed = 500;
         }
 
+        // Apply post position settings
+        $args = $this->apply_post_position_to_query($args, $settings, 'mgpcar_posts_filter');
 
         $mgpcar_products = new WP_Query($args);
         $mgp_unque_num = wp_rand('8652397', '5832471');
@@ -2289,7 +2295,7 @@ class mgPosts_carousel extends \Elementor\Widget_Base
                                 </div>
                             <?php
                             endwhile;
-                            wp_reset_query();
+                            wp_reset_postdata();
                             wp_reset_postdata();
                             ?>
                         </div>
@@ -2338,9 +2344,9 @@ class mgPosts_carousel extends \Elementor\Widget_Base
 
 
     ?>
-        <div class="card mg-card mg-shadow mgp-card mb-4">
+        <div class="mgp-card mg-card mg-shadow mgp-card mgp-mb-4">
             <?php mp_post_thumbnail($mgpcar_post_img_show, $mgpcar_img_size); ?>
-            <div class="mg-card-text card-body">
+            <div class="mg-card-text mgp-card-body">
                 <?php
                 if ($settings['mgpla_post_type'] == 'post') {
                     mp_post_cat_display($settings['mgpcar_category_show'], $settings['mgpcar_cat_type'], ', ', 'mp-post-cat', $settings['mgpcar_caticon_show']);

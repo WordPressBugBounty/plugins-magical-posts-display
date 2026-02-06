@@ -17,7 +17,7 @@ get_header();
 			<?php the_post_thumbnail(); ?>
 		</div>
 		<?php endif; ?> 
-		<div class="container">
+		<div class="mgp-container">
 			<div class="entry-content">
 				<?php
 				the_content();

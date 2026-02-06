@@ -368,7 +368,7 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::ICONS,
                 'separator' => 'before',
                 'default' => [
-                    'value' => 'fas fa-plus',
+                    'value' => 'fas fa-chevron-down',
                     'library' => 'fa-solid',
                 ],
                 'recommended' => [
@@ -418,7 +418,7 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                 'label' => esc_html__('Active Icon', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::ICONS,
                 'default' => [
-                    'value' => 'fas fa-minus',
+                    'value' => 'fas fa-chevron-up',
                     'library' => 'fa-solid',
                 ],
                 'recommended' => [
@@ -810,7 +810,7 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                 'name' => 'mpac_title_background_open',
                 'label' => esc_html__('Background', 'magical-posts-display'),
                 'types' => ['classic', 'gradient'],
-                'selector' => '{{WRAPPER}} .card-header.mg-accordion-title .mgrc-title',
+                'selector' => '{{WRAPPER}} .mgp-card-header.mg-accordion-title .mgrc-title',
             ]
         );
 
@@ -819,7 +819,7 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
             [
                 'name' => 'mpac_title_border_open',
                 'label' => esc_html__('Border', 'magical-posts-display'),
-                'selector' => '{{WRAPPER}} .card-header.mg-accordion-title .mgrc-title',
+                'selector' => '{{WRAPPER}} .mgp-card-header.mg-accordion-title .mgrc-title',
             ]
         );
 
@@ -830,7 +830,7 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%', 'em'],
                 'selectors' => [
-                    '{{WRAPPER}} .card-header.mg-accordion-title .mgrc-title' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .mgp-card-header.mg-accordion-title .mgrc-title' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -839,7 +839,7 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
             [
                 'name' => 'mpac_box_shadow_open',
                 'label' => esc_html__('Box Shadow', 'magical-posts-display'),
-                'selector' => '{{WRAPPER}} .card-header.mg-accordion-title .mgrc-title',
+                'selector' => '{{WRAPPER}} .mgp-card-header.mg-accordion-title .mgrc-title',
             ]
         );
 
@@ -867,7 +867,7 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                 'name' => 'mpac_background_close',
                 'label' => esc_html__('Background', 'magical-posts-display'),
                 'types' => ['classic', 'gradient'],
-                'selector' => '{{WRAPPER}} .card-header.mg-accordion-title .mgrc-title.collapsed',
+                'selector' => '{{WRAPPER}} .mgp-card-header.mg-accordion-title .mgrc-title.collapsed',
 
             ]
         );
@@ -881,7 +881,7 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                 'condition' => [
                     'mpac_style!' => ['curve-shape']
                 ],
-                'selector' => '{{WRAPPER}} .card-header.mg-accordion-title .mgrc-title.collapsed',
+                'selector' => '{{WRAPPER}} .mgp-card-header.mg-accordion-title .mgrc-title.collapsed',
             ]
         );
         $this->add_control(
@@ -891,7 +891,7 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%', 'em'],
                 'selectors' => [
-                    '{{WRAPPER}} .card-header.mg-accordion-title .mgrc-title.collapsed' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .mgp-card-header.mg-accordion-title .mgrc-title.collapsed' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -901,7 +901,7 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
             [
                 'name' => 'mpac_box_shadow_close',
                 'label' => esc_html__('Box Shadow', 'magical-posts-display'),
-                'selector' => '{{WRAPPER}} .card-header.mg-accordion-title .mgrc-title.collapsed',
+                'selector' => '{{WRAPPER}} .mgp-card-header.mg-accordion-title .mgrc-title.collapsed',
             ]
         );
 
@@ -924,7 +924,7 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::DIMENSIONS,
                 'size_units' => ['px'],
                 'selectors' => [
-                    '{{WRAPPER}} .card-header.mg-accordion-title .mgrc-title' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .mgp-card-header.mg-accordion-title .mgrc-title' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -947,7 +947,7 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                 ],
                 'size_units'     => ['px'],
                 'selectors'         => [
-                    '{{WRAPPER}} .card-header.mg-accordion-title .mgrc-title'    => 'margin-bottom: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .mgp-card-header.mg-accordion-title .mgrc-title'    => 'margin-bottom: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -1788,7 +1788,17 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                 foreach ($mpac_items as $index => $item) :
 
                     if ($item['mpac_post_id']) :
-                        $mpac_post_id = absint($item['mpac_post_id']);
+                        // Support both ID and slug for backward compatibility
+                        $post_value = $item['mpac_post_id'];
+                        if (is_numeric($post_value)) {
+                            $mpac_post_id = absint($post_value);
+                        } else {
+                            // It's a slug, get the post by slug
+                            $post_obj = get_page_by_path($post_value, OBJECT, 'post');
+                            $mpac_post_id = $post_obj ? $post_obj->ID : 0;
+                        }
+                        
+                        if ($mpac_post_id) :
                         $args = array(
                             'post_type' => 'post',
                             'p'         =>  $mpac_post_id,
@@ -1797,9 +1807,9 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                         $mpac_loop = new WP_Query($args);
                         while ($mpac_loop->have_posts()) :  $mpac_loop->the_post();
                 ?>
-                            <div class="card mgrc-item mgrc-item-<?php echo esc_attr($settings['mpac_text_align']); ?>-<?php echo esc_attr($settings['mpac_icon_position']); ?> text-<?php echo esc_attr($settings['mpac_text_align']); ?>">
-                                <div class="card-header mg-accordion-title" id="heading<?php echo esc_attr($index); ?><?php echo esc_attr($mpac_rand); ?>">
-                                    <div class="mgrc-title <?php if ($item['mpac_is_open'] != 'yes') : ?>collapsed<?php endif; ?> <?php if ($settings['mpac_icon_position'] == 'left') : ?>mgrc-left<?php endif; ?>" data-bs-toggle="collapse" data-bs-target="#mgc-item<?php echo esc_attr($index); ?><?php echo esc_attr($mpac_rand); ?>" aria-expanded="<?php if ($item['mpac_is_open'] == 'yes') : ?>true<?php else : ?>false<?php endif; ?>" aria-controls="mgc-item<?php echo esc_attr($index); ?><?php echo esc_attr($mpac_rand); ?>">
+                            <div class="mgp-card mgrc-item mgrc-item-<?php echo esc_attr($settings['mpac_text_align']); ?>-<?php echo esc_attr($settings['mpac_icon_position']); ?> text-<?php echo esc_attr($settings['mpac_text_align']); ?>">
+                                <div class="mgp-card-header mg-accordion-title" id="heading<?php echo esc_attr($index); ?><?php echo esc_attr($mpac_rand); ?>">
+                                    <div class="mgrc-title <?php if ($item['mpac_is_open'] != 'yes') : ?>collapsed<?php endif; ?> <?php if ($settings['mpac_icon_position'] == 'left') : ?>mgrc-left<?php endif; ?>" data-mgbs-toggle="collapse" data-mgbs-target="#mgc-item<?php echo esc_attr($index); ?><?php echo esc_attr($mpac_rand); ?>" aria-expanded="<?php if ($item['mpac_is_open'] == 'yes') : ?>true<?php else : ?>false<?php endif; ?>" aria-controls="mgc-item<?php echo esc_attr($index); ?><?php echo esc_attr($mpac_rand); ?>">
                                         <?php if ($settings['mpac_icon_position'] == 'left' && $settings['mpac_icon_show'] == 'yes') : ?>
                                             <div class="mgc-icons mgc-left-icon">
                                                 <div class="mgc-icon mgc-icon-top">
@@ -1814,13 +1824,13 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                                         <?php endif; ?>
                                         <?php
                                         // Ensure the title tag is properly escaped to prevent any invalid HTML tags or XSS attacks
-                                        echo '<' . tag_escape($settings['mpac_title_tag']) . '>';
+                                        echo '<' . mpd_validate_html_tag($settings['mpac_title_tag']) . '>';
 
                                         // Trim the post title to the specified number of words and escape it for safe output
                                         echo esc_html(wp_trim_words(get_the_title(), $settings['mpac_crop_title'], '...'));
 
                                         // Close the title tag with the escaped tag name
-                                        echo '</' . tag_escape($settings['mpac_title_tag']) . '>';
+                                        echo '</' . mpd_validate_html_tag($settings['mpac_title_tag']) . '>';
                                         ?>
 
                                         <?php if ($settings['mpac_icon_position'] == 'right' && $settings['mpac_icon_show'] == 'yes') : ?>
@@ -1839,12 +1849,12 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
 
                                 </div>
 
-                                <div id="mgc-item<?php echo esc_attr($index); ?><?php echo esc_attr($mpac_rand); ?>" class="collapse mgac-mcontent mgaccont <?php if ($item['mpac_is_open'] == 'yes') : ?>show<?php endif; ?>" aria-labelledby="heading<?php echo esc_attr($index); ?><?php echo esc_attr($mpac_rand); ?>" data-bs-parent="#mpdAccordion<?php echo esc_attr($mpac_rand); ?>">
-                                    <div class="card-body mgac-content mgac-<?php echo esc_attr($settings['mpac_effect']); ?>">
+                                <div id="mgc-item<?php echo esc_attr($index); ?><?php echo esc_attr($mpac_rand); ?>" class="mgp-collapse mgac-mcontent mgaccont <?php if ($item['mpac_is_open'] == 'yes') : ?>mgp-show<?php endif; ?>" aria-labelledby="heading<?php echo esc_attr($index); ?><?php echo esc_attr($mpac_rand); ?>" data-mgbs-parent="#mpdAccordion<?php echo esc_attr($mpac_rand); ?>">
+                                    <div class="mgp-card-body mgac-content mgac-<?php echo esc_attr($settings['mpac_effect']); ?>">
 
-                                        <div class="row">
+                                        <div class="mgp-row">
                                             <?php if ($settings['mpac_show_img']) : ?>
-                                                <div class="col-lg-5">
+                                                <div class="mgp-col-lg-5">
                                                     <div class="mpdac-post-image">
                                                         <figure>
                                                             <a href="<?php the_permalink(); ?>">
@@ -1853,9 +1863,9 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                                                         </figure>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-7">
+                                                <div class="mgp-col-lg-7">
                                                 <?php else : ?>
-                                                    <div class="col-lg-12">
+                                                    <div class="mgp-col-lg-12">
                                                     <?php endif; ?>
                                                     <div class="mpdac-post-details">
                                                         <?php mp_post_cat_display($mpac_category_show, $settings['mpac_cat_type'], ', '); ?>
@@ -1897,14 +1907,15 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                                 </div>
 
                             <?php endwhile; ?>
+                        <?php endif; // end if ($mpac_post_id) ?>
                         <?php else : ?>
-                            <div class="alert alert-warning text-center mt-5 mb-5" role="alert">
+                            <div class="mgp-alert mgp-alert-warning mgp-text-center mgp-mt-5 mgp-mb-5" role="alert">
                                 <?php echo esc_html('No posts found. Please add posts for display the accordion.', 'magical-posts-display'); ?>
                             </div>
-                        <?php endif; ?>
+                        <?php endif; // end if ($item['mpac_post_id']) ?>
                     <?php endforeach; ?>
                 <?php else : ?>
-                    <div class="alert alert-danger text-center mt-5 mb-5" role="alert">
+                    <div class="mgp-alert mgp-alert-danger mgp-text-center mgp-mt-5 mgp-mb-5" role="alert">
                         <?php echo esc_html('No posts found. Please add posts for display the accordion.', 'magical-posts-display'); ?>
                     </div>
                 <?php endif; ?>

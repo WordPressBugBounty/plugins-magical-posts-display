@@ -3,6 +3,7 @@
 
 class mgpdAdPostsGrid1 extends \Elementor\Widget_Base
 {
+    use Query_Controls_Trait;
 
     /**
      * Get widget name.
@@ -159,6 +160,9 @@ class mgpdAdPostsGrid1 extends \Elementor\Widget_Base
                 'step'    => 1,
             ]
         );
+
+        // Post Position Control
+        $this->register_post_position_control('mgpla_posts_filter');
 
         $this->add_control(
             'mgpla_grid_categories',
@@ -504,7 +508,7 @@ class mgpdAdPostsGrid1 extends \Elementor\Widget_Base
                 'default' => 'left',
                 'classes' => 'flex-{{VALUE}}',
                 'selectors' => [
-                    '{{WRAPPER}} .mgpdl-item .card-body.mgpdl-text' => 'text-align: {{VALUE}};',
+                    '{{WRAPPER}} .mgpdl-item .mgp-card-body.mgpdl-text' => 'text-align: {{VALUE}};',
                 ],
             ]
         );
@@ -1773,10 +1777,10 @@ class mgpdAdPostsGrid1 extends \Elementor\Widget_Base
                 break;
         }
         if ($mgpla_filter === 'show_byid' && !empty($settings['mgpla_post_id'])) {
-            $args['post__in'] = array_map('absint', $settings['mgpla_post_id']);
+            $args['post__in'] = mp_display_resolve_post_ids($settings['mgpla_post_id'], $mgpla_post_type);
         } elseif ($mgpla_filter === 'show_byid_manually') {
-            $post_ids = array_map('absint', explode(',', $settings['mgpla_post_ids_manually']));
-            $args['post__in'] = array_filter($post_ids);
+            $post_ids = array_map('trim', explode(',', $settings['mgpla_post_ids_manually']));
+            $args['post__in'] = mp_display_resolve_post_ids($post_ids, $mgpla_post_type);
         }
 
         // Custom Order
@@ -1827,6 +1831,8 @@ class mgpdAdPostsGrid1 extends \Elementor\Widget_Base
         $mgpla_category_show = $this->get_settings('mgpla_category_show');
         $mgpla_wrap = $this->get_settings('mgpla_wrap');
 
+        // Apply post position settings
+        $args = $this->apply_post_position_to_query($args, $settings, 'mgpla_posts_filter');
 
         $mgpla_posts = new WP_Query($args);
         $mgpla_count = 0;
@@ -1878,7 +1884,7 @@ class mgpdAdPostsGrid1 extends \Elementor\Widget_Base
                                 </figure>
                             </div>
                         <?php else : ?>
-                            <div class="mgpdl-item mgpd-list mgladp1-all mb-4 <?php if (has_post_thumbnail() && $mgpla_post_img_show) : ?>mgpdl-hasimg<?php endif; ?>">
+                            <div class="mgpdl-item mgpd-list mgladp1-all mgp-mb-4 <?php if (has_post_thumbnail() && $mgpla_post_img_show) : ?>mgpdl-hasimg<?php endif; ?>">
                                 <div class="mgpdl-card <?php if ($mgpla_wrap) : ?>no-wrap<?php endif; ?>">
                                     <?php if (has_post_thumbnail() && $mgpla_post_img_show) : ?>
                                         <div class="mgpdl-img">
@@ -1889,7 +1895,7 @@ class mgpdAdPostsGrid1 extends \Elementor\Widget_Base
                                             </figure>
                                         </div>
                                     <?php endif; ?>
-                                    <div class="card-body mgpdl-text">
+                                    <div class="mgp-card-body mgpdl-text">
                                         <?php
                                         if ($mgpla_post_type == 'post') {
                                             mp_post_cat_display($mgpla_category_show, $settings['mgpla_cat_type'], ', ', 'mp-post-cat', '');
@@ -1924,7 +1930,7 @@ class mgpdAdPostsGrid1 extends \Elementor\Widget_Base
                     <?php
                         endif;
                     endwhile;
-                    wp_reset_query();
+                    wp_reset_postdata();
                     wp_reset_postdata();
                     ?>
                 </div>

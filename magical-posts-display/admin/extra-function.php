@@ -60,7 +60,7 @@ if (!function_exists('spacehide_go_me')) :
 		$class = 'notice notice-success is-dismissible';
 		$url1 = esc_url('https://wpthemespace.com/product-category/pro-theme/');
 
-		$message = __('<strong><span style="color:red;">Latest WordPress Theme:</span>  <span style="color:green"> If you find a Secure, SEO friendly, full functional premium WordPress theme for your site then </span>  </strong>', 'niso');
+		$message = __('<strong><span style="color:red;">Latest WordPress Theme:</span>  <span style="color:green"> If you find a Secure, SEO friendly, full functional premium WordPress theme for your site then </span>  </strong>', 'magical-posts-display');
 
 		printf(
 			'<div class="%1$s" style="padding:10px 15px 20px;"><p>%2$s <a href="%3$s" target="_blank">%4$s</a>.</p><a target="_blank" class="button button-danger" href="%3$s" style="margin-right:10px">%5$s</a></div>',

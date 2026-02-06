@@ -36,7 +36,7 @@ if (!class_exists('mgpDisplayWelcomePage')) :
 
             add_menu_page($menu_text, $menu_text, 'manage_options', 'mgpd-page', array($this, 'plugin_page'), 'dashicons-tickets-alt', 20);
 
-            add_submenu_page('mgpd-page', esc_html__("WelCome Page", 'gbox'), esc_html__("WelCome Page", 'gbox'), "manage_options",  'mgpd-page', array($this, 'plugin_page'));
+            add_submenu_page('mgpd-page', esc_html__("WelCome Page", 'magical-posts-display' ), esc_html__("WelCome Page", 'magical-posts-display' ), "manage_options",  'mgpd-page', array($this, 'plugin_page'));
         }
 
 
@@ -45,11 +45,11 @@ if (!class_exists('mgpDisplayWelcomePage')) :
             $sections = array(
                 array(
                     'id'    => 'magical_ptab_home',
-                    'title' => __('Home', 'magical-addons-for-elementor')
+                    'title' => __('Home', 'magical-posts-display')
                 ),
                 /*array(
                 'id'    => 'magical_addons',
-                'title' => __( 'Addons', 'magical-addons-for-elementor' )
+                'title' => __( 'Addons', 'magical-posts-display'  )
             )*/
             );
             return $sections;

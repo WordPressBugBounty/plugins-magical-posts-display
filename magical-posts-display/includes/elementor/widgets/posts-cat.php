@@ -420,10 +420,10 @@ class mgpdEPosts_cats extends \Elementor\Widget_Base
         $this->add_control(
             'content_grid_boxshadow',
             [
-                'label' => __('Use Box shadow?', 'magical-addons-for-elementor'),
+                'label' => __('Use Box shadow?', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::SWITCHER,
-                'yes' => __('Yes', 'magical-addons-for-elementor'),
-                'no' => __('No', 'magical-addons-for-elementor'),
+                'yes' => __('Yes', 'magical-posts-display'),
+                'no' => __('No', 'magical-posts-display'),
                 'default' => 'yes',
             ]
         );
@@ -829,7 +829,7 @@ class mgpdEPosts_cats extends \Elementor\Widget_Base
 
 ?>
             <div class="mgpckit-cat-grid mpdc-catg-<?php echo esc_attr($settings['mgpd_cats_style']); ?>">
-                <div class="row">
+                <div class="mgp-row">
                     <?php
                     foreach ($cat_list as $item) :
                         $catslug = $item['mgpd_cats'];
@@ -845,7 +845,7 @@ class mgpdEPosts_cats extends \Elementor\Widget_Base
 
                         $cat_link =  get_category_link($catid);;
                     ?>
-                        <div class="col-lg-<?php echo esc_attr($mgpd_cats_column); ?>">
+                        <div class="mgp-col-lg-<?php echo esc_attr($mgpd_cats_column); ?>">
                             <div class="mgpckit-cat-item <?php if ($settings['content_grid_boxshadow'] == 'yes') : ?>mgpdi-shadow<?php endif; ?>">
 
                                 <?php if ($settings['mgpc_catimg_show']) : ?>
@@ -880,7 +880,7 @@ class mgpdEPosts_cats extends \Elementor\Widget_Base
                 </div>
             </div>
         <?php else : ?>
-            <div class="alert alert-danger">
+            <div class="mgp-alert mgp-alert-danger">
                 <?php echo esc_html('Please select posts categories for display this section.'); ?>
             </div>
         <?php endif; ?>

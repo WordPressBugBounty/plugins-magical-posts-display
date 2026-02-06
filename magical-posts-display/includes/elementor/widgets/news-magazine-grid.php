@@ -2,6 +2,7 @@
 
 class mgpdNewsMagazineGrid extends \Elementor\Widget_Base
 {
+    use Query_Controls_Trait;
     /**
      * Get widget name.
      */
@@ -133,6 +134,9 @@ class mgpdNewsMagazineGrid extends \Elementor\Widget_Base
                 'description' => __('Total posts to show (4-6). 1 big post + 3-5 small posts', 'magical-posts-display'),
             ]
         );
+
+        // Post Position Control
+        $this->register_post_position_control('mgps_nmg_posts_filter');
 
         $this->add_control(
             'mgps_nmg_grid_categories',
@@ -1301,6 +1305,9 @@ class mgpdNewsMagazineGrid extends \Elementor\Widget_Base
                 }
             }
         }
+
+        // Apply post position settings
+        $args = $this->apply_post_position_to_query($args, $settings, 'mgps_nmg_posts_filter');
 
         $posts_query = new WP_Query($args);
 

@@ -8,8 +8,8 @@ defined('ABSPATH') || die();
 ?>
 
 <div id="mgpdp1" class="magical-post-display mgpdp1">
-	<div class="mg-cols">
-		<section class="sec-wel" <?php if (!class_exists('magicalPostDisplayPro')) : ?> style="background-image: url(<?php echo esc_url(MAGICAL_POSTS_DISPLAY_ASSETS . 'img/blue.svg'); ?>);" <?php else : ?>style="background-image: url(<?php echo esc_url(MAGICAL_POSTS_DISPLAY_ASSETS . 'mg/purple.svg'); ?>);" <?php endif; ?>>
+	<div class="mgp-welcome">
+		<section class="sec-wel" <?php if (!class_exists('magicalPostDisplayPro')) : ?> style="background-image: url(<?php echo esc_url(MAGICAL_POSTS_DISPLAY_ASSETS . 'img/blue.svg'); ?>);" <?php else : ?>style="background-image: url(<?php echo esc_url(MAGICAL_POSTS_DISPLAY_ASSETS . 'img/purple.svg'); ?>);" <?php endif; ?>>
 			<div class="wel-center-text">
 				<div class="welsec-icon">
 					<img src="<?php echo esc_url(MAGICAL_POSTS_DISPLAY_ASSETS . 'img/icons/coffee.svg'); ?>">
@@ -20,22 +20,21 @@ defined('ABSPATH') || die();
 					<a class="button button-mgp1 venoboxvid btn-lg vbox-item mgyouvideo" data-autoplay="true" data-vbtype="video" href="https://www.youtube.com/watch?v=7BCThHcUSHk">
 						<?php esc_html_e('See Short Video', 'magical-posts-display'); ?>
 					</a>
-
 					<?php if (!class_exists('magicalPostDisplayPro')) : ?>
-						<a href="https://wpthemespace.com/product/magical-posts-display-pro/" class="button button-mgp1 button-mgp2"><?php esc_html_e('Buy Pro Now', 'magical-posts-display'); ?></a>
+						<a href="https://wpthemespace.com/product/magical-posts-display-pro/" class="button button-mgp1 button-mgp2"><?php esc_html_e('View Pro Version', 'magical-posts-display'); ?></a>
 					<?php endif; ?>
 				</div>
 
 			</div>
 		</section>
 		<section class="mgfeature mgf1">
-			<div class="cols">
-				<div class="col-2">
+			<div class="mgp-row">
+				<div class="mgp-col-2">
 					<div class="mgfimg">
 						<img src="<?php echo esc_url(MAGICAL_POSTS_DISPLAY_ASSETS . 'img/blocks-intro.svg'); ?>">
 					</div>
 				</div>
-				<div class="col-2">
+				<div class="mgp-col-2">
 					<div class="mgftext">
 						<h2><?php esc_html_e('WordPress Elementor Posts Display Addons', 'magical-posts-display'); ?></h2>
 						<p><?php esc_html_e('Now you can easily display your site posts many diffrent way. You can show your posts by posts carousel, posts grid, posts list grid, posts list, posts accordion, posts categories tab, So save your time and money.', 'magical-posts-display'); ?></p>
@@ -50,50 +49,50 @@ defined('ABSPATH') || die();
 					<h1><?php esc_html_e('Video Tutorial', 'magical-posts-display'); ?></h1>
 					<h5><?php esc_html_e('How to use Magical Posts Display WordPress plugin in your site? ', 'magical-posts-display'); ?></h5>
 				</div>
-				<div class="cols">
-					<div class="col-4">
+				<div class="mgp-row">
+					<div class="mgp-col-4">
 						<div class="mgvideo">
-							<a class="btn btn-danger venoboxvid btn-lg vbox-item mgyouvideo" data-autoplay="true" data-vbtype="video" href="https://www.youtube.com/watch?v=Dta4CwqvILI">
+							<a class="mgp-btn mgp-btn-danger venoboxvid mgp-btn-lg vbox-item mgyouvideo" data-autoplay="true" data-vbtype="video" href="https://www.youtube.com/watch?v=Dta4CwqvILI">
 								<img src="https://img.youtube.com/vi/Dta4CwqvILI/0.jpg" alt="<?php echo esc_attr__('Video tutorial', 'magical-posts-display'); ?>">
 							</a>
 							<h3><?php esc_html_e('Magical Posts Carousel Video', 'magical-posts-display'); ?></h3>
 						</div>
 					</div>
-					<div class="col-4">
+					<div class="mgp-col-4">
 						<div class="mgvideo">
-							<a class="btn btn-danger venoboxvid btn-lg vbox-item mgyouvideo" data-autoplay="true" data-vbtype="video" href="https://www.youtube.com/watch?v=cGGZjLLFTao">
+							<a class="mgp-btn mgp-btn-danger venoboxvid mgp-btn-lg vbox-item mgyouvideo" data-autoplay="true" data-vbtype="video" href="https://www.youtube.com/watch?v=cGGZjLLFTao">
 								<img src="https://img.youtube.com/vi/cGGZjLLFTao/0.jpg" alt="<?php echo esc_attr__('Video tutorial', 'magical-posts-display'); ?>">
 							</a>
 							<h3><?php esc_html_e('Magical Posts Grid Video', 'magical-posts-display'); ?></h3>
 						</div>
 					</div>
-					<div class="col-4">
+					<div class="mgp-col-4">
 						<div class="mgvideo">
-							<a class="btn btn-danger venoboxvid btn-lg vbox-item mgyouvideo" data-autoplay="true" data-vbtype="video" href="https://www.youtube.com/watch?v=EurYISxEtec">
+							<a class="mgp-btn mgp-btn-danger venoboxvid mgp-btn-lg vbox-item mgyouvideo" data-autoplay="true" data-vbtype="video" href="https://www.youtube.com/watch?v=EurYISxEtec">
 								<img src="https://img.youtube.com/vi/EurYISxEtec/0.jpg" alt="<?php echo esc_attr__('Video tutorial', 'magical-posts-display'); ?>">
 							</a>
 							<h3><?php esc_html_e('Magical Posts Accordion Video', 'magical-posts-display'); ?></h3>
 						</div>
 					</div>
-					<div class="col-4">
+					<div class="mgp-col-4">
 						<div class="mgvideo">
-							<a class="btn btn-danger venoboxvid btn-lg vbox-item mgyouvideo" data-autoplay="true" data-vbtype="video" href="https://www.youtube.com/watch?v=bsXWQ9y79Ew">
+							<a class="mgp-btn mgp-btn-danger venoboxvid mgp-btn-lg vbox-item mgyouvideo" data-autoplay="true" data-vbtype="video" href="https://www.youtube.com/watch?v=bsXWQ9y79Ew">
 								<img src="https://img.youtube.com/vi/bsXWQ9y79Ew/0.jpg" alt="<?php echo esc_attr__('Video tutorial', 'magical-posts-display'); ?>">
 							</a>
 							<h3><?php esc_html_e('Magical Posts Awesome List Video', 'magical-posts-display'); ?></h3>
 						</div>
 					</div>
-					<div class="col-4">
+					<div class="mgp-col-4">
 						<div class="mgvideo">
-							<a class="btn btn-danger venoboxvid btn-lg vbox-item mgyouvideo" data-autoplay="true" data-vbtype="video" href="https://www.youtube.com/watch?v=R-aOHV5EPpU">
+							<a class="mgp-btn mgp-btn-danger venoboxvid mgp-btn-lg vbox-item mgyouvideo" data-autoplay="true" data-vbtype="video" href="https://www.youtube.com/watch?v=R-aOHV5EPpU">
 								<img src="https://img.youtube.com/vi/R-aOHV5EPpU/0.jpg" alt="<?php echo esc_attr__('Video tutorial', 'magical-posts-display'); ?>">
 							</a>
 							<h3><?php esc_html_e('Magical Posts Tab Video', 'magical-posts-display'); ?></h3>
 						</div>
 					</div>
-					<div class="col-4">
+					<div class="mgp-col-4">
 						<div class="mgvideo">
-							<a class="btn btn-danger venoboxvid btn-lg vbox-item mgyouvideo" data-autoplay="true" data-vbtype="video" href="https://www.youtube.com/watch?v=rj3gZ62Wtxo">
+							<a class="mgp-btn mgp-btn-danger venoboxvid mgp-btn-lg vbox-item mgyouvideo" data-autoplay="true" data-vbtype="video" href="https://www.youtube.com/watch?v=rj3gZ62Wtxo">
 								<img src="https://img.youtube.com/vi/rj3gZ62Wtxo/0.jpg" alt="<?php echo esc_attr__('Video tutorial', 'magical-posts-display'); ?>">
 							</a>
 							<h3><?php esc_html_e('Magical Posts List Card Video', 'magical-posts-display'); ?></h3>

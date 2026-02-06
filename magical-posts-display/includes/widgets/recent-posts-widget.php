@@ -101,17 +101,17 @@ if (!class_exists('mgpd_Recent_Posts')) :
 					$post_title = get_the_title($recent_post->ID);
 					$title = (!empty($post_title)) ? $post_title : __('no title', 'magical-posts-display');
 					?>
-					<li class="mpdw-recent-item mb-3">
-						<div class="row">
+					<li class="mpdw-recent-item mgp-mb-3">
+						<div class="mgp-row">
 							<?php if (has_post_thumbnail($recent_post->ID)) : ?>
-								<div class="col-sm-4">
-									<div class="mpdw-recent-img mb-1">
+								<div class="mgp-col-sm-4">
+									<div class="mpdw-recent-img mgp-mb-1">
 										<?php echo get_the_post_thumbnail($recent_post->ID, 'medium'); ?>
 									</div>
 								</div>
-								<div class="col-sm-8">
+								<div class="mgp-col-sm-8">
 								<?php else : ?>
-									<div class="col-sm-12">
+									<div class="mgp-col-sm-12">
 									<?php endif; ?>
 									<div class="mpdw-recent-text">
 										<h4><a href="<?php echo esc_url(get_permalink($recent_post->ID)); ?>"><?php echo esc_html(wp_trim_words($title, 6, '..')); ?></a></h4>
