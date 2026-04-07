@@ -79,7 +79,7 @@ class mgPosts_carousel extends \Elementor\Widget_Base
     public function get_script_depends()
     {
         return [
-            'mg-swiper',
+            'swiper',
             'mpd-pcarousel-active',
         ];
     }
@@ -333,6 +333,73 @@ class mgPosts_carousel extends \Elementor\Widget_Base
             */
 
         $this->add_control(
+            'mgpcar_marquee',
+            [
+                'label' => __('Marquee / Ticker Mode (Pro)', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'label_on' => __('Yes', 'magical-posts-display'),
+                'label_off' => __('No', 'magical-posts-display'),
+                'return_value' => 'yes',
+                'default' => '',
+                'description' => __('Enable continuous smooth scrolling like a marquee/ticker (Pro Only)', 'magical-posts-display'),
+                'frontend_available' => true,
+                'classes' => 'mpd-pro-control',
+            ]
+        );
+        $this->add_control(
+            'mgpcar_marquee_speed',
+            [
+                'label' => __('Marquee Speed', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => [
+                        'min' => 1,
+                        'max' => 20,
+                        'step' => 1,
+                    ]
+                ],
+                'default' => [
+                    'size' => 5,
+                ],
+                'description' => __('Lower = slower, Higher = faster', 'magical-posts-display'),
+                'condition' => [
+                    'mgpcar_marquee' => 'yes',
+                ],
+                'classes' => 'mpd-pro-control',
+            ]
+        );
+        $this->add_control(
+            'mgpcar_marquee_direction',
+            [
+                'label' => __('Marquee Direction', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => 'left',
+                'options' => [
+                    'left' => __('Left', 'magical-posts-display'),
+                    'right' => __('Right', 'magical-posts-display'),
+                ],
+                'condition' => [
+                    'mgpcar_marquee' => 'yes',
+                ],
+                'classes' => 'mpd-pro-control',
+            ]
+        );
+        $this->add_control(
+            'mgpcar_marquee_pause_hover',
+            [
+                'label' => __('Pause on Hover', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'label_on' => __('Yes', 'magical-posts-display'),
+                'label_off' => __('No', 'magical-posts-display'),
+                'return_value' => 'yes',
+                'default' => 'yes',
+                'condition' => [
+                    'mgpcar_marquee' => 'yes',
+                ],
+                'classes' => 'mpd-pro-control',
+            ]
+        );
+        $this->add_control(
             'mgpcar_autoplay',
             [
                 'label' => __('Autoplay?', 'magical-posts-display'),
@@ -342,6 +409,9 @@ class mgPosts_carousel extends \Elementor\Widget_Base
                 'return_value' => 'yes',
                 'default' => 'yes',
                 'frontend_available' => true,
+                'condition' => [
+                    'mgpcar_marquee' => '',
+                ],
             ]
         );
         $this->add_control(
@@ -357,6 +427,7 @@ class mgPosts_carousel extends \Elementor\Widget_Base
                 'frontend_available' => true,
                 'condition' => [
                     'mgpcar_autoplay' => 'yes',
+                    'mgpcar_marquee' => '',
                 ],
             ]
         );
@@ -372,7 +443,8 @@ class mgPosts_carousel extends \Elementor\Widget_Base
                 'default' => 500,
                 'description' => __('Autoplay speed in milliseconds', 'magical-posts-display'),
                 'condition' => [
-                    'mgpcar_autoplay' => 'yes'
+                    'mgpcar_autoplay' => 'yes',
+                    'mgpcar_marquee' => '',
                 ],
                 'frontend_available' => 'true',
             ]
@@ -1951,8 +2023,8 @@ class mgPosts_carousel extends \Elementor\Widget_Base
                     ],
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .swiper-container-horizontal>.swiper-pagination-bullets, {{WRAPPER}} .swiper-pagination-custom, {{WRAPPER}} .swiper-pagination-fraction' => 'bottom: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .swiper-container-vertical>.swiper-pagination-bullets' => 'right: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .swiper-horizontal>.swiper-pagination-bullets, {{WRAPPER}} .swiper-container-horizontal>.swiper-pagination-bullets, {{WRAPPER}} .swiper-pagination-custom, {{WRAPPER}} .swiper-pagination-fraction' => 'bottom: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .swiper-vertical>.swiper-pagination-bullets, {{WRAPPER}} .swiper-container-vertical>.swiper-pagination-bullets' => 'right: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -1964,8 +2036,8 @@ class mgPosts_carousel extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::SLIDER,
                 'size_units' => ['px', '%'],
                 'selectors' => [
-                    '{{WRAPPER}} .swiper-container-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet' => 'margin-right: calc({{SIZE}}{{UNIT}} / 2); margin-left: calc({{SIZE}}{{UNIT}} / 2);',
-                    '{{WRAPPER}} .swiper-container-vertical>.swiper-pagination-bullets .swiper-pagination-bullet' => 'margin-top: calc({{SIZE}}{{UNIT}} / 2); margin-bottom: calc({{SIZE}}{{UNIT}} / 2);',
+                    '{{WRAPPER}} .swiper-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet, {{WRAPPER}} .swiper-container-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet' => 'margin-right: calc({{SIZE}}{{UNIT}} / 2); margin-left: calc({{SIZE}}{{UNIT}} / 2);',
+                    '{{WRAPPER}} .swiper-vertical>.swiper-pagination-bullets .swiper-pagination-bullet, {{WRAPPER}} .swiper-container-vertical>.swiper-pagination-bullets .swiper-pagination-bullet' => 'margin-top: calc({{SIZE}}{{UNIT}} / 2); margin-bottom: calc({{SIZE}}{{UNIT}} / 2);',
                 ],
             ]
         );
@@ -1993,7 +2065,7 @@ class mgPosts_carousel extends \Elementor\Widget_Base
 
                 'toggle' => true,
                 'selectors' => [
-                    '{{WRAPPER}} .swiper-container-horizontal>.swiper-pagination-bullets, .swiper-pagination-custom, {{WRAPPER}} .swiper-pagination-fraction' => 'text-align: {{VALUE}}'
+                    '{{WRAPPER}} .swiper-horizontal>.swiper-pagination-bullets, {{WRAPPER}} .swiper-container-horizontal>.swiper-pagination-bullets, .swiper-pagination-custom, {{WRAPPER}} .swiper-pagination-fraction' => 'text-align: {{VALUE}}'
                 ]
             ]
         );
@@ -2258,8 +2330,17 @@ class mgPosts_carousel extends \Elementor\Widget_Base
 
         //grid layout
         $mgpcar_post_style = $this->get_settings('mgpcar_post_style');
+        $mgpcar_marquee = $this->get_settings('mgpcar_marquee');
+        // Marquee is a pro-only feature
+        if (empty(mp_display_check_main_ok())) {
+            $mgpcar_marquee = '';
+        }
         $mgpcar_autoplay = $this->get_settings('mgpcar_autoplay');
-        if ($mgpcar_autoplay == 'yes') {
+        if ($mgpcar_marquee == 'yes') {
+            $mgpcar_autoplay_set = 'yes';
+            $mgpcar_autoplay_delay = 0;
+            $mgpcar_autoplay_speed = 500;
+        } elseif ($mgpcar_autoplay == 'yes') {
             $mgpcar_autoplay_set = $mgpcar_autoplay;
             $mgpcar_autoplay_delay = $settings['mgpcar_autoplay_delay'];
             $mgpcar_autoplay_speed = $settings['mgpcar_autoplay_speed'];
@@ -2287,7 +2368,7 @@ class mgPosts_carousel extends \Elementor\Widget_Base
             ?>
 
                 <div id="mgpdeg-items" class="mgproductd mgpde-items style<?php echo esc_attr($mgpcar_post_style); ?>">
-                    <div class="mgproductd mgpc-pcarousel swiper-container" data-loop="<?php echo esc_attr($settings['mgpcar_loop']); ?>" data-number="<?php echo esc_attr($settings['mgpcar_posts_number']); ?>" data-margin="<?php echo esc_attr($settings['mgpcar_posts_margin']['size']); ?>" data-direction="horizontal" data-autoplay="<?php echo esc_attr($mgpcar_autoplay_set); ?>" data-auto-delay="<?php echo esc_attr($mgpcar_autoplay_delay); ?>" data-speed="<?php echo esc_attr($mgpcar_autoplay_speed); ?>" data-auto-height="<?php echo esc_attr($settings['mgpcar_auto_height']); ?>" data-grab-cursor="<?php echo esc_attr($settings['mgpcar_grab_cursor']); ?>" data-nav="<?php echo esc_attr($settings['mgpcar_navigation']); ?>" data-dots="<?php echo esc_attr($settings['mgpcar_dots']); ?>">
+                    <div class="mgproductd mgpc-pcarousel swiper swiper-container<?php echo ($mgpcar_marquee == 'yes') ? ' mgpc-marquee' : ''; ?>" data-loop="<?php echo esc_attr($settings['mgpcar_loop']); ?>" data-number="<?php echo esc_attr($settings['mgpcar_posts_number']); ?>" data-margin="<?php echo esc_attr($settings['mgpcar_posts_margin']['size']); ?>" data-direction="horizontal" data-autoplay="<?php echo esc_attr($mgpcar_autoplay_set); ?>" data-auto-delay="<?php echo esc_attr($mgpcar_autoplay_delay); ?>" data-speed="<?php echo esc_attr($mgpcar_autoplay_speed); ?>" data-auto-height="<?php echo esc_attr($settings['mgpcar_auto_height']); ?>" data-grab-cursor="<?php echo esc_attr($settings['mgpcar_grab_cursor']); ?>" data-nav="<?php echo esc_attr($settings['mgpcar_navigation']); ?>" data-dots="<?php echo esc_attr($settings['mgpcar_dots']); ?>" data-marquee="<?php echo esc_attr($mgpcar_marquee); ?>" data-marquee-speed="<?php echo esc_attr(isset($settings['mgpcar_marquee_speed']['size']) ? $settings['mgpcar_marquee_speed']['size'] : 5); ?>" data-marquee-direction="<?php echo esc_attr(isset($settings['mgpcar_marquee_direction']) ? $settings['mgpcar_marquee_direction'] : 'left'); ?>" data-marquee-pause="<?php echo esc_attr(isset($settings['mgpcar_marquee_pause_hover']) ? $settings['mgpcar_marquee_pause_hover'] : 'yes'); ?>">
                         <div class="swiper-wrapper">
                             <?php while ($mgpcar_products->have_posts()) : $mgpcar_products->the_post(); ?>
                                 <div class="swiper-slide no-load">

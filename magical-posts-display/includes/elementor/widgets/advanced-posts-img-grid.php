@@ -264,6 +264,38 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 ]
             ]
         );
+        $this->add_control(
+            'mgpla_rownumber_tablet',
+            [
+                'label'   => __('Posts Per Row (Tablet)', 'magical-posts-display'),
+                'type'    => \Elementor\Controls_Manager::SELECT,
+                'default' => '6',
+                'options' => [
+                    '12'   => __('1', 'magical-posts-display'),
+                    '6'  => __('2', 'magical-posts-display'),
+                    '4'  => __('3', 'magical-posts-display'),
+                    '3'  => __('4', 'magical-posts-display'),
+                ],
+                'condition' => [
+                    'mgpla_gpost_style' => '1',
+                ]
+            ]
+        );
+        $this->add_control(
+            'mgpla_rownumber_mobile',
+            [
+                'label'   => __('Posts Per Row (Mobile)', 'magical-posts-display'),
+                'type'    => \Elementor\Controls_Manager::SELECT,
+                'default' => '12',
+                'options' => [
+                    '12'   => __('1', 'magical-posts-display'),
+                    '6'  => __('2', 'magical-posts-display'),
+                ],
+                'condition' => [
+                    'mgpla_gpost_style' => '1',
+                ]
+            ]
+        );
         /*
         $this->add_control(
             'mgpla_post_grid_position',
@@ -2017,11 +2049,9 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
 
     public function free_image_posts($settings)
     {
-        if ($settings['mgpla_rownumber'] == '12') {
-            $column_set = 'mgp-col-lg-12';
-        } else {
-            $column_set = 'mgp-col-lg-' . $settings['mgpla_rownumber'] . ' mgp-col-md-6';
-        }
+        $mgpla_rownumber_tablet = !empty($settings['mgpla_rownumber_tablet']) ? $settings['mgpla_rownumber_tablet'] : '6';
+        $mgpla_rownumber_mobile = !empty($settings['mgpla_rownumber_mobile']) ? $settings['mgpla_rownumber_mobile'] : '12';
+        $column_set = 'mgp-col-lg-' . $settings['mgpla_rownumber'] . ' mgp-col-md-' . $mgpla_rownumber_tablet . ' mgp-col-sm-' . $mgpla_rownumber_mobile;
         $mgpg_post_type = !empty($settings['mgpg_post_type']) ? $settings['mgpg_post_type'] : 'post';
 
         ?>

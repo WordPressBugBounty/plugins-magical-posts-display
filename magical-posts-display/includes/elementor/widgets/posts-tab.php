@@ -140,6 +140,32 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                 ]
             ]
         );
+        $this->add_control(
+            'mapt_column_tablet',
+            [
+                'label'   => __('Grid Column (Tablet)', 'magical-posts-display'),
+                'type'    => \Elementor\Controls_Manager::SELECT,
+                'default' => '6',
+                'options' => [
+                    '12'   => __('1 Column', 'magical-posts-display'),
+                    '6'  => __('2 Column', 'magical-posts-display'),
+                    '4'  => __('3 Column', 'magical-posts-display'),
+                    '3'  => __('4 Column', 'magical-posts-display'),
+                ]
+            ]
+        );
+        $this->add_control(
+            'mapt_column_mobile',
+            [
+                'label'   => __('Grid Column (Mobile)', 'magical-posts-display'),
+                'type'    => \Elementor\Controls_Manager::SELECT,
+                'default' => '12',
+                'options' => [
+                    '12'   => __('1 Column', 'magical-posts-display'),
+                    '6'  => __('2 Column', 'magical-posts-display'),
+                ]
+            ]
+        );
         $this->end_controls_section();
         $this->start_controls_section(
             'mapt_options_section',
@@ -1924,6 +1950,8 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
         $mapt_cats = $this->get_settings('mapt_cats');
         $mapt_post_img_show = $this->get_settings('mapt_post_img_show');
         $mapt_column    = $settings['mapt_column'];
+        $mapt_column_tablet = !empty($settings['mapt_column_tablet']) ? $settings['mapt_column_tablet'] : '6';
+        $mapt_column_mobile = !empty($settings['mapt_column_mobile']) ? $settings['mapt_column_mobile'] : '12';
         $mapt_posts_count    = absint($settings['mapt_posts_count']);
         $mapt_post_style   = $settings['mapt_post_style'];
         $mapt_show_title   = $settings['mapt_show_title'];
@@ -2047,7 +2075,7 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                                             if ($mgpteb_item_posts->have_posts()) :
                                                 while ($mgpteb_item_posts->have_posts()) : $mgpteb_item_posts->the_post();
                                             ?>
-                                                    <div class="mgp-col-lg-<?php echo esc_attr($mapt_column); ?>">
+                                                    <div class="mgp-col-lg-<?php echo esc_attr($mapt_column); ?> mgp-col-md-<?php echo esc_attr($mapt_column_tablet); ?> mgp-col-sm-<?php echo esc_attr($mapt_column_mobile); ?>">
                                                         <div class="mgp-card mg-card mg-shadow mgp-card mgp-mb-4">
                                                             <?php mp_post_thumbnail($mapt_post_img_show, $settings['mapt_img_size']); ?>
                                                             <div class="mg-card-text mgp-card-body">

@@ -3,7 +3,7 @@ Contributors: nalam
 Donate link: https://wpthemespace.com/donation
 Tags: post display, Page display, custom Post, elementor widget, post slider
 Requires at least: 6.0
-Tested up to: 6.9
+Tested up to: 7.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -140,7 +140,17 @@ Yes, Magical Posts Display supports posts categories, allowing you to display po
 
 == Changelog ==
 
-= 1.2.6 =
+= 1.2.58 =
+ * Fixed Posts Grid "Show Posts Per Row" not applying selected column count
+ * Added Tablet and Mobile responsive column controls to Posts Grid, Posts Tab, Posts Category, and Advanced Image Grid widgets
+ * Fixed Masonry layout visibility issue in Elementor editor
+ * Fixed Masonry layout height calculation on frontend
+ * Fixed Masonry column width CSS selectors
+ * Masonry layout is now a Pro-only feature
+ * Improved responsive grid CSS with proper media query breakpoints
+
+
+= 1.2.57 =
  * Added Post Position Control feature to all query-based widgets
  * New dropdown to select specific posts (1st, 2nd, 3rd, 4th) or offset from specific positions
  * Supports "All Posts", individual post selection, and "Posts from 2nd/3rd/4th/5th/6th" options

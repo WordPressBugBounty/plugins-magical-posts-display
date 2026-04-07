@@ -82,13 +82,17 @@ class MPD_Assets_Manager
      */
     public static function block_styles()
     {
-        wp_register_style(
-            'swiper',
-            MAGICAL_POSTS_DISPLAY_URL . '/assets/css/swiper.min.css',
-            [],
-            '8.4.5',
-            'all'
-        );
+        // Use Elementor's bundled Swiper CSS (handle: 'swiper').
+        // Fallback: register only if not already registered (e.g. Elementor inactive).
+        if ( ! wp_style_is( 'swiper', 'registered' ) ) {
+            wp_register_style(
+                'swiper',
+                MAGICAL_POSTS_DISPLAY_URL . '/assets/css/swiper.min.css',
+                [],
+                '8.4.5',
+                'all'
+            );
+        }
 
         wp_enqueue_style(
             'venobox.min',
@@ -122,13 +126,17 @@ class MPD_Assets_Manager
      */
     public static function block_scripts()
     {
-        wp_register_script(
-            'mg-swiper',
-            MAGICAL_POSTS_DISPLAY_URL . '/assets/js/swiper.min.js',
-            ['jquery'],
-            '8.4.5',
-            true
-        );
+        // Use Elementor's bundled Swiper JS (handle: 'swiper').
+        // Fallback: register only if not already registered (e.g. Elementor inactive).
+        if ( ! wp_script_is( 'swiper', 'registered' ) ) {
+            wp_register_script(
+                'swiper',
+                MAGICAL_POSTS_DISPLAY_URL . '/assets/js/swiper.min.js',
+                [],
+                '8.4.5',
+                true
+            );
+        }
 
         wp_register_script(
             'jquery.easy-ticker',

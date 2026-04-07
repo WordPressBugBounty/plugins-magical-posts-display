@@ -253,9 +253,10 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'default' => 'static',
                 'options' => [
                     'static'   => __('Static', 'magical-posts-display'),
-                    'masonry'  => __('Masonry', 'magical-posts-display'),
+                    'masonry'  => __('Masonry (Pro Only)', 'magical-posts-display'),
                 ],
-                'description' => __('Choose between static grid layout or masonry layout. Masonry creates a dynamic, Pinterest-style layout. <strong>Note: Masonry only works on frontend, not in editor preview.</strong>', 'magical-posts-display'),
+                'description' => __('Choose between static grid layout or masonry layout. Masonry creates a dynamic, Pinterest-style layout.', 'magical-posts-display'),
+                'classes' => 'mpd-pro-control',
             ]
         );
         $this->add_control(
@@ -272,7 +273,8 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'condition' => [
                     'mgpg_layout_type' => 'masonry',
                 ],
-                'description' => __('Choose different image height patterns for masonry layout. <strong>Note: Masonry preview only works on frontend.</strong>', 'magical-posts-display'),
+                'description' => __('Choose different image height patterns for masonry layout.', 'magical-posts-display'),
+                'classes' => 'mpd-pro-control',
             ]
         );
         $this->add_control(
@@ -300,6 +302,32 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                     '4'  => __('3', 'magical-posts-display'),
                     '3'  => __('4', 'magical-posts-display'),
                     '2'  => __('6', 'magical-posts-display'),
+                ]
+            ]
+        );
+        $this->add_control(
+            'mgpg_rownumber_tablet',
+            [
+                'label'   => __('Posts Per Row (Tablet)', 'magical-posts-display'),
+                'type'    => \Elementor\Controls_Manager::SELECT,
+                'default' => '6',
+                'options' => [
+                    '12'   => __('1', 'magical-posts-display'),
+                    '6'  => __('2', 'magical-posts-display'),
+                    '4'  => __('3', 'magical-posts-display'),
+                    '3'  => __('4', 'magical-posts-display'),
+                ]
+            ]
+        );
+        $this->add_control(
+            'mgpg_rownumber_mobile',
+            [
+                'label'   => __('Posts Per Row (Mobile)', 'magical-posts-display'),
+                'type'    => \Elementor\Controls_Manager::SELECT,
+                'default' => '12',
+                'options' => [
+                    '12'   => __('1', 'magical-posts-display'),
+                    '6'  => __('2', 'magical-posts-display'),
                 ]
             ]
         );
@@ -3552,6 +3580,8 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         $mgpg_masonry_style = $this->get_settings('mgpg_masonry_style');
         $mgpg_post_style = $this->get_settings('mgpg_post_style');
         $mgpg_rownumber = $this->get_settings('mgpg_rownumber');
+        $mgpg_rownumber_tablet = $this->get_settings('mgpg_rownumber_tablet');
+        $mgpg_rownumber_mobile = $this->get_settings('mgpg_rownumber_mobile');
         // grid content
         $mgpg_post_img_show = $this->get_settings('mgpg_post_img_show');
         $mgpg_show_title = $this->get_settings('mgpg_show_title');
@@ -3584,11 +3614,9 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
 
         if ($mgpg_posts->have_posts()) :
 
-            if ($mgpg_rownumber == '12') {
-                $column_set = 'mgp-col-lg-12';
-            } else {
-                $column_set = 'mgp-col-lg-' . $mgpg_rownumber . ' mgp-col-md-6';
-            }
+            $column_set = 'mgp-col-lg-' . esc_attr($mgpg_rownumber);
+            $column_set .= ' mgp-col-md-' . esc_attr($mgpg_rownumber_tablet ? $mgpg_rownumber_tablet : '6');
+            $column_set .= ' mgp-col-sm-' . esc_attr($mgpg_rownumber_mobile ? $mgpg_rownumber_mobile : '12');
 
             // Add masonry specific classes
             $container_class = 'mgpd mgp-items style' . esc_attr($mgpg_post_style);
@@ -3610,7 +3638,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 $container_class .= ' mgpd-premium-' . esc_attr($mgpg_premium_features_style);
             }
 
-            if ($mgpg_layout_type === 'masonry') {
+            if ($mgpg_layout_type === 'masonry' && mp_display_check_main_ok()) {
                 $masonry_style = $mgpg_masonry_style ? $mgpg_masonry_style : 'style1';
                 $container_class .= ' mgpd-masonry-container mgpd-masonry-' . esc_attr($masonry_style);
                 $row_class .= ' mgpd-masonry';
@@ -3649,51 +3677,58 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
 
             <?php
             // Inline Masonry Initialization Script for better compatibility
-            if ($mgpg_layout_type === 'masonry') {
+            if ($mgpg_layout_type === 'masonry' && mp_display_check_main_ok()) {
                 $widget_id = uniqid('mgpd_masonry_');
             ?>
                 <script type="text/javascript">
                     (function() {
                         // Initialize masonry for this specific widget
-                        function initMasonry<?php echo $widget_id; ?>() {
+                        function initMasonry<?php echo esc_js($widget_id); ?>() {
                             var container = document.querySelector('.mgpd-masonry-container');
-                            if (container && typeof Masonry !== 'undefined' && typeof imagesLoaded !== 'undefined') {
-                                var masonryGrid = container.querySelector('.mgpd-masonry');
-                                if (masonryGrid) {
-                                    // Force all images to load first
-                                    imagesLoaded(masonryGrid, function() {
-                                        // Clear any existing height to let masonry calculate properly
-                                        masonryGrid.style.height = '';
+                            if (!container) return;
 
-                                        // Initialize masonry
-                                        var masonry = new Masonry(masonryGrid, {
-                                            itemSelector: '.mgpd-masonry-item',
-                                            columnWidth: '.mgpd-masonry-item',
-                                            percentPosition: true,
-                                            transitionDuration: 0
-                                        });
+                            var masonryGrid = container.querySelector('.mgpd-masonry');
+                            if (!masonryGrid) return;
 
-                                        // Store instance for global access
-                                        window.mgpdMasonryInstance = masonry;
-
-                                        // Force layout calculation after a brief delay
-                                        setTimeout(function() {
-                                            masonry.layout();
-                                        }, 100);
-                                    });
-                                }
+                            // Check if Masonry JS library is available
+                            if (typeof Masonry === 'undefined' || typeof imagesLoaded === 'undefined') {
+                                // Masonry not loaded (editor mode) - just show items
+                                container.classList.add('masonry-loaded');
+                                return;
                             }
+
+                            // Force all images to load first
+                            imagesLoaded(masonryGrid, function() {
+                                // Initialize masonry
+                                var masonry = new Masonry(masonryGrid, {
+                                    itemSelector: '.mgpd-masonry-item',
+                                    columnWidth: '.mgpd-masonry-item',
+                                    percentPosition: true,
+                                    transitionDuration: 0
+                                });
+
+                                // Mark as loaded to reveal items
+                                container.classList.add('masonry-loaded');
+
+                                // Store instance for global access
+                                window.mgpdMasonryInstance = masonry;
+
+                                // Force layout recalculation after a brief delay
+                                setTimeout(function() {
+                                    masonry.layout();
+                                }, 200);
+                            });
                         }
 
                         // Initialize when DOM is ready
                         if (document.readyState === 'loading') {
-                            document.addEventListener('DOMContentLoaded', initMasonry<?php echo $widget_id; ?>);
+                            document.addEventListener('DOMContentLoaded', initMasonry<?php echo esc_js($widget_id); ?>);
                         } else {
-                            initMasonry<?php echo $widget_id; ?>();
+                            initMasonry<?php echo esc_js($widget_id); ?>();
                         }
 
                         // Also initialize on window load as fallback
-                        window.addEventListener('load', initMasonry<?php echo $widget_id; ?>);
+                        window.addEventListener('load', initMasonry<?php echo esc_js($widget_id); ?>);
                     })();
                 </script>
             <?php
@@ -3781,6 +3816,8 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         $default_settings = array(
             'mgpg_posts_count' => 6,
             'mgpg_rownumber' => '4',
+            'mgpg_rownumber_tablet' => '6',
+            'mgpg_rownumber_mobile' => '12',
             'mgpg_layout_type' => 'grid',
             'mgpg_post_style' => '1',
             'mgpg_post_type' => 'post',
@@ -3834,13 +3871,11 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
 
             // Calculate item class - consistent with render() method
             $mgpg_rownumber = isset($settings['mgpg_rownumber']) ? $settings['mgpg_rownumber'] : '4';
+            $mgpg_rownumber_tablet = isset($settings['mgpg_rownumber_tablet']) ? $settings['mgpg_rownumber_tablet'] : '6';
+            $mgpg_rownumber_mobile = isset($settings['mgpg_rownumber_mobile']) ? $settings['mgpg_rownumber_mobile'] : '12';
             $mgpg_layout_type = isset($settings['mgpg_layout_type']) ? $settings['mgpg_layout_type'] : 'grid';
 
-            if ($mgpg_rownumber == '12') {
-                $item_class = 'mgp-col-lg-12';
-            } else {
-                $item_class = 'mgp-col-lg-' . $mgpg_rownumber . ' mgp-col-md-6';
-            }
+            $item_class = 'mgp-col-lg-' . $mgpg_rownumber . ' mgp-col-md-' . $mgpg_rownumber_tablet . ' mgp-col-sm-' . $mgpg_rownumber_mobile;
 
             if ($mgpg_layout_type === 'masonry') {
                 $item_class .= ' mgpd-masonry-item';
@@ -3854,13 +3889,11 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
             }
             wp_reset_postdata();
         }
-
         wp_send_json_success($output);
     }
 
     /**
      * AJAX handler for infinite scroll
-     * Static method to be called from WordPress AJAX hooks
      */
     public static function ajax_infinite_scroll()
     {
@@ -3887,6 +3920,8 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         $default_settings = array(
             'mgpg_posts_count' => 6,
             'mgpg_rownumber' => '4',
+            'mgpg_rownumber_tablet' => '6',
+            'mgpg_rownumber_mobile' => '12',
             'mgpg_layout_type' => 'grid',
             'mgpg_post_style' => '1',
             'mgpg_post_type' => 'post',
@@ -3930,13 +3965,11 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
 
             // Calculate item class - consistent with render() method
             $mgpg_rownumber = isset($settings['mgpg_rownumber']) ? $settings['mgpg_rownumber'] : '4';
+            $mgpg_rownumber_tablet = isset($settings['mgpg_rownumber_tablet']) ? $settings['mgpg_rownumber_tablet'] : '6';
+            $mgpg_rownumber_mobile = isset($settings['mgpg_rownumber_mobile']) ? $settings['mgpg_rownumber_mobile'] : '12';
             $mgpg_layout_type = isset($settings['mgpg_layout_type']) ? $settings['mgpg_layout_type'] : 'grid';
 
-            if ($mgpg_rownumber == '12') {
-                $item_class = 'mgp-col-lg-12';
-            } else {
-                $item_class = 'mgp-col-lg-' . $mgpg_rownumber . ' mgp-col-md-6';
-            }
+            $item_class = 'mgp-col-lg-' . $mgpg_rownumber . ' mgp-col-md-' . $mgpg_rownumber_tablet . ' mgp-col-sm-' . $mgpg_rownumber_mobile;
 
             if ($mgpg_layout_type === 'masonry') {
                 $item_class .= ' mgpd-masonry-item';

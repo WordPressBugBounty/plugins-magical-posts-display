@@ -221,6 +221,32 @@ class mgpdEPosts_cats extends \Elementor\Widget_Base
             ]
         );
         $this->add_control(
+            'mgpd_cats_column_tablet',
+            [
+                'label'   => __('Grid Column (Tablet)', 'magical-posts-display'),
+                'type'    => \Elementor\Controls_Manager::SELECT,
+                'default' => '6',
+                'options' => [
+                    '12'   => __('1 Column', 'magical-posts-display'),
+                    '6'  => __('2 Column', 'magical-posts-display'),
+                    '4'  => __('3 Column', 'magical-posts-display'),
+                    '3'  => __('4 Column', 'magical-posts-display'),
+                ]
+            ]
+        );
+        $this->add_control(
+            'mgpd_cats_column_mobile',
+            [
+                'label'   => __('Grid Column (Mobile)', 'magical-posts-display'),
+                'type'    => \Elementor\Controls_Manager::SELECT,
+                'default' => '12',
+                'options' => [
+                    '12'   => __('1 Column', 'magical-posts-display'),
+                    '6'  => __('2 Column', 'magical-posts-display'),
+                ]
+            ]
+        );
+        $this->add_control(
             'mgpd_cats_style',
             [
                 'label'   => __('Style', 'magical-posts-display'),
@@ -823,6 +849,8 @@ class mgpdEPosts_cats extends \Elementor\Widget_Base
         $settings = $this->get_settings_for_display();
         $cat_list = $this->get_settings('cat_list');
         $mgpd_cats_column = $this->get_settings('mgpd_cats_column');
+        $mgpd_cats_column_tablet = $this->get_settings('mgpd_cats_column_tablet') ? $this->get_settings('mgpd_cats_column_tablet') : '6';
+        $mgpd_cats_column_mobile = $this->get_settings('mgpd_cats_column_mobile') ? $this->get_settings('mgpd_cats_column_mobile') : '12';
 
 
         if ($cat_list) :
@@ -845,7 +873,7 @@ class mgpdEPosts_cats extends \Elementor\Widget_Base
 
                         $cat_link =  get_category_link($catid);;
                     ?>
-                        <div class="mgp-col-lg-<?php echo esc_attr($mgpd_cats_column); ?>">
+                        <div class="mgp-col-lg-<?php echo esc_attr($mgpd_cats_column); ?> mgp-col-md-<?php echo esc_attr($mgpd_cats_column_tablet); ?> mgp-col-sm-<?php echo esc_attr($mgpd_cats_column_mobile); ?>">
                             <div class="mgpckit-cat-item <?php if ($settings['content_grid_boxshadow'] == 'yes') : ?>mgpdi-shadow<?php endif; ?>">
 
                                 <?php if ($settings['mgpc_catimg_show']) : ?>

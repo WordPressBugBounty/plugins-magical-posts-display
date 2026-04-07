@@ -5,6 +5,11 @@
         elementorFrontend.hooks.addAction("frontend/element_ready/mgposts_dslider.default", function (scope, $) {
        
             var vbpSlider = $(scope).find(".mgps-main");
+
+            if (!vbpSlider.length) {
+                return;
+            }
+
             var mgsLoop = vbpSlider.data('loop');
             var mgsEffect = vbpSlider.data('effect');
             var mgsDirection = vbpSlider.data('direction');
@@ -24,6 +29,10 @@
               var autoPlayData = false;
             }
 
+            // Ensure the container has the 'swiper' class for Swiper 8 CSS compatibility
+            if (!vbpSlider.hasClass('swiper')) {
+                vbpSlider.addClass('swiper');
+            }
 
             var mgsSwiper = new Swiper (vbpSlider.get(0), {
                   // Optional parameters
@@ -37,27 +46,18 @@
                   grabCursor: mgsGrabCursor,
                   parallax: true,
                   watchSlidesProgress: true,
-                  watchSlidesVisibility: true,
                   pagination: {
-                    el: '.swiper-pagination',
+                    el: vbpSlider.find('.swiper-pagination').get(0) || null,
                     clickable: true,
                   },
                   navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
+                    nextEl: vbpSlider.find('.swiper-button-next').get(0) || null,
+                    prevEl: vbpSlider.find('.swiper-button-prev').get(0) || null,
                   },
-                })
-
-            /*mgTimeline.timeline({
-              forceVerticalMode: 800,
-              mode: 'horizontal',
-              visibleItems: 4
-            });*/        
+                });
             
         });
-    })
-   
-
+    });
 
 }(jQuery));	
 
