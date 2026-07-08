@@ -4,7 +4,7 @@
  * Plugin Name: Magical Posts Display
  * Plugin URI: http://wpthemespace.com/magical-posts-display
  * Description: Show your site posts, Pages and Custom Post Types with many different styles by Elementor Widgets.
- * Version: 1.2.58
+ * Version: 1.2.59
  * Author: Noor Alam
  * Author URI: http://wpthemespace.com
  * Text Domain: magical-posts-display
@@ -37,7 +37,7 @@ if (!class_exists('magicalPostDisplay')) :
 		 *
 		 * @var string The plugin version.
 		 */
-		const version = '1.2.58';
+		const version = '1.2.59';
 
 		/**
 		 * Minimum PHP Version

@@ -3670,7 +3670,6 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                     <?php
                     endwhile;
                     wp_reset_postdata();
-                    wp_reset_postdata();
                     ?>
                 </div>
             </div>
@@ -3794,8 +3793,8 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
     public static function ajax_filter_posts()
     {
         // Check nonce for security
-        if (!isset($_POST['nonce']) || !wp_verify_nonce(wp_unslash($_POST['nonce']), 'mgpd_ajax_nonce')) {
-            wp_die(__('Security check failed', 'magical-posts-display'));
+        if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'mgpd_ajax_nonce')) {
+            wp_send_json_error(__('Security check failed', 'magical-posts-display'));
         }
 
         // Check if pro version is active
@@ -3810,6 +3809,8 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         // Sanitize settings array - ensure it's an array
         if (!is_array($settings)) {
             $settings = array();
+        } else {
+            $settings = array_map('sanitize_text_field', $settings);
         }
 
         // Set default settings if not provided
@@ -3898,8 +3899,8 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
     public static function ajax_infinite_scroll()
     {
         // Check nonce for security
-        if (!isset($_POST['nonce']) || !wp_verify_nonce(wp_unslash($_POST['nonce']), 'mgpd_ajax_nonce')) {
-            wp_die(__('Security check failed', 'magical-posts-display'));
+        if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'mgpd_ajax_nonce')) {
+            wp_send_json_error(__('Security check failed', 'magical-posts-display'));
         }
 
         // Check if pro version is active
@@ -3914,6 +3915,8 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         // Sanitize settings array - ensure it's an array
         if (!is_array($settings)) {
             $settings = array();
+        } else {
+            $settings = array_map('sanitize_text_field', $settings);
         }
 
         // Set default settings if not provided

@@ -24,8 +24,6 @@ jQuery(document).ready(function($) {
         console.error('MGPD: Masonry library not found');
     }
     
-    console.log('MGPD: Premium features script loaded', mgpd_ajax);
-    
     /**
      * AJAX Category Filter Functionality
      */
@@ -249,7 +247,7 @@ jQuery(document).ready(function($) {
      */
     function showError(message) {
         // Create error notification
-        var $error = $('<div class="mgpd-error-message">' + message + '</div>');
+        var $error = $('<div class="mgpd-error-message"></div>').text(message);
         $error.css({
             'position': 'fixed',
             'top': '20px',
@@ -277,19 +275,6 @@ jQuery(document).ready(function($) {
      */
     initHoverEffects();
     
-    /**
-     * Debug mode logging
-     */
-    if (window.console && typeof console.log === 'function') {
-        console.log('MGPD Premium Features Initialized:', {
-            ajax_filter: mgpd_ajax.ajax_filter_enabled,
-            infinite_scroll: mgpd_ajax.infinite_scroll_enabled,
-            hover_effects: mgpd_ajax.hover_effects_enabled,
-            layout_type: mgpd_ajax.layout_type,
-            current_page: mgpd_ajax.current_page,
-            max_pages: mgpd_ajax.max_pages
-        });
-    }
 });
 
 /**

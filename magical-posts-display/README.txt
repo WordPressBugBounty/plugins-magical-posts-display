@@ -140,6 +140,21 @@ Yes, Magical Posts Display supports posts categories, allowing you to display po
 
 == Changelog ==
 
+= 1.2.59 =
+* Fixed: AJAX nonce failure now returns proper JSON error instead of HTML
+* Fixed: AJAX settings array sanitized with sanitize_text_field before merge
+* Fixed: mpd_get_option() now correctly retrieves stored options via get_option()
+* Fixed: Removed duplicate post view counter that counted views twice per page load
+* Fixed: Instagram share button removed (platform discontinued web sharing endpoint)
+* Fixed: Production JavaScript no longer exposes server config to browser console
+* Fixed: Bootstrap tab shim no longer throws TypeError on .tab('show') call
+* Fixed: Corrupted emoji characters in admin banner replaced with proper Unicode
+* Fixed: Duplicate wp_reset_postdata() calls removed across 9 widget files
+* Fixed: esc_attr() replaced with sanitize_text_field() for WP_Query arguments
+* Fixed: Added isset() guards on dynamic settings keys to prevent PHP 8.x warnings
+* Fixed: XSS-safe error message rendering in premium features JavaScript
+* Removed: Empty magical-loop-grid.php widget stub file
+
 = 1.2.58 =
  * Fixed Posts Grid "Show Posts Per Row" not applying selected column count
  * Added Tablet and Mobile responsive column controls to Posts Grid, Posts Tab, Posts Category, and Advanced Image Grid widgets

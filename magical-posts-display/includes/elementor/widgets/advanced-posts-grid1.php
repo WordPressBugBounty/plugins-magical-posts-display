@@ -1931,7 +1931,6 @@ class mgpdAdPostsGrid1 extends \Elementor\Widget_Base
                         endif;
                     endwhile;
                     wp_reset_postdata();
-                    wp_reset_postdata();
                     ?>
                 </div>
             </div>

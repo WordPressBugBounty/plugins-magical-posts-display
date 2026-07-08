@@ -184,7 +184,6 @@ trait SVG_Icons_Trait
             'twitter' => 'https://x.com/intent/tweet?url=' . $encoded_url . '&text=' . $encoded_title,
             'linkedin' => 'https://www.linkedin.com/sharing/share-offsite/?url=' . $encoded_url,
             'pinterest' => 'https://pinterest.com/pin/create/button/?url=' . $encoded_url . '&description=' . $encoded_title,
-            'instagram' => 'https://www.instagram.com/sharer.php?u=' . $encoded_url,
         );
 
         $icon_methods = array(
@@ -192,7 +191,6 @@ trait SVG_Icons_Trait
             'twitter' => 'get_twitter_icon',
             'linkedin' => 'get_linkedin_icon',
             'pinterest' => 'get_pinterest_icon',
-            'instagram' => 'get_instagram_icon',
         );
 
         if (!isset($share_urls[$platform]) || !isset($icon_methods[$platform])) {
@@ -217,7 +215,7 @@ trait SVG_Icons_Trait
     protected function get_all_social_share_buttons($url, $title = '', $platforms = null, $size = 20)
     {
         if ($platforms === null) {
-            $platforms = array('facebook', 'twitter', 'linkedin', 'pinterest', 'instagram');
+            $platforms = array('facebook', 'twitter', 'linkedin', 'pinterest');
         }
 
         $output = '';

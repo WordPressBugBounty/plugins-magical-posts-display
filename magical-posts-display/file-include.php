@@ -70,11 +70,10 @@ require_once(MAGICAL_POSTS_DISPLAY_DIR . 'includes/widgets/recent-posts-widget.p
 
 
 if (!function_exists('mpd_get_option')) {
-	function mpd_get_option($option, $default = '')
+	function mpd_get_option($option_name, $default = '')
 	{
-		$value = '';
-		$value = $option ? $option : $default;
-		return $value;
+		$value = get_option($option_name, $default);
+		return $value !== '' ? $value : $default;
 	}
 }
 

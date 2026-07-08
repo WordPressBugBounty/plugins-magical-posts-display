@@ -2029,7 +2029,6 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                             }
                         endwhile;
                         wp_reset_postdata();
-                        wp_reset_postdata();
                         ?>
                         <?php if ($mgpla_gpost_style == 1) : ?> </div>
                     <?php endif; ?>

@@ -1885,7 +1885,6 @@ class mgpdEPostsList extends \Elementor\Widget_Base
                     <?php
                     endwhile;
                     wp_reset_postdata();
-                    wp_reset_postdata();
                     ?>
                 </div>
             </div>

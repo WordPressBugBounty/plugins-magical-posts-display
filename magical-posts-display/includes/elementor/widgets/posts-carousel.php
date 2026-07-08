@@ -2377,7 +2377,6 @@ class mgPosts_carousel extends \Elementor\Widget_Base
                             <?php
                             endwhile;
                             wp_reset_postdata();
-                            wp_reset_postdata();
                             ?>
                         </div>
                         <?php if ($settings['mgpcar_dots']) : ?>

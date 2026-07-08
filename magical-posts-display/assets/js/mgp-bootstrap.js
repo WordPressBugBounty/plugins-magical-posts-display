@@ -245,10 +245,7 @@
 
     // Expose functions globally if needed
     window.mgpTabs = {
-        init: initTabs,
-        show: function(tabId) {
-            $(tabId).tab('show');
-        }
+        init: initTabs
     };
 
     window.mgpCollapse = {

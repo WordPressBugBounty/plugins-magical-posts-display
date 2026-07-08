@@ -2134,7 +2134,6 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                                                 <?php
                                                 endwhile;
                                                 wp_reset_postdata();
-                                                wp_reset_postdata();
                                                 ?>
                                             <?php endif; ?>
                                         </div>

@@ -25,7 +25,6 @@ class MPD_Hooks_Handler
         register_deactivation_hook(MAGICAL_POSTS_DISPLAY_FILE, [__CLASS__, 'deactivation_setup']);
 
         // WordPress core hooks
-        add_action('wp_head', [__CLASS__, 'count_post_visits']);
         add_image_size('slider-bg', 1600, 600, true);
         add_image_size('card-grid', 600, 900, true);
         add_image_size('card-list', 600, 700, true);
@@ -64,20 +63,4 @@ class MPD_Hooks_Handler
         }
     }
 
-    /**
-     * Count post visits
-     */
-    public static function count_post_visits()
-    {
-        if (is_single()) {
-            global $post;
-            $views = get_post_meta($post->ID, 'mpd_my_post_viewed', true);
-            if ($views == '') {
-                update_post_meta($post->ID, 'mpd_my_post_viewed', '1');
-            } else {
-                $views_no = intval($views);
-                update_post_meta($post->ID, 'mpd_my_post_viewed', ++$views_no);
-            }
-        }
-    }
 }

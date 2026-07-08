@@ -1188,7 +1188,7 @@ class mgpdNewsMagazineImgGrid extends \Elementor\Widget_Base
     private function build_query_args($settings)
     {
         $args = [
-            'post_type' => esc_attr($settings['mgpnig_post_type']),
+            'post_type' => sanitize_text_field($settings['mgpnig_post_type']),
             'posts_per_page' => absint($settings['mgpnig_posts_count']),
             'post_status' => 'publish',
             'meta_query' => [
@@ -1260,8 +1260,8 @@ class mgpdNewsMagazineImgGrid extends \Elementor\Widget_Base
 
         // Custom order
         if ($settings['mgpnig_custom_order'] === 'yes') {
-            $args['orderby'] = esc_attr($settings['mgpnig_orderby']);
-            $args['order'] = esc_attr($settings['mgpnig_order']);
+            $args['orderby'] = sanitize_text_field($settings['mgpnig_orderby']);
+            $args['order'] = sanitize_text_field($settings['mgpnig_order']);
         }
 
         return $args;
@@ -1272,15 +1272,15 @@ class mgpdNewsMagazineImgGrid extends \Elementor\Widget_Base
      */
     private function render_post($post, $size, $settings)
     {
-        $show_image = $settings['mgpnig_' . $size . '_show_image'] === 'yes';
-        $show_title = $settings['mgpnig_' . $size . '_show_title'] === 'yes';
-        $show_excerpt = $settings['mgpnig_' . $size . '_show_excerpt'] === 'yes';
-        $show_category = $settings['mgpnig_' . $size . '_show_category'] === 'yes';
-        $show_meta = $settings['mgpnig_' . $size . '_show_meta'] === 'yes';
+        $show_image = isset($settings['mgpnig_' . $size . '_show_image']) && $settings['mgpnig_' . $size . '_show_image'] === 'yes';
+        $show_title = isset($settings['mgpnig_' . $size . '_show_title']) && $settings['mgpnig_' . $size . '_show_title'] === 'yes';
+        $show_excerpt = isset($settings['mgpnig_' . $size . '_show_excerpt']) && $settings['mgpnig_' . $size . '_show_excerpt'] === 'yes';
+        $show_category = isset($settings['mgpnig_' . $size . '_show_category']) && $settings['mgpnig_' . $size . '_show_category'] === 'yes';
+        $show_meta = isset($settings['mgpnig_' . $size . '_show_meta']) && $settings['mgpnig_' . $size . '_show_meta'] === 'yes';
 
-        $title_word_limit = absint($settings['mgpnig_' . $size . '_title_word_limit']);
-        $excerpt_word_limit = absint($settings['mgpnig_' . $size . '_excerpt_word_limit']);
-        $title_tag = esc_attr($settings['mgpnig_' . $size . '_title_tag']);
+        $title_word_limit = isset($settings['mgpnig_' . $size . '_title_word_limit']) ? absint($settings['mgpnig_' . $size . '_title_word_limit']) : 0;
+        $excerpt_word_limit = isset($settings['mgpnig_' . $size . '_excerpt_word_limit']) ? absint($settings['mgpnig_' . $size . '_excerpt_word_limit']) : 0;
+        $title_tag = isset($settings['mgpnig_' . $size . '_title_tag']) ? sanitize_text_field($settings['mgpnig_' . $size . '_title_tag']) : 'h2';
 
     ?>
         <div class="mgp-post-item">

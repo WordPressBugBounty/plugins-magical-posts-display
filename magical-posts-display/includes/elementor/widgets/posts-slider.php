@@ -1700,7 +1700,6 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
 
                     endwhile;
                     wp_reset_postdata();
-                    wp_reset_postdata();
                     ?>
                 </div>
                 <?php if ($settings['mgps_dots']) : ?>
