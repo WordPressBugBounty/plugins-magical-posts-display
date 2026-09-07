@@ -3,7 +3,7 @@ Contributors: nalam
 Donate link: https://wpthemespace.com/donation
 Tags: post display, Page display, custom Post, elementor widget, post slider
 Requires at least: 6.0
-Tested up to: 7.0
+Tested up to: 7.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
