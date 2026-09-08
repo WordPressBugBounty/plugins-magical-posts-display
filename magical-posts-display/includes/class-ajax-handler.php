@@ -25,6 +25,10 @@ class MPD_Ajax_Handler
         add_action('wp_ajax_nopriv_mgpd_ajax_filter_posts', [__CLASS__, 'handle_ajax_filter_posts']);
         add_action('wp_ajax_mgpd_infinite_scroll_posts', [__CLASS__, 'handle_ajax_infinite_scroll']);
         add_action('wp_ajax_nopriv_mgpd_infinite_scroll_posts', [__CLASS__, 'handle_ajax_infinite_scroll']);
+
+        // AJAX handler for theme builder archive load more / infinite scroll
+        add_action('wp_ajax_mgpd_theme_load_more', [__CLASS__, 'handle_theme_load_more']);
+        add_action('wp_ajax_nopriv_mgpd_theme_load_more', [__CLASS__, 'handle_theme_load_more']);
     }
 
     /**
@@ -86,6 +90,25 @@ class MPD_Ajax_Handler
             mgpdEPostsGrid::ajax_infinite_scroll();
         } else {
             wp_send_json_error('Method not found');
+        }
+    }
+
+    /**
+     * AJAX wrapper for theme builder archive load more / infinite scroll.
+     * Ensures theme builder widget classes are loaded before dispatching.
+     */
+    public static function handle_theme_load_more()
+    {
+        // Load theme builder widget classes if Elementor has not registered
+        // them yet on this request.
+        if (!class_exists('Mgpd_Theme_Archive_Posts') && class_exists('Mgpd_Theme_Builder_Module')) {
+            \Mgpd_Theme_Builder_Module::instance()->load_widgets();
+        }
+
+        if (class_exists('Mgpd_Theme_Archive_Posts') && method_exists('Mgpd_Theme_Archive_Posts', 'ajax_load_more')) {
+            \Mgpd_Theme_Archive_Posts::ajax_load_more();
+        } else {
+            wp_send_json_error(__('Widget not found', 'magical-posts-display'));
         }
     }
 }

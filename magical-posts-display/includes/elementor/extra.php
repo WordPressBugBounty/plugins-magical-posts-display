@@ -34,15 +34,32 @@ if (!class_exists('mpd_posts_meta_author_date')) {
     }
 }
 
-// Check main 
+// Check main - requires BOTH Pro plugin active AND Pro license active
 function mp_display_check_main_ok()
 {
-    $has_magical_posts_pro = get_option("has_magical_posts_pro");
-    $active_plugins = apply_filters('active_plugins', get_option('active_plugins'));
+    // 1. License check: license option must be active in DB
+    $has_magical_posts_pro = get_option('has_magical_posts_pro');
+    if (empty($has_magical_posts_pro)) {
+        return false;
+    }
 
-    if (in_array('magical-posts-display-pro/magical-posts-display-pro.php', $active_plugins) && !empty($has_magical_posts_pro)) {
+    // 2. Plugin active check: Pro class must be loaded, or plugin in active_plugins
+    if (class_exists('magicalPostDisplayPro')) {
         return true;
     }
+
+    $active_plugins = (array) apply_filters('active_plugins', get_option('active_plugins', []));
+    if (in_array('magical-posts-display-pro/magical-posts-display-pro.php', $active_plugins, true)) {
+        return true;
+    }
+
+    if (is_multisite()) {
+        $network_plugins = (array) get_site_option('active_sitewide_plugins', []);
+        if (isset($network_plugins['magical-posts-display-pro/magical-posts-display-pro.php'])) {
+            return true;
+        }
+    }
+
     return false;
 }
 

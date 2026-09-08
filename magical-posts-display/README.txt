@@ -1,14 +1,14 @@
 === Magical Posts Display – Elementor Advanced Posts widgets ===
 Contributors: nalam
 Donate link: https://wpthemespace.com/donation
-Tags: post display, Page display, custom Post, elementor widget, post slider
+Tags: theme builder, post display, custom post, elementor widget, post slider
 Requires at least: 6.0
 Tested up to: 7.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Show your site posts, Pages and Custom Post Types with many different styles by Elementor Widgets.
+Show your site posts, pages, custom post types & theme builder templates with advanced Elementor widgets.
 
 == Description ==
 <h2> With just one click, you can easily generate posts Slider, posts carousels, posts Grids, posts accordions, posts tabs, posts tickers, and Categories & Tags Filters for Posts, Pages, and Custom Post Types. This addon helps you showcase your content in various formats, providing an engaging user experience for your visitors. Magical Posts Display is an Elementor addon that simplifies the creation of interactive content displays. Magical Posts Display is compatible with all custom post types. </h2>
@@ -25,6 +25,24 @@ With Magical Posts Display, you get fantastic features like the Dynamic Site Bui
 <a href="https://wpthemespace.com/product/magical-posts-display-pro/" target="_blank">View Pro version</a>
 ### See Short video
 [youtube https://www.youtube.com/watch?v=7BCThHcUSHk]
+
+### 🎨 Theme Builder Widgets (Build Custom Single Post & Archive Templates)
+Magical Posts Display powers your Elementor Theme Builder with a dedicated suite of dynamic widgets for single posts and archive templates. Design custom single post layouts, blog archives, category pages, author pages, search results, and custom post type templates with complete design freedom:
+
+#### 📄 Post Single Template Widgets:
+1. **Post Title** — Dynamically output the title of the current post, page, or custom post type with HTML tag selection (H1-H6, p, span), alignment, custom colors, typography, and optional link.
+2. **Post Content** — Renders the complete post or page content with full typography styling, text color, link color, blockquote styles, and complete Elementor inner-layout support.
+3. **Post Excerpt** — Display custom excerpts or auto-generated post summaries with custom word/character limits and customizable "Read More" button/text.
+4. **Featured Image** — Display the current post's featured image with size controls (thumbnail, medium, large, full), custom aspect ratio, border radius, box shadow, overlay, and click-to-link options.
+5. **Post Meta** — Display author (with avatar), date (published/modified), categories, tags, comments count, and reading time. Includes customizable icons, badges, dividers, and inline or stacked layouts.
+6. **Author Box** — Showcase author biographical info, profile picture/avatar, social links, author role/name, and a direct link to the author's post archive.
+7. **Post Comments** — Embed a fully styled WordPress comments section including comment list, avatar styling, comment reply form, submit button styling, and threaded comments.
+8. **Post Navigation** — Add previous and next post pagination links with customizable arrows/icons, post title preview, and taxonomy-restricted filtering (same category/tag).
+
+#### 🗂️ Post Archive Template Widgets:
+9. **Archive Title** — Dynamically display the title of the current archive (Category, Tag, Author, Date, or Search Results) with optional prefix inclusion/removal ("Category:", "Tag:"), custom prefix text, and responsive typography.
+10. **Archive Posts** — A powerful, dynamic archive loop query widget that automatically displays the posts belonging to the current archive query. Features multiple layout modes (Grid, List, Magazine), column settings, thumbnail sizes, excerpt length, meta tags, and read more buttons.
+11. **Post Pagination** — Add numeric, Prev/Next, or Ajax-powered pagination to your archive templates, ensuring seamless browsing across multiple pages of posts.
 
 Magical Posts Display comes with a range of awesome Elementor widgets that make it easy to display your posts in unique and visually appealing ways. The latest addition includes the powerful News/Magazine Image Grid widget, featuring 5 distinct layout styles perfect for news, magazine, and blog websites.
 <p>Magical Posts Display is a user-friendly addon that offers many different ways to display your site posts. Our Elementor widgets allow you to customize and set new options for each Magical Posts item, giving you complete control over your content display. In addition, our addon supports post meta, categories, tags, comments, timestamps, and more, making it easy to create a personalized and engaging user experience for your visitors. </p>
@@ -139,6 +157,13 @@ Yes, Magical Posts Display supports posts categories, allowing you to display po
 
 
 == Changelog ==
+
+= 1.3.0 =
+* Added: Dedicated Theme Builder widgets suite for Single Post/Page and Archive templates
+* Added: Post Title, Post Content, Post Excerpt, Featured Image, Post Meta, Author Box, Post Comments, Post Navigation widgets
+* Added: Archive Title, Archive Posts dynamic loop, and Post Pagination widgets
+* Fixed: Minor bug fixes and improvements
+* Updated: Compatibility checks and optimizations
 
 = 1.2.59 =
 * Fixed: AJAX nonce failure now returns proper JSON error instead of HTML

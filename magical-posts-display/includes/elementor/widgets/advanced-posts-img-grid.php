@@ -106,6 +106,9 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'label' => esc_html__('Posts Query', 'magical-posts-display'),
             ]
         );
+
+        $this->register_query_source_controls('mgpla_query_source', 'mgpla_query_auto_notice', 'mgpla_archive_posts_per_page');
+
         $this->add_control(
             'mgpg_post_type',
             [
@@ -115,6 +118,9 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'label_block' => true,
                 'multiple' => true,
                 'options' => mp_display_all_posts_type(),
+                'condition' => [
+                    'mgpla_query_source' => 'custom',
+                ],
             ]
         );
 
@@ -125,6 +131,9 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::SELECT,
                 'default' => 'recent',
                 'options' => mp_display_post_filter(),
+                'condition' => [
+                    'mgpla_query_source' => 'custom',
+                ],
             ]
         );
 
@@ -137,6 +146,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'multiple' => true,
                 'options' => mp_display_posts_name(),
                 'condition' => [
+                    'mgpla_query_source' => 'custom',
                     'mgpla_posts_filter' => 'show_byid',
                 ]
             ]
@@ -150,6 +160,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::TEXT,
                 'label_block' => true,
                 'condition' => [
+                    'mgpla_query_source' => 'custom',
                     'mgpla_posts_filter' => 'show_byid_manually',
                 ]
             ]
@@ -162,11 +173,14 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'type'    => \Elementor\Controls_Manager::NUMBER,
                 'default' => 6,
                 'step'    => 1,
+                'condition' => [
+                    'mgpla_query_source' => 'custom',
+                ],
             ]
         );
 
         // Post Position Control
-        $this->register_post_position_control('mgpla_posts_filter');
+        $this->register_post_position_control('mgpla_posts_filter', 'mgpla_query_source');
 
         $this->add_control(
             'mgpla_grid_categories',
@@ -177,6 +191,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
                 'multiple' => true,
                 'options' => mp_display_taxonomy_list(),
                 'condition' => [
+                    'mgpla_query_source' => 'custom',
                     'mgpla_posts_filter!' => 'show_byid',
                     'mgpg_post_type' => 'post',
                 ]
@@ -737,73 +752,7 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
         $this->end_controls_section();
 
 
-        $this->start_controls_section(
-            'mgpg_pagination',
-            [
-                'label' => sprintf('%s %s', __('Posts Pagination', 'magical-posts-display'), mp_display__pro_only_text()),
-                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
-            ]
-        );
-        if (empty(mp_display_check_main_ok())) {
-            $this->add_control(
-                'mgpg_pagination_info',
-                [
-                    'label' => sprintf('<span style="color:red">%s</span>', __('The Section only work with pro version.', 'magical-posts-display')),
-                    'type' => \Elementor\Controls_Manager::HEADING,
-                    'separator' => 'before',
-                ]
-            );
-        }
-        $this->add_control(
-            'mgpg_pagination_show',
-            [
-                'label' => __('Show Pagination', 'magical-posts-display'),
-                'description'   => __('Pagination only use the page for perfect display.', 'magical-posts-display'),
-                'type' => \Elementor\Controls_Manager::SWITCHER,
-                'label_on' => __('Yes', 'magical-posts-display'),
-                'label_off' => __('No', 'magical-posts-display'),
-                'default' => '',
-            ]
-        );
-        $this->add_control(
-            'mgpg_pagination_style',
-            [
-                'label' => __('Pagination Style', 'magical-posts-display'),
-                'type' => \Elementor\Controls_Manager::SELECT,
-                'options' => [
-                    'style1' => __('style One', 'magical-posts-display'),
-                    'style2' => __('Style Two', 'magical-posts-display'),
-                ],
-                'default' => 'style1',
-            ]
-        );
-        $this->add_responsive_control(
-            'mgpg_pagination_align',
-            [
-                'label' => __('Pagination Alignment', 'magical-posts-display'),
-                'type' => \Elementor\Controls_Manager::CHOOSE,
-                'options' => [
-                    'left' => [
-                        'title' => __('Left', 'magical-posts-display'),
-                        'icon' => 'eicon-text-align-left',
-                    ],
-                    'center' => [
-                        'title' => __('Center', 'magical-posts-display'),
-                        'icon' => 'eicon-text-align-center',
-                    ],
-                    'right' => [
-                        'title' => __('Right', 'magical-posts-display'),
-                        'icon' => 'eicon-text-align-right',
-                    ],
-
-                ],
-                'default' => 'center',
-                'selectors' => [
-                    '{{WRAPPER}} .mp-pagination' => 'text-align: {{VALUE}};',
-                ],
-            ]
-        );
-        $this->end_controls_section();
+        $this->register_pagination_section_controls('mgpla_query_source');
 
         if (empty(mp_display_check_main_ok())) {
             $this->start_controls_section(
@@ -1925,74 +1874,85 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
         $orderby = $this->get_settings('orderby');
         $order = $this->get_settings('order');
 
-        if (mp_display_check_main_ok() || mp_display_author_namet() == 'wptheme space pro') {
-            $mgpg_pagination_show = $settings['mgpg_pagination_show'];
-        } else {
-            $mgpg_pagination_show = '';
-        }
+        $mgpg_pagination_show = $this->should_show_pagination($settings, 'mgpla_query_source', 'mgpg_pagination_show');
 
         //pagination
-        $paged = get_query_var('paged') ? get_query_var('paged') : 1;
+        $paged = max(1, absint(get_query_var('paged')), absint(get_query_var('page')));
 
+        if ($this->should_use_archive_query($settings, 'mgpla_query_source')) {
+            $posts_per_page = !empty($settings['mgpla_archive_posts_per_page']) ? absint($settings['mgpla_archive_posts_per_page']) : get_option('posts_per_page', 10);
+            $args = array(
+                'post_status'         => 'publish',
+                'ignore_sticky_posts' => 1,
+                'posts_per_page'      => $posts_per_page,
+                'paged'               => $paged,
+            );
+            $args = $this->apply_archive_query_args($args);
 
-        // Query Argument
-        $args = array(
-            'post_type'             => $mgpg_post_type,
-            'post_status'           => 'publish',
-            'ignore_sticky_posts'   => 1,
-            'posts_per_page'        => $mgpla_posts_count,
-        );
-        if ($mgpg_pagination_show) {
-            $args['paged'] = $paged;
-        }
+            if ($mgpla_custom_order == 'yes') {
+                $args['orderby'] = $orderby;
+                $args['order'] = $order;
+            }
+        } else {
+            // Query Argument
+            $args = array(
+                'post_type'             => $mgpg_post_type,
+                'post_status'           => 'publish',
+                'ignore_sticky_posts'   => 1,
+                'posts_per_page'        => $mgpla_posts_count,
+            );
+            if ($mgpg_pagination_show) {
+                $args['paged'] = $paged;
+            }
 
-        switch ($mgpla_filter) {
-            case 'trending':
-                $args['meta_key']    = 'mp_post_week_viewed';
-                $args['orderby']      = 'rand';
-                break;
+            switch ($mgpla_filter) {
+                case 'trending':
+                    $args['meta_key']    = 'mp_post_week_viewed';
+                    $args['orderby']      = 'rand';
+                    break;
 
-            case 'popular':
-                $args['meta_key']    = 'mp_post_post_viewed';
-                $args['orderby']      = 'meta_value_num';
-                break;
+                case 'popular':
+                    $args['meta_key']    = 'mp_post_post_viewed';
+                    $args['orderby']      = 'meta_value_num';
+                    break;
 
-            case 'random_order':
-                $args['orderby']    = 'rand';
-                break;
+                case 'random_order':
+                    $args['orderby']    = 'rand';
+                    break;
 
-            default: /* Recent */
-                $args['orderby']    = 'date';
-                $args['order']      = 'desc';
-                break;
-        }
-        if ($mgpla_filter === 'show_byid' && !empty($settings['mgpla_post_id'])) {
-            $args['post__in'] = mp_display_resolve_post_ids($settings['mgpla_post_id'], $mgpla_post_type);
-        } elseif ($mgpla_filter === 'show_byid_manually') {
-            $post_ids = array_map('trim', explode(',', $settings['mgpla_post_ids_manually']));
-            $args['post__in'] = mp_display_resolve_post_ids($post_ids, $mgpla_post_type);
-        }
+                default: /* Recent */
+                    $args['orderby']    = 'date';
+                    $args['order']      = 'desc';
+                    break;
+            }
+            if ($mgpla_filter === 'show_byid' && !empty($settings['mgpla_post_id'])) {
+                $args['post__in'] = mp_display_resolve_post_ids($settings['mgpla_post_id'], $mgpla_post_type);
+            } elseif ($mgpla_filter === 'show_byid_manually') {
+                $post_ids = array_map('trim', explode(',', $settings['mgpla_post_ids_manually']));
+                $args['post__in'] = mp_display_resolve_post_ids($post_ids, $mgpla_post_type);
+            }
 
-        // Custom Order
-        if ($mgpla_custom_order == 'yes') {
-            $args['orderby'] = $orderby;
-            $args['order'] = $order;
-        }
+            // Custom Order
+            if ($mgpla_custom_order == 'yes') {
+                $args['orderby'] = $orderby;
+                $args['order'] = $order;
+            }
 
-        if (!(($mgpla_filter == "show_byid") || ($mgpla_filter == "show_byid_manually"))) {
+            if (!(($mgpla_filter == "show_byid") || ($mgpla_filter == "show_byid_manually"))) {
 
-            $post_cats = str_replace(' ', '', $mgpla_grid_categories);
-            if ("0" != $mgpla_grid_categories && $mgpg_post_type == 'post') {
-                if (is_array($post_cats) && count($post_cats) > 0) {
-                    $field_name = is_numeric($post_cats[0]) ? 'term_id' : 'slug';
-                    $args['tax_query'][] = array(
-                        array(
-                            'taxonomy' => 'category',
-                            'terms' => $post_cats,
-                            'field' => $field_name,
-                            'include_children' => false
-                        )
-                    );
+                $post_cats = str_replace(' ', '', $mgpla_grid_categories);
+                if ("0" != $mgpla_grid_categories && $mgpg_post_type == 'post') {
+                    if (is_array($post_cats) && count($post_cats) > 0) {
+                        $field_name = is_numeric($post_cats[0]) ? 'term_id' : 'slug';
+                        $args['tax_query'][] = array(
+                            array(
+                                'taxonomy' => 'category',
+                                'terms' => $post_cats,
+                                'field' => $field_name,
+                                'include_children' => false
+                            )
+                        );
+                    }
                 }
             }
         }
@@ -2037,7 +1997,13 @@ class mgpdAdPostsImgGrid extends \Elementor\Widget_Base
 
             <?php
             if ($mgpg_pagination_show) {
-                mp_display_pagination($paged, $mgpla_posts, $settings['mgpg_pagination_style']);
+                $pagination_type = !empty($settings['mgpg_pagination_type']) ? $settings['mgpg_pagination_type'] : 'numbers';
+                if (in_array($pagination_type, ['load_more', 'infinite'], true) && !mp_display_check_main_ok()) {
+                    $pagination_type = 'numbers';
+                }
+                if ($pagination_type === 'numbers') {
+                    mp_display_pagination($paged, $mgpla_posts, $settings['mgpg_pagination_style']);
+                }
             }
             ?>
         <?php else :

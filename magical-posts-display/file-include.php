@@ -59,6 +59,11 @@ if (file_exists(MAGICAL_POSTS_DISPLAY_DIR . 'includes/traits/Query_Controls_Trai
 	require_once(MAGICAL_POSTS_DISPLAY_DIR . 'includes/traits/Query_Controls_Trait.php');
 }
 
+// Theme Builder module
+if (file_exists(MAGICAL_POSTS_DISPLAY_DIR . 'includes/theme-builder/module.php')) {
+	require_once(MAGICAL_POSTS_DISPLAY_DIR . 'includes/theme-builder/module.php');
+}
+
 // Admin info (moved to conditional include based on context)
 if (is_admin() && !mpd_check_plugin_active('magical-posts-display-pro/magical-posts-display-pro.php')) {
 	require_once(MAGICAL_POSTS_DISPLAY_DIR . 'admin/admin-page/admin-info.php');

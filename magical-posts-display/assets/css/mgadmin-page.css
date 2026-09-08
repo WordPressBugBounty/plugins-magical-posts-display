@@ -1,203 +1,454 @@
 /*
-*
-* Admin Page style
-*
-*
-*/
-img{
-	max-width: 100%;
-	height: auto;
-}
-	.col-1,
-	.col-2,
-	.col-3,
-	.col-4 {
-    	width: 100%;
-    	margin-bottom: 10px;
-	}
-.cols {
-    width: 100%;
-    display: block;
-}
-.mgpdp1 .updated {
-    display: none;
+ * Magical Posts Display - Modern Admin Dashboard Styles
+ */
+
+.magical-posts-wrap {
+    margin: 20px 20px 0 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    color: #1e293b;
 }
 
-.col-2 {
-    width: 50%;
-    float: left;
-    overflow: hidden;
+.magical-posts-wrap .nav-tab-wrapper {
+    display: none !important;
 }
-.col-4 {
-    width: 25%;
-    float: left;
-    overflow: hidden;
+
+#magical_ptab_home form p.submit {
+    display: none !important;
 }
-.welsec-icon {
-    width: 61px;
-    margin-left: auto;
-    margin-right: auto;
-}
-div#magical_ptab_home {
-    display: block !important;
-}
-.mgvideo {
-    padding: 20px;
-}
-#mgpdp1 section {
-    display: block;
-    overflow: hidden;
-}
+
 .magical-posts-wrap .notice {
     display: none !important;
 }
+
 .magical-posts-wrap .notice.mgpd-notice {
     display: block !important;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-}
-.magical-posts-wrap .notice.mgpd-notice button.notice-dismiss {
-  display: none;
-}
-section.sec-wel {
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding: 80px 50px;
-}
-.wel-center-text {
-    text-align: center;
-}
-.wel-center-text h1 {
-    font-size: 50px;
-    text-transform: capitalize;
-}
-.wel-sect-text h5,
-.wel-sect-text h1 {
-    color: #fff;
-}
-.wel-center-text h5 {
-    font-size: 1.4rem;
-    line-height: 1.3;
-    margin: 10px;
-}
-a.button.button-mgp1 {
-    background: #000000;
-    color: #fff;
-    padding: 12px 45px;
-    margin: 10px;
-    font-size: 1rem;
-    min-height: 38px;
-    display: inline-block;
-    border-radius: 5px;
-    transition: 0.5s;
-    border: none;
-    font-weight: 600;
-}
-a.button.button-mgp1.btnprohas {
-    background: #700000;
-    color: #fff;
-}
-a.button.button-mgp1.btnprohas:hover {
-    background: #460000;
-    color: #fff;
-}
-.mgftext {
-    padding: 50px 30px;
-}
-a.button.button-mgp1.button-mgp2 {
-    background: darkblue;
-    margin-left: 5px;
 }
 
-a.button.button-mgp1.button-mgp2:hover {
-    background: indigo;
-    color: #fff;
-}
-.mgftext h2 {
-    font-size: 35px;
-    line-height: 1.2;
+.mgpd-dashboard-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.mgftext p {
-    color: #333;
-    font-size: 18px;
-}
-section.mgfeature.mgf2 {
-    padding: 60px 0;
-}
-.mpd-sect-text {
-    margin-bottom: 50px;
-}
-/*Admin five star settings style*/
-
-.mgrating .mgrat-left {
-    width: 25%;
-    float: left;
-}
-
-.mgrating .mgrat-right {
-    width: 75%;
-    float: left;
-}
-
-.mgrating {
-    max-width: 750px;
-    margin-left: auto;
-    margin-right: auto;
-    background: #fff;
+/* ==========================================================================
+   Hero Banner
+   ========================================================================== */
+.mgpd-hero-banner {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 100%);
+    border-radius: 16px;
+    padding: 44px 48px;
+    color: #ffffff;
+    box-shadow: 0 10px 25px -5px rgba(49, 46, 129, 0.25), 0 8px 10px -6px rgba(49, 46, 129, 0.2);
+    margin-bottom: 36px;
+    position: relative;
     overflow: hidden;
-    padding: 28px;
-    box-shadow: 10px 0 20px rgba(0,0,0,.05);
-    border: 1px solid #ededed;
 }
 
-.mgrating .mgrat-left img {
-    background: red;
-    padding: 27px;
-    border-radius: 34%;
-    width: 45%;
+.mgpd-hero-banner::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(129, 140, 248, 0.18) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
 }
-.mgrating p {
-    font-size: 15px;
+
+.mgpd-hero-badges {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
 }
-.mgrat-right h2 {
-    font-size: 25px;
-    margin-top: 0;
+
+.mgpd-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 9999px;
     line-height: 1.2;
 }
-a.mgstar-link {
-    background: green;
-    color: #fff;
-    padding: 12px 20px;
-    margin-top: 10px;
-    display: inline-block;
+
+.mgpd-badge-version {
+    background: rgba(255, 255, 255, 0.15);
+    color: #e0e7ff;
+    backdrop-filter: blur(4px);
+}
+
+.mgpd-badge-pro {
+    background: #10b981;
+    color: #ffffff;
+}
+
+.mgpd-badge-pro .dashicons {
     font-size: 14px;
-    text-decoration: none;
+    width: 14px;
+    height: 14px;
+}
+
+.mgpd-badge-free {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+.mgpd-hero-title {
+    font-size: 32px;
     font-weight: 700;
+    color: #ffffff !important;
+    margin: 0 0 12px 0;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-/*Responsive code*/
-@media (min-width: 768px) and (max-width: 991px){
-	.col-4 {
-    	width: 50%;
-	}
+.mgpd-hero-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: #a5b4fc;
+}
 
+.mgpd-hero-subtitle {
+    font-size: 15px;
+    color: #c7d2fe;
+    max-width: 680px;
+    line-height: 1.6;
+    margin: 0 0 28px 0;
 }
-@media (max-width: 767px){
-	.col-1,
-	.col-2,
-	.col-3,
-	.col-4 {
-    	width: 100%;
-	}
-	.mgrating .mgrat-left img {
-	    padding: 15px;
-	}
-	a.mgstar-link {
-	    padding: 12px 12px;
-	    font-size: 13px;
-	}
-	
+
+.mgpd-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
 }
+
+.mgpd-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    line-height: 1.3;
+}
+
+.mgpd-btn .dashicons {
+    font-size: 17px;
+    width: 17px;
+    height: 17px;
+}
+
+.mgpd-btn-primary {
+    background: #ffffff;
+    color: #312e81 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.mgpd-btn-primary:hover {
+    background: #f8fafc;
+    color: #1e1b4b !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15);
+}
+
+.mgpd-btn-secondary {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(4px);
+}
+
+.mgpd-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.22);
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-1px);
+}
+
+.mgpd-btn-accent {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #ffffff !important;
+    box-shadow: 0 2px 4px rgba(217, 119, 6, 0.25);
+}
+
+.mgpd-btn-accent:hover {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+.mgpd-btn-outline {
+    background: transparent;
+    color: #e0e7ff !important;
+}
+
+.mgpd-btn-outline:hover {
+    color: #ffffff !important;
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   Sections & Layout
+   ========================================================================== */
+.mgpd-section {
+    margin-bottom: 40px;
+}
+
+.mgpd-section-header {
+    margin-bottom: 20px;
+}
+
+.mgpd-section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 6px 0;
+}
+
+.mgpd-section-subtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* ==========================================================================
+   Quick Start Steps Grid
+   ========================================================================== */
+.mgpd-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.mgpd-step-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 22px 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mgpd-step-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.06);
+}
+
+.mgpd-step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #eef2ff;
+    color: #4f46e5;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.mgpd-step-heading {
+    font-size: 15.5px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 6px 0;
+}
+
+.mgpd-step-desc {
+    font-size: 13.5px;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* ==========================================================================
+   Features Showcase Grid
+   ========================================================================== */
+.mgpd-features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.mgpd-feature-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 26px 26px 22px 26px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.mgpd-feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.08);
+    border-color: #cbd5e1;
+}
+
+.mgpd-feature-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.mgpd-feature-icon .dashicons {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+}
+
+.mgpd-icon-indigo { background: #eef2ff; color: #4f46e5; }
+.mgpd-icon-purple { background: #f5f3ff; color: #7c3aed; }
+.mgpd-icon-pink   { background: #fdf2f8; color: #db2777; }
+.mgpd-icon-blue   { background: #eff6ff; color: #2563eb; }
+.mgpd-icon-amber  { background: #fffbeb; color: #d97706; }
+.mgpd-icon-emerald{ background: #ecfdf5; color: #059669; }
+
+.mgpd-feature-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 8px 0;
+}
+
+.mgpd-feature-desc {
+    font-size: 13.5px;
+    color: #64748b;
+    line-height: 1.55;
+    margin: 0 0 18px 0;
+    flex-grow: 1;
+}
+
+.mgpd-feature-tag {
+    align-self: flex-start;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 6px;
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.mgpd-tag-highlight {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+/* ==========================================================================
+   Resources & Community
+   ========================================================================== */
+.mgpd-resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.mgpd-resource-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.mgpd-res-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.mgpd-res-icon .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.mgpd-resource-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 6px 0;
+}
+
+.mgpd-resource-card p {
+    font-size: 13.5px;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0 0 14px 0;
+}
+
+.mgpd-card-link {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #4f46e5;
+    text-decoration: none;
+}
+
+.mgpd-card-link:hover {
+    color: #3730a3;
+    text-decoration: underline;
+}
+
+.mgpd-resource-review {
+    background: linear-gradient(180deg, #ffffff 0%, #fffbeb 100%);
+    border-color: #fde68a;
+}
+
+.mgpd-star-icon {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.mgpd-btn-gold {
+    background: #d97706;
+    color: #ffffff !important;
+}
+
+.mgpd-btn-gold:hover {
+    background: #b45309;
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+@media (max-width: 768px) {
+    .mgpd-hero-banner {
+        padding: 30px 24px;
+    }
+    .mgpd-hero-title {
+        font-size: 26px;
+    }
+    .mgpd-hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .mgpd-btn {
+        justify-content: center;
+    }
+}
+

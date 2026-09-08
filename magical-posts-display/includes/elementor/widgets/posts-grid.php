@@ -102,6 +102,8 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
             ]
         );
 
+        $this->register_query_source_controls('mgpg_query_source', 'mgpg_query_auto_notice', 'mgpg_archive_posts_per_page');
+
         $this->add_control(
             'mgpg_post_type',
             [
@@ -111,6 +113,9 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'label_block' => true,
                 'multiple' => true,
                 'options' => mp_display_all_posts_type(),
+                'condition' => [
+                    'mgpg_query_source' => 'custom',
+                ],
             ]
         );
 
@@ -131,6 +136,9 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                     'custom_fields' => esc_html__('Custom Fields Filter (Pro Only)', 'magical-posts-display'),
                     'exclude_current' => esc_html__('Exclude Current Post (Pro Only)', 'magical-posts-display'),
                 ],
+                'condition' => [
+                    'mgpg_query_source' => 'custom',
+                ],
             ]
         );
         $this->add_control(
@@ -142,6 +150,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'multiple' => true,
                 'options' => mp_display_posts_name(),
                 'condition' => [
+                    'mgpg_query_source' => 'custom',
                     'mgpg_posts_filter' => 'show_byid',
                     'mgpg_post_type' => 'post',
                 ],
@@ -157,6 +166,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'type' => \Elementor\Controls_Manager::TEXT,
                 'label_block' => true,
                 'condition' => [
+                    'mgpg_query_source' => 'custom',
                     'mgpg_posts_filter' => 'show_byid_manually',
                 ]
             ]
@@ -169,11 +179,14 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'type'    => \Elementor\Controls_Manager::NUMBER,
                 'default' => 6,
                 'step'    => 1,
+                'condition' => [
+                    'mgpg_query_source' => 'custom',
+                ],
             ]
         );
 
         // Post Position Control
-        $this->register_post_position_control('mgpg_posts_filter');
+        $this->register_post_position_control('mgpg_posts_filter', 'mgpg_query_source');
 
         $this->add_control(
             'mgpg_grid_categories',
@@ -184,6 +197,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'multiple' => true,
                 'options' => mp_display_taxonomy_list(),
                 'condition' => [
+                    'mgpg_query_source' => 'custom',
                     'mgpg_posts_filter!' => 'show_byid',
                     'mgpg_post_type' => 'post',
                 ]
@@ -832,73 +846,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         }
         $this->end_controls_section();
 
-        $this->start_controls_section(
-            'mgpg_pagination',
-            [
-                'label' => sprintf('%s %s', __('Posts Pagination', 'magical-posts-display'), mp_display__pro_only_text()),
-                'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
-            ]
-        );
-        if (empty(mp_display_check_main_ok())) {
-            $this->add_control(
-                'mgpg_pagination_info',
-                [
-                    'label' => sprintf('<span style="color:red">%s</span>', __('The Section only work with pro version.', 'magical-posts-display')),
-                    'type' => \Elementor\Controls_Manager::HEADING,
-                    'separator' => 'before',
-                ]
-            );
-        }
-        $this->add_control(
-            'mgpg_pagination_show',
-            [
-                'label' => __('Show Pagination', 'magical-posts-display'),
-                'description'   => __('Pagination only use the page for perfect display.', 'magical-posts-display'),
-                'type' => \Elementor\Controls_Manager::SWITCHER,
-                'label_on' => __('Yes', 'magical-posts-display'),
-                'label_off' => __('No', 'magical-posts-display'),
-                'default' => '',
-            ]
-        );
-        $this->add_control(
-            'mgpg_pagination_style',
-            [
-                'label' => __('Pagination Style', 'magical-posts-display'),
-                'type' => \Elementor\Controls_Manager::SELECT,
-                'options' => [
-                    'style1' => __('style One', 'magical-posts-display'),
-                    'style2' => __('Style Two', 'magical-posts-display'),
-                ],
-                'default' => 'style1',
-            ]
-        );
-        $this->add_responsive_control(
-            'mgpg_pagination_align',
-            [
-                'label' => __('Pagination Alignment', 'magical-posts-display'),
-                'type' => \Elementor\Controls_Manager::CHOOSE,
-                'options' => [
-                    'left' => [
-                        'title' => __('Left', 'magical-posts-display'),
-                        'icon' => 'eicon-text-align-left',
-                    ],
-                    'center' => [
-                        'title' => __('Center', 'magical-posts-display'),
-                        'icon' => 'eicon-text-align-center',
-                    ],
-                    'right' => [
-                        'title' => __('Right', 'magical-posts-display'),
-                        'icon' => 'eicon-text-align-right',
-                    ],
-
-                ],
-                'default' => 'center',
-                'selectors' => [
-                    '{{WRAPPER}} .mp-pagination' => 'text-align: {{VALUE}};',
-                ],
-            ]
-        );
-        $this->end_controls_section();
+        $this->register_pagination_section_controls('mgpg_query_source');
 
         if (empty(mp_display_check_main_ok())) {
 
@@ -3501,74 +3449,87 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         $orderby = $this->get_settings('orderby');
         $order = $this->get_settings('order');
 
-        if (mp_display_check_main_ok() || mp_display_author_namet() == 'wptheme space pro') {
-            $mgpg_pagination_show = $settings['mgpg_pagination_show'];
-        } else {
-            $mgpg_pagination_show = '';
-        }
+        $mgpg_pagination_show = $this->should_show_pagination($settings, 'mgpg_query_source', 'mgpg_pagination_show');
 
         //pagination
-        $paged = get_query_var('paged') ? get_query_var('paged') : 1;
-        // Query Argument
-        $args = array(
-            'post_type'             => $mgpg_post_type,
-            'post_status'           => 'publish',
-            'ignore_sticky_posts'   => 1,
-            'posts_per_page'        => $mgpg_posts_count,
-        );
-        if ($mgpg_pagination_show) {
-            $args['paged'] = $paged;
-        }
+        $paged = max(1, absint(get_query_var('paged')), absint(get_query_var('page')));
 
-        switch ($mgpg_filter) {
+        if ($this->should_use_archive_query($settings, 'mgpg_query_source')) {
+            $posts_per_page = !empty($settings['mgpg_archive_posts_per_page']) ? absint($settings['mgpg_archive_posts_per_page']) : get_option('posts_per_page', 10);
+            $args = array(
+                'post_status'         => 'publish',
+                'ignore_sticky_posts' => 1,
+                'posts_per_page'      => $posts_per_page,
+                'paged'               => $paged,
+            );
+            $args = $this->apply_archive_query_args($args);
 
-            case 'trending':
-                $args['meta_key']    = 'mp_post_week_viewed';
-                $args['orderby']      = 'rand';
-                break;
+            if ($mgpg_custom_order == 'yes') {
+                $args['orderby'] = $orderby;
+                $args['order'] = $order;
+            }
+        } else {
+            // Query Argument
+            $args = array(
+                'post_type'             => $mgpg_post_type,
+                'post_status'           => 'publish',
+                'ignore_sticky_posts'   => 1,
+                'posts_per_page'        => $mgpg_posts_count,
+            );
+            if ($mgpg_pagination_show) {
+                $args['paged'] = $paged;
+            }
 
-            case 'popular':
-                $args['meta_key']    = 'mp_post_post_viewed';
-                $args['orderby']      = 'meta_value_num';
-                break;
+            switch ($mgpg_filter) {
 
-            case 'random_order':
-                $args['orderby']    = 'rand';
-                break;
+                case 'trending':
+                    $args['meta_key']    = 'mp_post_week_viewed';
+                    $args['orderby']      = 'rand';
+                    break;
 
-            default: /* Recent */
-                $args['orderby']    = 'date';
-                $args['order']      = 'desc';
-                break;
-        }
-        if ($mgpg_filter === 'show_byid' && !empty($settings['mgpg_post_id'])) {
-            $args['post__in'] = mp_display_resolve_post_ids($settings['mgpg_post_id'], $mgpg_post_type);
-        } elseif ($mgpg_filter === 'show_byid_manually') {
-            $post_ids = array_map('trim', explode(',', $settings['mgpg_post_ids_manually']));
-            $args['post__in'] = mp_display_resolve_post_ids($post_ids, $mgpg_post_type);
-        }
+                case 'popular':
+                    $args['meta_key']    = 'mp_post_post_viewed';
+                    $args['orderby']      = 'meta_value_num';
+                    break;
+
+                case 'random_order':
+                    $args['orderby']    = 'rand';
+                    break;
+
+                default: /* Recent */
+                    $args['orderby']    = 'date';
+                    $args['order']      = 'desc';
+                    break;
+            }
+            if ($mgpg_filter === 'show_byid' && !empty($settings['mgpg_post_id'])) {
+                $args['post__in'] = mp_display_resolve_post_ids($settings['mgpg_post_id'], $mgpg_post_type);
+            } elseif ($mgpg_filter === 'show_byid_manually') {
+                $post_ids = array_map('trim', explode(',', $settings['mgpg_post_ids_manually']));
+                $args['post__in'] = mp_display_resolve_post_ids($post_ids, $mgpg_post_type);
+            }
 
 
-        // Custom Order
-        if ($mgpg_custom_order == 'yes') {
-            $args['orderby'] = $orderby;
-            $args['order'] = $order;
-        }
+            // Custom Order
+            if ($mgpg_custom_order == 'yes') {
+                $args['orderby'] = $orderby;
+                $args['order'] = $order;
+            }
 
-        if (!(($mgpg_filter == "show_byid") || ($mgpg_filter == "show_byid_manually"))) {
+            if (!(($mgpg_filter == "show_byid") || ($mgpg_filter == "show_byid_manually"))) {
 
-            $post_cats = str_replace(' ', '', $mgpg_grid_categories);
-            if ("0" != $mgpg_grid_categories && $mgpg_post_type == 'post') {
-                if (is_array($post_cats) && count($post_cats) > 0) {
-                    $field_name = is_numeric($post_cats[0]) ? 'term_id' : 'slug';
-                    $args['tax_query'][] = array(
-                        array(
-                            'taxonomy' => 'category',
-                            'terms' => $post_cats,
-                            'field' => $field_name,
-                            'include_children' => false
-                        )
-                    );
+                $post_cats = str_replace(' ', '', $mgpg_grid_categories);
+                if ("0" != $mgpg_grid_categories && $mgpg_post_type == 'post') {
+                    if (is_array($post_cats) && count($post_cats) > 0) {
+                        $field_name = is_numeric($post_cats[0]) ? 'term_id' : 'slug';
+                        $args['tax_query'][] = array(
+                            array(
+                                'taxonomy' => 'category',
+                                'terms' => $post_cats,
+                                'field' => $field_name,
+                                'include_children' => false
+                            )
+                        );
+                    }
                 }
             }
         }
@@ -3736,7 +3697,13 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
 
             <?php
             if ($mgpg_pagination_show) {
-                mp_display_pagination($paged, $mgpg_posts, $settings['mgpg_pagination_style']);
+                $pagination_type = !empty($settings['mgpg_pagination_type']) ? $settings['mgpg_pagination_type'] : 'numbers';
+                if (in_array($pagination_type, ['load_more', 'infinite'], true) && !mp_display_check_main_ok()) {
+                    $pagination_type = 'numbers';
+                }
+                if ($pagination_type === 'numbers') {
+                    mp_display_pagination($paged, $mgpg_posts, $settings['mgpg_pagination_style']);
+                }
             }
             ?>
 

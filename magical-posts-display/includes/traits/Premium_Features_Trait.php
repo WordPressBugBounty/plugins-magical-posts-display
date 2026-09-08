@@ -168,6 +168,48 @@ trait Premium_Features_Trait
     }
 
     /**
+     * Render premium features content (reading time, view count, social share)
+     *
+     * @param bool|string $reading_time Whether to show reading time
+     * @param bool|string $view_count Whether to show view count
+     * @param bool|string $social_share Whether to show social share
+     */
+    protected function render_premium_features_content($reading_time, $view_count, $social_share)
+    {
+        $has_reading_time = !empty($reading_time) && 'no' !== $reading_time;
+        $has_view_count   = !empty($view_count) && 'no' !== $view_count;
+        $has_social_share = !empty($social_share) && 'no' !== $social_share;
+
+        if ($has_reading_time || $has_view_count) {
+            echo '<div class="mgpd-time-count-wrap">';
+            // Reading Time Display
+            if ($has_reading_time) {
+                $content = get_the_content();
+                $word_count = str_word_count(wp_strip_all_tags($content));
+                $reading_time_value = ceil($word_count / 200); // Average reading speed: 200 words per minute
+                echo '<div class="mgpd-reading-time">' . $this->get_reading_time_icon(16) . ' ' . $reading_time_value . ' min read</div>';
+            }
+
+            // Post Views Counter
+            if ($has_view_count) {
+                $post_views = get_post_meta(get_the_ID(), 'mp_post_post_viewed', true);
+                $post_views = $post_views ? $post_views : 0;
+                echo '<div class="mgpd-view-count">' . $this->get_view_count_icon(16) . ' ' . number_format($post_views) . ' views</div>';
+            }
+            echo '</div>';
+        }
+
+        // Social Share Buttons
+        if ($has_social_share) {
+            $post_url = get_permalink();
+            $post_title = get_the_title();
+            echo '<div class="mgpd-social-share">';
+            echo $this->get_all_social_share_buttons($post_url, $post_title, null, 20);
+            echo '</div>';
+        }
+    }
+
+    /**
      * Render all premium features based on settings
      * 
      * @param array $settings Widget settings

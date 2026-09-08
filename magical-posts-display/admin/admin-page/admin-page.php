@@ -36,7 +36,7 @@ if (!class_exists('mgpDisplayWelcomePage')) :
 
             add_menu_page($menu_text, $menu_text, 'manage_options', 'mgpd-page', array($this, 'plugin_page'), 'dashicons-tickets-alt', 20);
 
-            add_submenu_page('mgpd-page', esc_html__("WelCome Page", 'magical-posts-display' ), esc_html__("WelCome Page", 'magical-posts-display' ), "manage_options",  'mgpd-page', array($this, 'plugin_page'));
+            add_submenu_page('mgpd-page', esc_html__("Dashboard", 'magical-posts-display' ), esc_html__("Dashboard", 'magical-posts-display' ), "manage_options",  'mgpd-page', array($this, 'plugin_page'));
         }
 
 
