@@ -67,8 +67,9 @@ Magical Posts Display comes with a range of awesome Elementor widgets that make 
  	<li><strong>Posts list card. <a href="https://mpd.wpcolors.net/awesome-new-posts-list-pro/" target="_blank">Live preview</a> | <a href="https://youtu.be/AjWr7-YeJx4" target="_blank">Video Tutorial</a></strong></li>
  	<li><strong>Categories gird.</strong></li>
  	<li><strong>Popular posts widget with image.</strong></li>
- 	<li><strong>Recent posts widget with image.</strong></li>
- 	<li><strong>Posts grid show by shortcode.</strong></li>
+ 	<li><strong>Elementor Widgets Manager - Toggle any of the 25 widgets on/off to maximize site speed.</strong></li>
+ 	<li><strong>Conditional Asset Loading - Fast PageSpeed; scripts & styles only load when widgets are used.</strong></li>
+ 	<li><strong>Presets & Layout Recipes - Step-by-step blueprints for 8 blog & magazine layouts.</strong></li>
  	<li><strong>Posts time show.</strong></li>
  	<li><strong>Posts category show.</strong></li>
  	<li><strong>Posts tag show.</strong></li>
@@ -158,12 +159,27 @@ Yes, Magical Posts Display supports posts categories, allowing you to display po
 
 == Changelog ==
 
+= 1.3.1 =
+* Enhanced: Redesigned PRO admin notice with modern high-converting UI, instant AJAX dismissal, and 30-day snooze mechanism.
+* Security: Hardened admin notice dismissal with CSRF nonce verification and capability checks.
+* Compliance: Removed unsolicited promotional notice on themes screen, adhering strictly to WordPress.org repository guidelines.
+* Compliance: Fixed 29 mismatched text domains across all widgets for 100% WordPress translation readiness.
+* Robustness: Added exception handling for Elementor category registration to prevent Reflection errors in future Elementor updates.
+* Enhanced UX: Added zero-friction drag-and-drop auto-fallbacks for Posts Accordion, Posts Tab, and Posts Categories widgets so widgets immediately display content upon insertion.
+* Unlocked: "Exclude Current Post" feature in Posts Grid now freely available for building seamless Related Posts sections on single post templates.
+* Performance: Capped unbounded post query selectors in editor helpers to 100 posts, eliminating memory exhaustion on large sites.
+* Bugfix: Resolved PHP 8.2 and 8.3 null term property warnings across Posts Categories, Posts Slider, and Posts Tab widgets.
+
 = 1.3.0 =
-* Added: Dedicated Theme Builder widgets suite for Single Post/Page and Archive templates
-* Added: Post Title, Post Content, Post Excerpt, Featured Image, Post Meta, Author Box, Post Comments, Post Navigation widgets
-* Added: Archive Title, Archive Posts dynamic loop, and Post Pagination widgets
-* Fixed: Minor bug fixes and improvements
-* Updated: Compatibility checks and optimizations
+* Added: Performance - Complete Conditional Asset Loading system (assets only enqueue when widgets are active on the page)
+* Added: Admin Elements Manager - Enable/disable any of the 25 Showcase and Theme Builder widgets individually with instant live counter
+* Added: Presets Showcase & Blueprint Guide - 8 layout recipes and complete guide for building custom Single and Archive templates
+* Added: Elementor Editor Live Preview hooks for seamless Masonry and Swiper re-initialization during real-time layout adjustments
+* Added: Dedicated Theme Builder widgets suite for Single Post/Page and Archive templates (Post Title, Content, Excerpt, Featured Image, Meta, Author Box, Comments, Navigation, Archive Title, Archive Posts, Pagination)
+* Removed: Outdated shortcode mentions from documentation in favor of pure Elementor and upcoming Gutenberg blocks
+* Fixed: Replaced brittle inline script in Posts Grid with standard Elementor frontend JS hooks
+* Fixed: Undefined function fallback for mp_display_pro_only_text in Premium_Features_Trait
+* Updated: Compatibility checks, asset managers, and nonces security
 
 = 1.2.59 =
 * Fixed: AJAX nonce failure now returns proper JSON error instead of HTML
@@ -380,8 +396,8 @@ Yes, Magical Posts Display supports posts categories, allowing you to display po
 
 = 1.1.2.1 =
  * Added 2 more tab items now supports 4 tab category
- * Added options for shortcode grid
- * Added style for shortcode grid
+ * Added options for grid layout
+ * Added style for grid layout
  * Some Css style fixe
  * Added Valid donation link
 = 1.1.2 =

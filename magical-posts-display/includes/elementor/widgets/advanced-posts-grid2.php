@@ -70,6 +70,16 @@ class mgpdAdPostsGrid2 extends \Elementor\Widget_Base
         return ['magic', 'post', 'advanced', 'grid', 'list'];
     }
 
+    public function get_style_depends()
+    {
+        return ['mpd-style', 'mpd-fonts'];
+    }
+
+    public function get_script_depends()
+    {
+        return ['masonry', 'imagesloaded', 'mpd-main'];
+    }
+
     /**
      * Register Blank widget controls.
      *
@@ -696,7 +706,7 @@ class mgpdAdPostsGrid2 extends \Elementor\Widget_Base
                 [
                     'type' => \Elementor\Controls_Manager::RAW_HTML,
                     'raw' => mp_go_pro_template([
-                        'title' => esc_html__('Get All Pro Features', 'elementor'),
+                        'title' => esc_html__('Get All Pro Features', 'magical-posts-display'),
                         'massage' => esc_html__('Posts Video, QR Code, Reading Time Calculator, Total Word Count, Share Icons, Pagination And More style & options waiting for you. So upgrade pro today!! it\'s lifetime Deal!!!', 'magical-posts-display'),
                         'link' => 'https://wpthemespace.com/product/magical-posts-display-pro/',
                     ]),

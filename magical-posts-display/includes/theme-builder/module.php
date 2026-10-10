@@ -119,7 +119,25 @@ if ( ! class_exists( 'Mgpd_Theme_Builder_Module' ) ) {
 			 */
 			$widgets = apply_filters( 'mgpd_theme_builder/widgets', $widgets );
 
+			$class_key_map = [
+				'Mgpd_Theme_Post_Title'      => 'theme_post_title',
+				'Mgpd_Theme_Post_Excerpt'    => 'theme_post_excerpt',
+				'Mgpd_Theme_Post_Content'    => 'theme_post_content',
+				'Mgpd_Theme_Featured_Image'  => 'theme_featured_image',
+				'Mgpd_Theme_Post_Meta'       => 'theme_post_meta',
+				'Mgpd_Theme_Post_Navigation' => 'theme_post_navigation',
+				'Mgpd_Theme_Post_Comments'   => 'theme_post_comments',
+				'Mgpd_Theme_Author_Box'      => 'theme_author_box',
+				'Mgpd_Theme_Archive_Title'   => 'theme_archive_title',
+				'Mgpd_Theme_Archive_Posts'   => 'theme_archive_posts',
+				'Mgpd_Theme_Post_Pagination' => 'theme_post_pagination',
+			];
+
 			foreach ( $widgets as $class_name ) {
+				$key = isset( $class_key_map[ $class_name ] ) ? $class_key_map[ $class_name ] : '';
+				if ( $key && function_exists( 'mpd_is_widget_enabled' ) && ! mpd_is_widget_enabled( $key ) ) {
+					continue;
+				}
 				if ( class_exists( $class_name ) ) {
 					$widgets_manager->register( new $class_name() );
 				}
@@ -159,45 +177,57 @@ if ( ! class_exists( 'Mgpd_Theme_Builder_Module' ) ) {
 		}
 
 		/**
-		 * Enqueue frontend styles.
+		 * Enqueue frontend styles conditionally.
 		 */
 		public function enqueue_frontend_styles() {
-			if ( class_exists( '\Elementor\Icons_Manager' ) ) {
-				\Elementor\Icons_Manager::enqueue_shim();
+			if ( ! wp_style_is( 'mgpd-theme-builder-widgets', 'registered' ) ) {
+				wp_register_style(
+					'mgpd-theme-builder-widgets',
+					MAGICAL_POSTS_DISPLAY_URL . '/assets/css/theme-builder-widgets.css',
+					[],
+					MAGICAL_POSTS_DISPLAY_VERSION
+				);
 			}
-			wp_enqueue_style(
-				'mgpd-theme-builder-widgets',
-				MAGICAL_POSTS_DISPLAY_URL . '/assets/css/theme-builder-widgets.css',
-				[],
-				MAGICAL_POSTS_DISPLAY_VERSION
-			);
+
+			if ( did_action( 'elementor/loaded' ) && ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) ) {
+				if ( class_exists( '\Elementor\Icons_Manager' ) ) {
+					\Elementor\Icons_Manager::enqueue_shim();
+				}
+				wp_enqueue_style( 'mgpd-theme-builder-widgets' );
+			}
 		}
 
 		/**
-		 * Enqueue frontend scripts (AJAX load more / infinite scroll).
+		 * Enqueue frontend scripts conditionally.
 		 */
 		public function enqueue_frontend_scripts() {
-			wp_enqueue_script(
-				'mgpd-theme-builder',
-				MAGICAL_POSTS_DISPLAY_URL . '/assets/js/theme-builder.js',
-				[ 'jquery' ],
-				MAGICAL_POSTS_DISPLAY_VERSION,
-				true
-			);
+			if ( ! wp_script_is( 'mgpd-theme-builder', 'registered' ) ) {
+				wp_register_script(
+					'mgpd-theme-builder',
+					MAGICAL_POSTS_DISPLAY_URL . '/assets/js/theme-builder.js',
+					[ 'jquery' ],
+					MAGICAL_POSTS_DISPLAY_VERSION,
+					true
+				);
 
-			wp_localize_script(
-				'mgpd-theme-builder',
-				'mgpdThemeBuilder',
-				[
-					'ajaxurl' => admin_url( 'admin-ajax.php' ),
-					'nonce'   => wp_create_nonce( 'mgpd_theme_nonce' ),
-					'i18n'    => [
-						'error'    => __( 'Something went wrong. Please try again.', 'magical-posts-display' ),
-						'loading'  => __( 'Loading...', 'magical-posts-display' ),
-						'loadMore' => __( 'Load More', 'magical-posts-display' ),
-					],
-				]
-			);
+				wp_localize_script(
+					'mgpd-theme-builder',
+					'mgpdThemeBuilder',
+					[
+						'ajaxurl' => admin_url( 'admin-ajax.php' ),
+						'nonce'   => wp_create_nonce( 'mgpd_theme_nonce' ),
+						'i18n'    => [
+							'error'    => __( 'Something went wrong. Please try again.', 'magical-posts-display' ),
+							'loading'  => __( 'Loading...', 'magical-posts-display' ),
+							'loadMore' => __( 'Load More', 'magical-posts-display' ),
+						],
+					]
+				);
+			}
+
+			if ( did_action( 'elementor/loaded' ) && ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) ) {
+				wp_enqueue_script( 'mgpd-theme-builder' );
+			}
 		}
 	}
 }

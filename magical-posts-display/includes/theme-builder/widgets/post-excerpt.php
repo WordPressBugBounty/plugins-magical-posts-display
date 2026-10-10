@@ -34,6 +34,10 @@ if ( ! class_exists( 'Mgpd_Theme_Post_Excerpt' ) ) {
 			return [ 'post', 'excerpt', 'summary', 'description', 'theme' ];
 		}
 
+		public function get_style_depends() {
+			return [ 'mgpd-theme-builder-widgets' ];
+		}
+
 		protected function register_controls() {
 			$this->start_controls_section(
 				'content_section',

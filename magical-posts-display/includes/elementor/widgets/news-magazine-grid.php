@@ -48,9 +48,15 @@ class mgpdNewsMagazineGrid extends \Elementor\Widget_Base
      */
     public function get_style_depends()
     {
-        // Enqueue the CSS file for this widget
-        wp_enqueue_style('magical-news-magazine-grid');
-        return ['magical-news-magazine-grid'];
+        return ['mpd-style', 'mpd-fonts', 'magical-news-magazine-grid'];
+    }
+
+    /**
+     * Get script depends.
+     */
+    public function get_script_depends()
+    {
+        return ['mpd-main'];
     }
 
     /**

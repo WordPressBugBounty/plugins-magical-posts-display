@@ -178,7 +178,13 @@ if (!function_exists('mp_display_posts_name')) {
     {
         $options = array();
         $options['0'] = __('Select', 'magical-posts-display');
-        $all_post = array('posts_per_page' => -1, 'post_type' => $post_type);
+        $all_post = array(
+            'posts_per_page' => 100,
+            'post_type'      => $post_type,
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+            'post_status'    => 'publish',
+        );
         $post_terms = get_posts($all_post);
         if (!empty($post_terms) && !is_wp_error($post_terms)) {
             foreach ($post_terms as $term) {
@@ -187,8 +193,8 @@ if (!function_exists('mp_display_posts_name')) {
                 // Also keep ID as key for backward compatibility with old saved values
                 $options[$term->ID] = $term->post_title;
             }
-            return $options;
         }
+        return $options;
     }
 }
 
@@ -227,7 +233,13 @@ if (!function_exists('mp_display_posts_by_slug')) {
     {
         $options = array();
         $options['0'] = __('Select', 'magical-posts-display');
-        $all_posts = array('posts_per_page' => -1, 'post_type' => $post_type);
+        $all_posts = array(
+            'posts_per_page' => 100,
+            'post_type'      => $post_type,
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+            'post_status'    => 'publish',
+        );
         $post_terms = get_posts($all_posts);
         if (!empty($post_terms) && !is_wp_error($post_terms)) {
             foreach ($post_terms as $term) {
@@ -331,7 +343,7 @@ if (!function_exists('mp_go_pro_template')) :
             // Show a `Get Pro` button only if the user doesn't have Pro.
             if ($texts['link']) { ?>
                 <a class="elementor-nerd-box-link elementor-button elementor-button-default elementor-button-go-pro" href="<?php echo esc_url($texts['link']); ?>" target="_blank">
-                    <?php echo esc_html__('Get Pro', 'elementor'); ?>
+                    <?php echo esc_html__('Get Pro', 'magical-posts-display'); ?>
                 </a>
             <?php } ?>
         </div>

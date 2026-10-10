@@ -70,6 +70,16 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
     {
         return ['magic', 'post', 'grid', 'card', 'category'];
     }
+
+    public function get_style_depends()
+    {
+        return ['mpd-style', 'mpd-fonts'];
+    }
+
+    public function get_script_depends()
+    {
+        return ['masonry', 'imagesloaded', 'mpd-main'];
+    }
     /**
      * Register Blank widget controls.
      *
@@ -134,8 +144,24 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                     'show_byid_manually' => esc_html__('Add ID Manually', 'magical-posts-display'),
                     'advanced_query' => esc_html__('Advanced Query Builder (Pro Only)', 'magical-posts-display'),
                     'custom_fields' => esc_html__('Custom Fields Filter (Pro Only)', 'magical-posts-display'),
-                    'exclude_current' => esc_html__('Exclude Current Post (Pro Only)', 'magical-posts-display'),
+                    'exclude_current' => esc_html__('Exclude Current Post', 'magical-posts-display'),
                 ],
+                'condition' => [
+                    'mgpg_query_source' => 'custom',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_exclude_current_post',
+            [
+                'label' => esc_html__('Exclude Current Post', 'magical-posts-display'),
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'label_on' => esc_html__('Yes', 'magical-posts-display'),
+                'label_off' => esc_html__('No', 'magical-posts-display'),
+                'return_value' => 'yes',
+                'default' => '',
+                'description' => esc_html__('Useful for Related Posts sections on single post pages to avoid showing the current post.', 'magical-posts-display'),
                 'condition' => [
                     'mgpg_query_source' => 'custom',
                 ],
@@ -861,7 +887,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 [
                     'type' => \Elementor\Controls_Manager::RAW_HTML,
                     'raw' => mp_go_pro_template([
-                        'title' => esc_html__('Get All Pro Features', 'elementor'),
+                        'title' => esc_html__('Get All Pro Features', 'magical-posts-display'),
                         'massage' => esc_html__('Posts Video, QR Code, Reading Time Calculator, Total Word Count, Share Icons, Pagination And More style & options waiting for you. So upgrade pro today!! it\'s lifetime Deal!!!', 'magical-posts-display'),
                         'link' => 'https://wpthemespace.com/product/magical-posts-display-pro/',
                     ]),
@@ -2180,7 +2206,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         $this->add_responsive_control(
             'mgpg_meta_date_icon_size',
             [
-                'label' => __('Icon Size', 'bk-helper'),
+                'label' => __('Icon Size', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range' => [
@@ -2364,7 +2390,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         $this->add_responsive_control(
             'mgpg_meta_tag_icon_size',
             [
-                'label' => __('Icon Size', 'bk-helper'),
+                'label' => __('Icon Size', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range' => [
@@ -2419,7 +2445,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         $this->add_responsive_control(
             'mgpg_btn_icon_size',
             [
-                'label' => __('Icon Size', 'bk-helper'),
+                'label' => __('Icon Size', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::SLIDER,
                 'size_units' => ['px'],
                 'range' => [
@@ -3496,6 +3522,11 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                     $args['orderby']    = 'rand';
                     break;
 
+                case 'exclude_current':
+                    $args['orderby']    = 'date';
+                    $args['order']      = 'desc';
+                    break;
+
                 default: /* Recent */
                     $args['orderby']    = 'date';
                     $args['order']      = 'desc';
@@ -3506,6 +3537,19 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
             } elseif ($mgpg_filter === 'show_byid_manually') {
                 $post_ids = array_map('trim', explode(',', $settings['mgpg_post_ids_manually']));
                 $args['post__in'] = mp_display_resolve_post_ids($post_ids, $mgpg_post_type);
+            }
+
+            // Exclude current post
+            $mgpg_exclude_current = $this->get_settings('mgpg_exclude_current_post');
+            if ($mgpg_filter === 'exclude_current' || $mgpg_exclude_current === 'yes') {
+                $current_post_id = get_the_ID();
+                if ($current_post_id) {
+                    if (empty($args['post__not_in'])) {
+                        $args['post__not_in'] = array($current_post_id);
+                    } else {
+                        $args['post__not_in'][] = $current_post_id;
+                    }
+                }
             }
 
 
@@ -3636,63 +3680,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
             </div>
 
             <?php
-            // Inline Masonry Initialization Script for better compatibility
-            if ($mgpg_layout_type === 'masonry' && mp_display_check_main_ok()) {
-                $widget_id = uniqid('mgpd_masonry_');
-            ?>
-                <script type="text/javascript">
-                    (function() {
-                        // Initialize masonry for this specific widget
-                        function initMasonry<?php echo esc_js($widget_id); ?>() {
-                            var container = document.querySelector('.mgpd-masonry-container');
-                            if (!container) return;
-
-                            var masonryGrid = container.querySelector('.mgpd-masonry');
-                            if (!masonryGrid) return;
-
-                            // Check if Masonry JS library is available
-                            if (typeof Masonry === 'undefined' || typeof imagesLoaded === 'undefined') {
-                                // Masonry not loaded (editor mode) - just show items
-                                container.classList.add('masonry-loaded');
-                                return;
-                            }
-
-                            // Force all images to load first
-                            imagesLoaded(masonryGrid, function() {
-                                // Initialize masonry
-                                var masonry = new Masonry(masonryGrid, {
-                                    itemSelector: '.mgpd-masonry-item',
-                                    columnWidth: '.mgpd-masonry-item',
-                                    percentPosition: true,
-                                    transitionDuration: 0
-                                });
-
-                                // Mark as loaded to reveal items
-                                container.classList.add('masonry-loaded');
-
-                                // Store instance for global access
-                                window.mgpdMasonryInstance = masonry;
-
-                                // Force layout recalculation after a brief delay
-                                setTimeout(function() {
-                                    masonry.layout();
-                                }, 200);
-                            });
-                        }
-
-                        // Initialize when DOM is ready
-                        if (document.readyState === 'loading') {
-                            document.addEventListener('DOMContentLoaded', initMasonry<?php echo esc_js($widget_id); ?>);
-                        } else {
-                            initMasonry<?php echo esc_js($widget_id); ?>();
-                        }
-
-                        // Also initialize on window load as fallback
-                        window.addEventListener('load', initMasonry<?php echo esc_js($widget_id); ?>);
-                    })();
-                </script>
-            <?php
-            }
+            // Masonry layout is initialized via Elementor hooks in assets/js/main.js
             ?>
 
             <?php

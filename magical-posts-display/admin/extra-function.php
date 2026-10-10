@@ -47,29 +47,3 @@ if (!function_exists('mp_display_get_term_options')) :
 endif;
 
 
-
-//Admin notice 
-if (!function_exists('spacehide_go_me')) :
-	function spacehide_go_me()
-	{
-		global $pagenow;
-		if ($pagenow != 'themes.php') {
-			return;
-		}
-
-		$class = 'notice notice-success is-dismissible';
-		$url1 = esc_url('https://wpthemespace.com/product-category/pro-theme/');
-
-		$message = __('<strong><span style="color:red;">Latest WordPress Theme:</span>  <span style="color:green"> If you find a Secure, SEO friendly, full functional premium WordPress theme for your site then </span>  </strong>', 'magical-posts-display');
-
-		printf(
-			'<div class="%1$s" style="padding:10px 15px 20px;"><p>%2$s <a href="%3$s" target="_blank">%4$s</a>.</p><a target="_blank" class="button button-danger" href="%3$s" style="margin-right:10px">%5$s</a></div>',
-			esc_attr($class),
-			wp_kses_post($message),
-			esc_url($url1),
-			esc_html__('see here', 'magical-posts-display'),
-			esc_html__('View WordPress Theme', 'magical-posts-display')
-		);
-	}
-	add_action('admin_notices', 'spacehide_go_me');
-endif;

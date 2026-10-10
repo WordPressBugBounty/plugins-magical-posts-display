@@ -451,263 +451,372 @@ ul.mgpdl-list {
     .mgp-text-sm-center { text-align: center; }
 }
 
-/* Enhanced Admin Notice Styles with Animation */
-.mgadin-hero {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    border: 2px solid #e3f2fd;
+/* ==========================================================================
+   Modern Magical Posts Display PRO Notice
+   ========================================================================== */
+.notice.mgadin-pro-upsell-notice {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #6366f1;
     border-radius: 12px;
-    padding: 25px;
-    margin: 20px 0;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.1);
+    padding: 0;
+    margin: 20px 20px 20px 0;
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
     position: relative;
     overflow: hidden;
-    animation: slideInFromTop 0.6s ease-out;
     transition: all 0.3s ease;
 }
 
-.mgadin-hero:hover {
-    box-shadow: 0 12px 35px rgba(0, 123, 255, 0.15);
-    transform: translateY(-2px);
+.notice.mgadin-pro-upsell-notice:hover {
+    box-shadow: 0 14px 30px -5px rgba(99, 102, 241, 0.12), 0 6px 10px -2px rgba(0, 0, 0, 0.04);
 }
 
-/* Animated Background Gradient */
-.mgadin-hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 123, 255, 0.05), transparent);
-    animation: shimmer 3s infinite;
+.notice.mgadin-pro-upsell-notice .notice-dismiss {
+    top: 14px;
+    right: 14px;
+    padding: 6px;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+    z-index: 10;
 }
 
-/* Content Container */
-.mge-info-content {
-    flex: 1;
-    z-index: 2;
-    position: relative;
+.notice.mgadin-pro-upsell-notice .notice-dismiss:hover {
+    color: #ef4444;
+    transform: scale(1.1);
 }
 
-.mge-info-hello {
-    font-weight: 700;
+.notice.mgadin-pro-upsell-notice .notice-dismiss:before {
     font-size: 18px;
-    color: #2c3e50;
-    margin-bottom: 8px;
-    animation: fadeInUp 0.8s ease-out 0.2s both;
 }
 
-.mge-info-title {
-    font-size: 24px;
-    display: block;
-    line-height: 1.4;
-    font-weight: 600;
-    color: #1a202c;
-    animation: fadeInUp 0.8s ease-out 0.3s both;
-}
-
-.mge-info-desc {
-    font-size: 16px;
-    line-height: 1.5;
-    margin: 15px 0 25px;
-    color: #4a5568;
-}
-
-.mge-info-desc div {
-    margin-bottom: 12px;
-    animation: fadeInUp 0.8s ease-out 0.4s both;
-}
-
-.mge-info-desc div.mge-offer {
-    background: linear-gradient(45deg, #ff6b6b, #ff8e53);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 700;
-    font-size: 17px;
-    padding: 10px 15px;
-    border-left: 4px solid #ff6b6b;
-    background-color: rgba(255, 107, 107, 0.1);
-    border-radius: 6px;
-    animation: pulse 2s infinite, fadeInUp 0.8s ease-out 0.5s both;
-}
-
-.mge-info-actions {
+.mgpd-pro-notice-wrap {
     display: flex;
-    align-items: center;
-    gap: 15px;
-    animation: fadeInUp 0.8s ease-out 0.6s both;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 26px 30px;
+    background: radial-gradient(circle at 85% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 50%), linear-gradient(135deg, #ffffff 0%, #fbfcfe 60%, #f5f7ff 100%);
+    box-sizing: border-box;
 }
 
-.mge-info-actions a.button {
+/* Left Content Area */
+.mgpd-pro-notice-left {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.mgpd-pro-notice-badge {
     display: inline-flex;
     align-items: center;
-    padding: 12px 24px;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    gap: 8px;
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    border-radius: 50px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
 }
 
-.mge-info-actions a.button::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.3s ease, height 0.3s ease;
+.mgpd-pro-notice-badge .mgpd-badge-sparkle {
+    font-size: 13px;
 }
 
-.mge-info-actions a.button:hover::before {
-    width: 300px;
-    height: 300px;
+.mgpd-pro-notice-badge .mgpd-badge-title {
+    color: #4338ca;
 }
 
-.mge-info-actions .upgrade-btn {
-    background: linear-gradient(45deg, #007cba, #0096dc);
-    color: white;
-    border: none;
-    box-shadow: 0 4px 15px rgba(0, 124, 186, 0.3);
-    animation: buttonBounce 2s infinite;
+.mgpd-pro-notice-badge .mgpd-badge-pill {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: #ffffff;
+    border-radius: 20px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 800;
 }
 
-.mge-info-actions .upgrade-btn:hover {
-    background: linear-gradient(45deg, #005a87, #007bb5);
-    box-shadow: 0 6px 20px rgba(0, 124, 186, 0.4);
-    transform: translateY(-2px);
+.mgpd-pro-notice-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 8px 0;
+    line-height: 1.35;
+    letter-spacing: -0.2px;
 }
 
-.mge-info-actions .demo-btn {
-    background: linear-gradient(45deg, #28a745, #20c997);
-    color: white;
-    border: none;
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-}
-
-.mge-info-actions .demo-btn:hover {
-    background: linear-gradient(45deg, #218838, #1ea379);
-    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
-    transform: translateY(-2px);
-}
-
-.mge-info-actions .mgad-dismiss {
-    background: transparent;
-    border: 2px solid #6c757d;
-    color: #6c757d;
-    padding: 10px 20px;
-    border-radius: 6px;
+.mgpd-pro-notice-desc {
     font-size: 14px;
-    transition: all 0.3s ease;
+    color: #475569;
+    margin: 0 0 18px 0;
+    line-height: 1.6;
+    max-width: 780px;
 }
 
-.mge-info-actions .mgad-dismiss:hover {
-    background: #6c757d;
-    color: white;
+/* Features Grid */
+.mgpd-pro-features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 18px;
+    margin-bottom: 18px;
+    max-width: 780px;
+}
+
+.mgpd-pro-feature-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e293b;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 7px 12px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.mgpd-pro-feature-item:hover {
+    background: #ffffff;
+    border-color: #c7d2fe;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(99, 102, 241, 0.08);
+}
+
+.mgpd-pro-feature-item .mgpd-feat-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+/* Deal Urgency Banner */
+.mgpd-pro-deal-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(90deg, #fff1f2 0%, #fff7ed 100%);
+    border-left: 3px solid #f43f5e;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #9f1239;
+    margin-bottom: 22px;
+    max-width: 780px;
+}
+
+.mgpd-pro-deal-banner .mgpd-deal-flame {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.mgpd-pro-deal-banner strong {
+    color: #e11d48;
+}
+
+/* Actions */
+.mgpd-pro-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.mgpd-pro-actions .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: auto;
+    line-height: normal;
+    padding: 11px 22px;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+}
+
+.mgpd-btn-upgrade {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+}
+
+.mgpd-btn-upgrade:hover,
+.mgpd-btn-upgrade:focus {
+    background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45);
+    transform: translateY(-2px);
+}
+
+.mgpd-btn-demo {
+    background: #ffffff !important;
+    color: #4338ca !important;
+    border: 1.5px solid #c7d2fe !important;
+}
+
+.mgpd-btn-demo:hover,
+.mgpd-btn-demo:focus {
+    background: #f5f3ff !important;
+    border-color: #a5b4fc !important;
+    color: #3730a3 !important;
     transform: translateY(-1px);
 }
 
-.mge-info-actions .button i {
-    margin-left: 15px;
+.mgpd-btn-dismiss {
+    background: #f1f5f9 !important;
+    color: #64748b !important;
+    border: 1px solid #cbd5e1 !important;
 }
 
-/* Keyframe Animations */
-@keyframes slideInFromTop {
-    0% {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
+.mgpd-btn-dismiss:hover,
+.mgpd-btn-dismiss:focus {
+    background: #e2e8f0 !important;
+    color: #334155 !important;
+    border-color: #94a3b8 !important;
+}
+
+/* Right Pricing Card */
+.mgpd-pro-notice-right {
+    flex: 0 0 240px;
+    display: flex;
+    align-items: stretch;
+}
+
+.mgpd-pricing-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    border: 1.5px solid #c7d2fe;
+    border-radius: 12px;
+    padding: 20px 18px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.mgpd-pricing-card-badge {
+    background: #eef2ff;
+    color: #4f46e5;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid #c7d2fe;
+    margin-bottom: 10px;
+}
+
+.mgpd-pricing-val {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 2px;
+    margin-bottom: 4px;
+}
+
+.mgpd-pricing-val .mgpd-currency {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.mgpd-pricing-val .mgpd-amount {
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1;
+    color: #0f172a;
+    letter-spacing: -1px;
+}
+
+.mgpd-pricing-val .mgpd-term {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    margin-left: 2px;
+}
+
+.mgpd-pricing-save {
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+.mgpd-pricing-save del {
+    color: #94a3b8;
+}
+
+.mgpd-pricing-perks {
+    list-style: none !important;
+    margin: 0 0 16px 0 !important;
+    padding: 0 !important;
+    text-align: left;
+    width: 100%;
+    font-size: 12px;
+    color: #334155;
+    line-height: 1.5;
+}
+
+.mgpd-pricing-perks li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.mgpd-pricing-perks li span {
+    color: #10b981;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.mgpd-pricing-cta {
+    display: inline-block;
+    width: 100%;
+    padding: 8px 12px;
+    background: #4f46e5;
+    color: #ffffff !important;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 6px;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.mgpd-pricing-cta:hover {
+    background: #4338ca;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+    .mgpd-pro-features-grid {
+        grid-template-columns: 1fr;
     }
 }
 
-@keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes shimmer {
-    0% {
-        left: -100%;
-    }
-    100% {
-        left: 100%;
-    }
-}
-
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.02);
-    }
-}
-
-@keyframes buttonBounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-3px);
-    }
-    60% {
-        transform: translateY(-2px);
-    }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .mgadin-hero {
+@media (max-width: 900px) {
+    .mgpd-pro-notice-wrap {
         flex-direction: column;
-        text-align: center;
         padding: 20px;
     }
-    
-    .mge-info-actions {
-        flex-direction: column;
-        width: 100%;
-        gap: 10px;
-    }
-    
-    .mge-info-actions a.button {
-        width: 100%;
-        justify-content: center;
-    }
-}
 
-/* Additional Enhancement Elements */
-.mgadin-hero::after {
-    content: '🚀';
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 24px;
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0);
+    .mgpd-pro-notice-right {
+        flex: 1 1 auto;
+        width: 100%;
     }
-    50% {
-        transform: translateY(-10px);
+
+    .mgpd-pro-features-grid {
+        grid-template-columns: 1fr;
     }
 }
 

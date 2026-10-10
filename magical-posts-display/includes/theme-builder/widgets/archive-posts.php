@@ -38,6 +38,14 @@ if ( ! class_exists( 'Mgpd_Theme_Archive_Posts' ) ) {
 			return [ 'archive', 'posts', 'loop', 'grid', 'list', 'masonry', 'blog', 'theme' ];
 		}
 
+		public function get_style_depends() {
+			return [ 'mgpd-theme-builder-widgets', 'mpd-style', 'mpd-fonts' ];
+		}
+
+		public function get_script_depends() {
+			return [ 'masonry', 'imagesloaded', 'mpd-main', 'mgpd-theme-builder' ];
+		}
+
 		protected function register_controls() {
 			$this->register_layout_controls();
 			$this->register_query_controls();

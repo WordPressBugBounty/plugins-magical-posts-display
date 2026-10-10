@@ -68,6 +68,16 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
         return ['accordion', 'toggle', 'posts', 'magic', 'tab'];
     }
 
+    public function get_style_depends()
+    {
+        return ['mpd-style', 'mpd-fonts', 'mp-accordion-style'];
+    }
+
+    public function get_script_depends()
+    {
+        return ['mgp-bootstrap'];
+    }
+
     /**
      * Register Blank widget controls.
      *
@@ -98,6 +108,125 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
             [
                 'label' => esc_html__('Accordion posts', 'magical-posts-display'),
                 'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+            ]
+        );
+
+        $this->add_control(
+            'mpac_query_type',
+            [
+                'label'   => esc_html__('Query Source', 'magical-posts-display'),
+                'type'    => \Elementor\Controls_Manager::SELECT,
+                'default' => 'auto',
+                'options' => [
+                    'auto'   => esc_html__('Dynamic / Recent Posts', 'magical-posts-display'),
+                    'manual' => esc_html__('Manual Selection (Repeater)', 'magical-posts-display'),
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mpac_post_type',
+            [
+                'label'       => esc_html__('Post Type', 'magical-posts-display'),
+                'type'        => \Elementor\Controls_Manager::SELECT,
+                'default'     => 'post',
+                'options'     => mp_display_all_posts_type(),
+                'condition'   => [
+                    'mpac_query_type' => 'auto',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mpac_posts_count',
+            [
+                'label'     => esc_html__('Number of Posts', 'magical-posts-display'),
+                'type'      => \Elementor\Controls_Manager::NUMBER,
+                'default'   => 5,
+                'min'       => 1,
+                'max'       => 50,
+                'step'      => 1,
+                'condition' => [
+                    'mpac_query_type' => 'auto',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mpac_categories',
+            [
+                'label'       => esc_html__('Filter by Categories', 'magical-posts-display'),
+                'type'        => \Elementor\Controls_Manager::SELECT2,
+                'label_block' => true,
+                'multiple'    => true,
+                'options'     => mp_display_taxonomy_list(),
+                'condition'   => [
+                    'mpac_query_type' => 'auto',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mpac_orderby',
+            [
+                'label'     => esc_html__('Order By', 'magical-posts-display'),
+                'type'      => \Elementor\Controls_Manager::SELECT,
+                'default'   => 'date',
+                'options'   => [
+                    'date'          => esc_html__('Date', 'magical-posts-display'),
+                    'title'         => esc_html__('Title', 'magical-posts-display'),
+                    'comment_count' => esc_html__('Comment Count', 'magical-posts-display'),
+                    'rand'          => esc_html__('Random', 'magical-posts-display'),
+                ],
+                'condition' => [
+                    'mpac_query_type' => 'auto',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mpac_order',
+            [
+                'label'     => esc_html__('Order', 'magical-posts-display'),
+                'type'      => \Elementor\Controls_Manager::SELECT,
+                'default'   => 'DESC',
+                'options'   => [
+                    'DESC' => esc_html__('Descending (3, 2, 1)', 'magical-posts-display'),
+                    'ASC'  => esc_html__('Ascending (1, 2, 3)', 'magical-posts-display'),
+                ],
+                'condition' => [
+                    'mpac_query_type' => 'auto',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mpac_first_open',
+            [
+                'label'        => esc_html__('First Item Auto-Open?', 'magical-posts-display'),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', 'magical-posts-display'),
+                'label_off'    => esc_html__('No', 'magical-posts-display'),
+                'return_value' => 'yes',
+                'default'      => 'yes',
+                'condition'    => [
+                    'mpac_query_type' => 'auto',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'mpac_exclude_current',
+            [
+                'label'        => esc_html__('Exclude Current Post', 'magical-posts-display'),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', 'magical-posts-display'),
+                'label_off'    => esc_html__('No', 'magical-posts-display'),
+                'return_value' => 'yes',
+                'default'      => '',
+                'condition'    => [
+                    'mpac_query_type' => 'auto',
+                ],
             ]
         );
 
@@ -133,6 +262,9 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                 'separator' => 'before',
                 'title_field' => get_the_title('{{ mpac_post_id }}'),
                 'fields' => $repeater->get_controls(),
+                'condition' => [
+                    'mpac_query_type' => 'manual',
+                ],
                 'dynamic' => [
                     'active' => true,
                 ],/*
@@ -692,7 +824,7 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
                 [
                     'type' => \Elementor\Controls_Manager::RAW_HTML,
                     'raw' => mp_go_pro_template([
-                        'title' => esc_html__('Get All Pro Features', 'elementor'),
+                        'title' => esc_html__('Get All Pro Features', 'magical-posts-display'),
                         'massage' => esc_html__('Posts Video, QR Code, Reading Time Calculator, Total Word Count, Share Icons, Pagination And More style & options waiting for you. So upgrade pro today!! it\'s lifetime Deal!!!', 'magical-posts-display'),
                         'link' => 'https://wpthemespace.com/product/magical-posts-display-pro/',
                     ]),
@@ -1757,21 +1889,115 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
      * @access protected
      */
 
+    /**
+     * Render single accordion item HTML
+     *
+     * @param int   $index
+     * @param int   $mpac_rand
+     * @param string $is_open 'yes'|'no'
+     * @param array  $settings
+     */
+    protected function render_accordion_item($index, $mpac_rand, $is_open, $settings)
+    {
+        $mpac_post_btn          = $this->get_settings('mpac_post_btn');
+        $mpac_category_show     = $this->get_settings('mpac_category_show');
+        $mpac_usebtn_icon       = $this->get_settings('mpac_usebtn_icon');
+        $mpac_btn_title         = $this->get_settings('mpac_btn_title');
+        $mpac_btn_target        = $this->get_settings('mpac_btn_target');
+        $mpac_btn_icon          = $this->get_settings('mpac_btn_icon');
+        $mpac_btn_icon_position = $this->get_settings('mpac_btn_icon_position');
+        ?>
+        <div class="mgp-card mgrc-item mgrc-item-<?php echo esc_attr($settings['mpac_text_align']); ?>-<?php echo esc_attr($settings['mpac_icon_position']); ?> text-<?php echo esc_attr($settings['mpac_text_align']); ?>">
+            <div class="mgp-card-header mg-accordion-title" id="heading<?php echo esc_attr($index . $mpac_rand); ?>">
+                <div class="mgrc-title <?php if ($is_open !== 'yes') : ?>collapsed<?php endif; ?> <?php if ($settings['mpac_icon_position'] === 'left') : ?>mgrc-left<?php endif; ?>" data-mgbs-toggle="collapse" data-mgbs-target="#mgc-item<?php echo esc_attr($index . $mpac_rand); ?>" aria-expanded="<?php echo ($is_open === 'yes') ? 'true' : 'false'; ?>" aria-controls="mgc-item<?php echo esc_attr($index . $mpac_rand); ?>">
+                    <?php if ($settings['mpac_icon_position'] === 'left' && $settings['mpac_icon_show'] === 'yes') : ?>
+                        <div class="mgc-icons mgc-left-icon">
+                            <div class="mgc-icon mgc-icon-top">
+                                <span class="mgc-close"><?php \Elementor\Icons_Manager::render_icon($settings['mpac_selected_icon']); ?></span>
+                            </div>
+                            <div class="mgc-icon">
+                                <span class="mgc-open"><?php \Elementor\Icons_Manager::render_icon($settings['mpac_selected_active_icon']); ?></span>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php
+                    echo '<' . mpd_validate_html_tag($settings['mpac_title_tag']) . '>';
+                    echo esc_html(wp_trim_words(get_the_title(), $settings['mpac_crop_title'], '...'));
+                    echo '</' . mpd_validate_html_tag($settings['mpac_title_tag']) . '>';
+                    ?>
+
+                    <?php if ($settings['mpac_icon_position'] === 'right' && $settings['mpac_icon_show'] === 'yes') : ?>
+                        <div class="mgc-icons mgc-right-icon">
+                            <div class="mgc-icon mgc-icon-top">
+                                <span class="mgc-close"><?php \Elementor\Icons_Manager::render_icon($settings['mpac_selected_icon']); ?></span>
+                            </div>
+                            <div class="mgc-icon">
+                                <span class="mgc-open"><?php \Elementor\Icons_Manager::render_icon($settings['mpac_selected_active_icon']); ?></span>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <div id="mgc-item<?php echo esc_attr($index . $mpac_rand); ?>" class="mgp-collapse mgac-mcontent mgaccont <?php if ($is_open === 'yes') : ?>mgp-show<?php endif; ?>" aria-labelledby="heading<?php echo esc_attr($index . $mpac_rand); ?>" data-mgbs-parent="#mpdAccordion<?php echo esc_attr($mpac_rand); ?>">
+                <div class="mgp-card-body mgac-content mgac-<?php echo esc_attr($settings['mpac_effect']); ?>">
+                    <div class="mgp-row">
+                        <?php if ($settings['mpac_show_img'] && has_post_thumbnail()) : ?>
+                            <div class="mgp-col-lg-5">
+                                <div class="mpdac-post-image">
+                                    <figure>
+                                        <a href="<?php the_permalink(); ?>">
+                                            <?php the_post_thumbnail($settings['mpac_img_size']); ?>
+                                        </a>
+                                    </figure>
+                                </div>
+                            </div>
+                            <div class="mgp-col-lg-7">
+                        <?php else : ?>
+                            <div class="mgp-col-lg-12">
+                        <?php endif; ?>
+                                <div class="mpdac-post-details">
+                                    <?php mp_post_cat_display($mpac_category_show, $settings['mpac_cat_type'], ', '); ?>
+                                    <?php
+                                    if ($settings['mpac_desc_show']) {
+                                        if (has_excerpt()) {
+                                            echo esc_html(wp_trim_words(get_the_excerpt(), $settings['mpac_crop_desc'], '...'));
+                                        } else {
+                                            echo esc_html(wp_trim_words(get_the_content(), $settings['mpac_crop_desc'], '...'));
+                                        }
+                                    }
+                                    ?>
+                                    <div class="mpacc-btn">
+                                        <?php
+                                        if ($mpac_post_btn) {
+                                            mp_post_btn(
+                                                $mpac_btn_title,
+                                                $mpac_usebtn_icon,
+                                                $mpac_btn_icon,
+                                                $mpac_btn_icon_position,
+                                                $mpac_btn_target,
+                                                $settings['mpac_link_type']
+                                            );
+                                        }
+                                        ?>
+                                    </div>
+                                    <div class="mpacc-meta">
+                                        <?php mpd_posts_meta_author_date($settings['mpac_author_show'], $settings['mpac_date_show']); ?>
+                                    </div>
+                                    <?php mpd_post_tags($settings['mpac_tag_show']); ?>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+
     protected function render()
     {
         $settings = $this->get_settings_for_display();
-        $mpac_items = $this->get_settings('mpac_items');
-        $mpac_post_btn = $this->get_settings('mpac_post_btn');
-        $mpac_category_show = $this->get_settings('mpac_category_show');
-        $mpac_usebtn_icon = $this->get_settings('mpac_usebtn_icon');
-        $mpac_btn_title = $this->get_settings('mpac_btn_title');
-        $mpac_btn_target = $this->get_settings('mpac_btn_target');
-        $mpac_btn_icon = $this->get_settings('mpac_btn_icon');
-        $mpac_btn_icon_position = $this->get_settings('mpac_btn_icon_position');
-?>
-
-
-        <?php
         $mpac_rand = wp_rand(253495, 56934658);
 
         if ($settings['mpac_usebg_color'] == 'yes') {
@@ -1779,148 +2005,117 @@ class mgpdEPostsAccordion extends \Elementor\Widget_Base
         } else {
             $mpac_excolor = 'eacolor';
         }
+
+        $query_type = !empty($settings['mpac_query_type']) ? $settings['mpac_query_type'] : '';
+        $mpac_items = $this->get_settings('mpac_items');
+
+        // Backward compatibility: if query_type is not set, but repeater has items, use manual
+        if (empty($query_type)) {
+            $query_type = (!empty($mpac_items) && is_array($mpac_items)) ? 'manual' : 'auto';
+        }
         ?>
 
         <div class="accordion mgaccordion mg-<?php echo esc_attr($settings['mpac_style']); ?> <?php echo esc_attr($mpac_excolor); ?>" id="mpdAccordion<?php echo esc_attr($mpac_rand); ?>">
+            <?php
+            if ($query_type === 'auto') {
+                $post_type   = !empty($settings['mpac_post_type']) ? $settings['mpac_post_type'] : 'post';
+                $posts_count = !empty($settings['mpac_posts_count']) ? absint($settings['mpac_posts_count']) : 5;
 
-            <?php if ($mpac_items) : ?>
-                <?php
-                foreach ($mpac_items as $index => $item) :
+                $args = array(
+                    'post_type'           => $post_type,
+                    'post_status'         => 'publish',
+                    'ignore_sticky_posts' => 1,
+                    'posts_per_page'      => $posts_count,
+                    'orderby'             => !empty($settings['mpac_orderby']) ? $settings['mpac_orderby'] : 'date',
+                    'order'               => !empty($settings['mpac_order']) ? $settings['mpac_order'] : 'DESC',
+                );
 
-                    if ($item['mpac_post_id']) :
-                        // Support both ID and slug for backward compatibility
-                        $post_value = $item['mpac_post_id'];
-                        if (is_numeric($post_value)) {
-                            $mpac_post_id = absint($post_value);
-                        } else {
-                            // It's a slug, get the post by slug
-                            $post_obj = get_page_by_path($post_value, OBJECT, 'post');
-                            $mpac_post_id = $post_obj ? $post_obj->ID : 0;
-                        }
-                        
-                        if ($mpac_post_id) :
-                        $args = array(
-                            'post_type' => 'post',
-                            'p'         =>  $mpac_post_id,
-                            'post_status'       =>  'publish',
-                        );
-                        $mpac_loop = new WP_Query($args);
-                        while ($mpac_loop->have_posts()) :  $mpac_loop->the_post();
-                ?>
-                            <div class="mgp-card mgrc-item mgrc-item-<?php echo esc_attr($settings['mpac_text_align']); ?>-<?php echo esc_attr($settings['mpac_icon_position']); ?> text-<?php echo esc_attr($settings['mpac_text_align']); ?>">
-                                <div class="mgp-card-header mg-accordion-title" id="heading<?php echo esc_attr($index); ?><?php echo esc_attr($mpac_rand); ?>">
-                                    <div class="mgrc-title <?php if ($item['mpac_is_open'] != 'yes') : ?>collapsed<?php endif; ?> <?php if ($settings['mpac_icon_position'] == 'left') : ?>mgrc-left<?php endif; ?>" data-mgbs-toggle="collapse" data-mgbs-target="#mgc-item<?php echo esc_attr($index); ?><?php echo esc_attr($mpac_rand); ?>" aria-expanded="<?php if ($item['mpac_is_open'] == 'yes') : ?>true<?php else : ?>false<?php endif; ?>" aria-controls="mgc-item<?php echo esc_attr($index); ?><?php echo esc_attr($mpac_rand); ?>">
-                                        <?php if ($settings['mpac_icon_position'] == 'left' && $settings['mpac_icon_show'] == 'yes') : ?>
-                                            <div class="mgc-icons mgc-left-icon">
-                                                <div class="mgc-icon mgc-icon-top">
-                                                    <span class="mgc-close"><?php \Elementor\Icons_Manager::render_icon($settings['mpac_selected_icon']); ?></span>
-
-                                                </div>
-                                                <div class="mgc-icon">
-                                                    <span class="mgc-open"><?php \Elementor\Icons_Manager::render_icon($settings['mpac_selected_active_icon']); ?></span>
-
-                                                </div>
-                                            </div>
-                                        <?php endif; ?>
-                                        <?php
-                                        // Ensure the title tag is properly escaped to prevent any invalid HTML tags or XSS attacks
-                                        echo '<' . mpd_validate_html_tag($settings['mpac_title_tag']) . '>';
-
-                                        // Trim the post title to the specified number of words and escape it for safe output
-                                        echo esc_html(wp_trim_words(get_the_title(), $settings['mpac_crop_title'], '...'));
-
-                                        // Close the title tag with the escaped tag name
-                                        echo '</' . mpd_validate_html_tag($settings['mpac_title_tag']) . '>';
-                                        ?>
-
-                                        <?php if ($settings['mpac_icon_position'] == 'right' && $settings['mpac_icon_show'] == 'yes') : ?>
-                                            <div class="mgc-icons mgc-right-icon">
-                                                <div class="mgc-icon mgc-icon-top">
-                                                    <span class="mgc-close"><?php \Elementor\Icons_Manager::render_icon($settings['mpac_selected_icon']); ?></span>
-
-                                                </div>
-                                                <div class="mgc-icon">
-                                                    <span class="mgc-open"><?php \Elementor\Icons_Manager::render_icon($settings['mpac_selected_active_icon']); ?></span>
-
-                                                </div>
-                                            </div>
-                                        <?php endif; ?>
-                                    </div>
-
-                                </div>
-
-                                <div id="mgc-item<?php echo esc_attr($index); ?><?php echo esc_attr($mpac_rand); ?>" class="mgp-collapse mgac-mcontent mgaccont <?php if ($item['mpac_is_open'] == 'yes') : ?>mgp-show<?php endif; ?>" aria-labelledby="heading<?php echo esc_attr($index); ?><?php echo esc_attr($mpac_rand); ?>" data-mgbs-parent="#mpdAccordion<?php echo esc_attr($mpac_rand); ?>">
-                                    <div class="mgp-card-body mgac-content mgac-<?php echo esc_attr($settings['mpac_effect']); ?>">
-
-                                        <div class="mgp-row">
-                                            <?php if ($settings['mpac_show_img']) : ?>
-                                                <div class="mgp-col-lg-5">
-                                                    <div class="mpdac-post-image">
-                                                        <figure>
-                                                            <a href="<?php the_permalink(); ?>">
-                                                                <?php the_post_thumbnail($settings['mpac_img_size']); ?>
-                                                            </a>
-                                                        </figure>
-                                                    </div>
-                                                </div>
-                                                <div class="mgp-col-lg-7">
-                                                <?php else : ?>
-                                                    <div class="mgp-col-lg-12">
-                                                    <?php endif; ?>
-                                                    <div class="mpdac-post-details">
-                                                        <?php mp_post_cat_display($mpac_category_show, $settings['mpac_cat_type'], ', '); ?>
-                                                        <?php
-                                                        if ($settings['mpac_desc_show']) {
-                                                            if (has_excerpt()) {
-                                                                echo esc_html(wp_trim_words(get_the_excerpt(), $settings['mpac_crop_desc'], '...'));
-                                                            } else {
-                                                                echo esc_html(wp_trim_words(get_the_content(), $settings['mpac_crop_desc'], '...'));
-                                                            }
-                                                        }
-
-                                                        ?>
-                                                        <div class="mpacc-btn">
-                                                            <?php
-                                                            if ($mpac_post_btn) {
-                                                                mp_post_btn(
-                                                                    $text = $mpac_btn_title,
-                                                                    $icon_show = $mpac_usebtn_icon,
-                                                                    $icon = $mpac_btn_icon,
-                                                                    $icon_position = $mpac_btn_icon_position,
-                                                                    $target = $mpac_btn_target,
-                                                                    $class = $settings['mpac_link_type']
-                                                                );
-                                                            }
-                                                            ?>
-                                                        </div>
-                                                        <div class="mpacc-meta">
-                                                            <?php mpd_posts_meta_author_date($settings['mpac_author_show'], $settings['mpac_date_show']);  ?>
-                                                        </div>
-
-                                                        <?php mpd_post_tags($settings['mpac_tag_show']); ?>
-
-                                                    </div>
-                                                    </div>
-                                                </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            <?php endwhile; ?>
-                        <?php endif; // end if ($mpac_post_id) ?>
-                        <?php else : ?>
-                            <div class="mgp-alert mgp-alert-warning mgp-text-center mgp-mt-5 mgp-mb-5" role="alert">
-                                <?php echo esc_html('No posts found. Please add posts for display the accordion.', 'magical-posts-display'); ?>
-                            </div>
-                        <?php endif; // end if ($item['mpac_post_id']) ?>
-                    <?php endforeach; ?>
-                <?php else : ?>
-                    <div class="mgp-alert mgp-alert-danger mgp-text-center mgp-mt-5 mgp-mb-5" role="alert">
-                        <?php echo esc_html('No posts found. Please add posts for display the accordion.', 'magical-posts-display'); ?>
-                    </div>
-                <?php endif; ?>
-                            </div>
-
-                    <?php
+                if (!empty($settings['mpac_categories'])) {
+                    $cat_ids    = (array) $settings['mpac_categories'];
+                    $field_name = is_numeric($cat_ids[0]) ? 'term_id' : 'slug';
+                    $args['tax_query'] = array(
+                        array(
+                            'taxonomy'         => 'category',
+                            'field'            => $field_name,
+                            'terms'            => $cat_ids,
+                            'include_children' => false,
+                        ),
+                    );
                 }
+
+                if (!empty($settings['mpac_exclude_current']) && $settings['mpac_exclude_current'] === 'yes') {
+                    $current_post_id = get_the_ID();
+                    if ($current_post_id) {
+                        $args['post__not_in'] = array($current_post_id);
+                    }
+                }
+
+                $auto_loop = new WP_Query($args);
+                $first_auto_open = (!isset($settings['mpac_first_open']) || $settings['mpac_first_open'] === 'yes');
+
+                if ($auto_loop->have_posts()) :
+                    while ($auto_loop->have_posts()) : $auto_loop->the_post();
+                        $cur_idx = $auto_loop->current_post;
+                        $is_open = ($cur_idx === 0 && $first_auto_open) ? 'yes' : 'no';
+                        $this->render_accordion_item($cur_idx, $mpac_rand, $is_open, $settings);
+                    endwhile;
+                    wp_reset_postdata();
+                else :
+                    ?>
+                    <div class="mgp-alert mgp-alert-info mgp-text-center mgp-mt-5 mgp-mb-5" role="alert">
+                        <?php esc_html_e('No posts found to display in the accordion.', 'magical-posts-display'); ?>
+                    </div>
+                    <?php
+                endif;
+
+            } else {
+                // Manual Mode (Repeater)
+                if (!empty($mpac_items) && is_array($mpac_items)) :
+                    $has_rendered = false;
+                    foreach ($mpac_items as $index => $item) :
+                        if (!empty($item['mpac_post_id'])) :
+                            $post_value = $item['mpac_post_id'];
+                            if (is_numeric($post_value)) {
+                                $mpac_post_id = absint($post_value);
+                            } else {
+                                $post_obj     = get_page_by_path($post_value, OBJECT, 'post');
+                                $mpac_post_id = $post_obj ? $post_obj->ID : 0;
+                            }
+
+                            if ($mpac_post_id) :
+                                $args = array(
+                                    'post_type'   => 'post',
+                                    'p'           => $mpac_post_id,
+                                    'post_status' => 'publish',
+                                );
+                                $mpac_loop = new WP_Query($args);
+                                while ($mpac_loop->have_posts()) : $mpac_loop->the_post();
+                                    $is_open = (!empty($item['mpac_is_open']) && $item['mpac_is_open'] === 'yes') ? 'yes' : 'no';
+                                    $this->render_accordion_item($index, $mpac_rand, $is_open, $settings);
+                                    $has_rendered = true;
+                                endwhile;
+                                wp_reset_postdata();
+                            endif;
+                        endif;
+                    endforeach;
+
+                    if (!$has_rendered) :
+                        ?>
+                        <div class="mgp-alert mgp-alert-warning mgp-text-center mgp-mt-5 mgp-mb-5" role="alert">
+                            <?php esc_html_e('No valid posts selected in the accordion items.', 'magical-posts-display'); ?>
+                        </div>
+                        <?php
+                    endif;
+                else :
+                    ?>
+                    <div class="mgp-alert mgp-alert-danger mgp-text-center mgp-mt-5 mgp-mb-5" role="alert">
+                        <?php esc_html_e('No items added. Please add posts to display the accordion.', 'magical-posts-display'); ?>
+                    </div>
+                    <?php
+                endif;
+            }
+            ?>
+        </div>
+        <?php
+    }
             }

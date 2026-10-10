@@ -22,53 +22,81 @@ class mgPostsElementorMain
 	public function init_widgets($widgets_manager)
 	{
 		// Image grid 
-		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/advanced-posts-img-grid.php');
-		$widgets_manager->register(new \mgpdAdPostsImgGrid());
-		//Posts Grid
-		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-grid.php');
-		$widgets_manager->register(new \mgpdEPostsGrid());
-		//Posts list
-		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-list.php');
-		$widgets_manager->register(new \mgpdEPostsList());
-		//Awesome Posts list
-		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/awesome-posts-list.php');
-		$widgets_manager->register(new \mgpdEAwesomePostsList());
+		if (mpd_is_widget_enabled('adv_posts_img_grid')) {
+			require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/advanced-posts-img-grid.php');
+			$widgets_manager->register(new \mgpdAdPostsImgGrid());
+		}
+		// Posts Grid
+		if (mpd_is_widget_enabled('posts_grid')) {
+			require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-grid.php');
+			$widgets_manager->register(new \mgpdEPostsGrid());
+		}
+		// Posts list
+		if (mpd_is_widget_enabled('posts_list')) {
+			require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-list.php');
+			$widgets_manager->register(new \mgpdEPostsList());
+		}
+		// Awesome Posts list
+		if (mpd_is_widget_enabled('awesome_posts_list')) {
+			require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/awesome-posts-list.php');
+			$widgets_manager->register(new \mgpdEAwesomePostsList());
+		}
 		// Posts Carousel
-		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-carousel.php');
-		$widgets_manager->register(new \mgPosts_carousel());
+		if (mpd_is_widget_enabled('posts_carousel')) {
+			require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-carousel.php');
+			$widgets_manager->register(new \mgPosts_carousel());
+		}
 
 		// Posts Slider
-		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-slider.php');
-		$widgets_manager->register(new \mgpdEPostsSlider());
+		if (mpd_is_widget_enabled('posts_slider')) {
+			require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-slider.php');
+			$widgets_manager->register(new \mgpdEPostsSlider());
+		}
 
 		// Posts Accordion
-		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-accordion.php');
-		$widgets_manager->register(new \mgpdEPostsAccordion());
+		if (mpd_is_widget_enabled('posts_accordion')) {
+			require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-accordion.php');
+			$widgets_manager->register(new \mgpdEPostsAccordion());
+		}
 
 		// Posts Tabs
-		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-tab.php');
-		$widgets_manager->register(new \mgpdEPostsTab());
+		if (mpd_is_widget_enabled('posts_tab')) {
+			require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-tab.php');
+			$widgets_manager->register(new \mgpdEPostsTab());
+		}
 
-		// Posts Tabs
-		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-ticker.php');
-		$widgets_manager->register(new \mgpdEPostsTicker());
+		// Posts Ticker
+		if (mpd_is_widget_enabled('posts_ticker')) {
+			require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-ticker.php');
+			$widgets_manager->register(new \mgpdEPostsTicker());
+		}
 		// Posts Categories
-		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-cat.php');
-		$widgets_manager->register(new \mgpdEPosts_cats());
+		if (mpd_is_widget_enabled('posts_cat')) {
+			require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/posts-cat.php');
+			$widgets_manager->register(new \mgpdEPosts_cats());
+		}
 
 		// Advanced Posts ad grid one
-		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/advanced-posts-grid1.php');
-		$widgets_manager->register(new \mgpdAdPostsGrid1());
+		if (mpd_is_widget_enabled('adv_posts_grid1')) {
+			require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/advanced-posts-grid1.php');
+			$widgets_manager->register(new \mgpdAdPostsGrid1());
+		}
 		// Advanced Posts ad grid two
-		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/advanced-posts-grid2.php');
-		$widgets_manager->register(new \mgpdAdPostsGrid2());
+		if (mpd_is_widget_enabled('adv_posts_grid2')) {
+			require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/advanced-posts-grid2.php');
+			$widgets_manager->register(new \mgpdAdPostsGrid2());
+		}
 		// News Magazine Grid
-		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/news-magazine-grid.php');
-		$widgets_manager->register(new \mgpdNewsMagazineGrid());
+		if (mpd_is_widget_enabled('news_magazine_grid')) {
+			require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/news-magazine-grid.php');
+			$widgets_manager->register(new \mgpdNewsMagazineGrid());
+		}
 
 		// News Magazine Image Grid
-		require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/news-magazine-img-grid.php');
-		$widgets_manager->register(new \mgpdNewsMagazineImgGrid());
+		if (mpd_is_widget_enabled('news_magazine_img_grid')) {
+			require_once(MAGICAL_POSTS_DISPLAY_DIR . '/includes/elementor/widgets/news-magazine-img-grid.php');
+			$widgets_manager->register(new \mgpdNewsMagazineImgGrid());
+		}
 	}
 
 	public function register_new_category(\Elementor\Elements_Manager $elements_manager)
@@ -98,11 +126,17 @@ class mgPostsElementorMain
 		$after     = array_slice($categories, 4, null, true);
 		$reordered = $before + [$category_slug => $magical_category] + $after;
 
-		// Use reflection to inject reordered categories
-		$reflection = new \ReflectionClass($elements_manager);
-		$property   = $reflection->getProperty('categories');
-		$property->setAccessible(true);
-		$property->setValue($elements_manager, $reordered);
+		// Use reflection to safely inject reordered categories without breaking if Elementor internals change
+		try {
+			$reflection = new \ReflectionClass($elements_manager);
+			if ($reflection->hasProperty('categories')) {
+				$property = $reflection->getProperty('categories');
+				$property->setAccessible(true);
+				$property->setValue($elements_manager, $reordered);
+			}
+		} catch (\Throwable $e) {
+			// Fallback gracefully without throwing fatal ReflectionException
+		}
 	}
 
 
@@ -120,15 +154,22 @@ class mgPostsElementorMain
 	*/
 	function frontend_widget_styles()
 	{
-		wp_enqueue_style("mp-accordion-style", MAGICAL_POSTS_DISPLAY_ASSETS . 'css/widget-style/mp-accordion.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
+		// Styles are registered via MPD_Assets_Manager and enqueued conditionally per widget
+		if ( ! wp_style_is( 'mp-accordion-style', 'registered' ) ) {
+			wp_register_style("mp-accordion-style", MAGICAL_POSTS_DISPLAY_ASSETS . 'css/widget-style/mp-accordion.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
+		}
 
-		wp_enqueue_style("mp-tab-style", MAGICAL_POSTS_DISPLAY_ASSETS . 'css/widget-style/mp-tabs.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
+		if ( ! wp_style_is( 'mp-tab-style', 'registered' ) ) {
+			wp_register_style("mp-tab-style", MAGICAL_POSTS_DISPLAY_ASSETS . 'css/widget-style/mp-tabs.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
+		}
 
-		// Register News Magazine Grid styles
-		wp_register_style('magical-news-magazine-grid', MAGICAL_POSTS_DISPLAY_ASSETS . 'css/news-magazine-grid.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
+		if ( ! wp_style_is( 'magical-news-magazine-grid', 'registered' ) ) {
+			wp_register_style('magical-news-magazine-grid', MAGICAL_POSTS_DISPLAY_ASSETS . 'css/news-magazine-grid.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
+		}
 
-		// Register News Magazine Image Grid styles
-		wp_register_style('magical-news-magazine-img-grid', MAGICAL_POSTS_DISPLAY_ASSETS . 'css/news-magazine-img-grid.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
+		if ( ! wp_style_is( 'magical-news-magazine-img-grid', 'registered' ) ) {
+			wp_register_style('magical-news-magazine-img-grid', MAGICAL_POSTS_DISPLAY_ASSETS . 'css/news-magazine-img-grid.css', array(), MAGICAL_POSTS_DISPLAY_VERSION, 'all');
+		}
 	}
 
 
@@ -137,26 +178,35 @@ class mgPostsElementorMain
 	*/
 	function frontend_assets_scripts()
 	{
+		if ( ! wp_script_is( 'mpd-slider-script-active', 'registered' ) ) {
+			wp_register_script(
+				'mpd-slider-script-active',
+				MAGICAL_POSTS_DISPLAY_ASSETS . 'js/widgets-active/post-slider-active.js',
+				['jquery', 'swiper'],
+				MAGICAL_POSTS_DISPLAY_VERSION,
+				true
+			);
+		}
 
-		// posts slider active
-		wp_register_script(
-			'mpd-slider-script-active',
-			MAGICAL_POSTS_DISPLAY_ASSETS . 'js/widgets-active/post-slider-active.js',
-			['jquery'],
-			MAGICAL_POSTS_DISPLAY_VERSION,
-			true
-		);
-		//posts carousel active
-		wp_register_script(
-			'mpd-pcarousel-active',
-			MAGICAL_POSTS_DISPLAY_ASSETS . 'js/widgets-active/posts-carousel-active.js',
-			['jquery'],
-			MAGICAL_POSTS_DISPLAY_VERSION,
-			true
-		);
+		if ( ! wp_script_is( 'mpd-pcarousel-active', 'registered' ) ) {
+			wp_register_script(
+				'mpd-pcarousel-active',
+				MAGICAL_POSTS_DISPLAY_ASSETS . 'js/widgets-active/posts-carousel-active.js',
+				['jquery', 'swiper'],
+				MAGICAL_POSTS_DISPLAY_VERSION,
+				true
+			);
+		}
 
-		// posts ticker active
-		wp_enqueue_script("mpd-ticker-script-js", MAGICAL_POSTS_DISPLAY_ASSETS . 'js/widgets-active/posts-ticker-active.js', array('jquery'), MAGICAL_POSTS_DISPLAY_VERSION, true);
+		if ( ! wp_script_is( 'mpd-ticker-script-js', 'registered' ) ) {
+			wp_register_script(
+				'mpd-ticker-script-js',
+				MAGICAL_POSTS_DISPLAY_ASSETS . 'js/widgets-active/posts-ticker-active.js',
+				['jquery', 'jquery.easy-ticker'],
+				MAGICAL_POSTS_DISPLAY_VERSION,
+				true
+			);
+		}
 	}
 
 	/*

@@ -174,3 +174,245 @@ function mpd_validate_html_tag($tag, $default_tag = 'h2', $allowed_tags = array(
     // Return the validated tag or default
     return in_array($tag, $safe_tags, true) ? $tag : $default_tag;
 }
+
+/**
+ * Default elements enabled state
+ */
+function mpd_get_default_elements()
+{
+    return array(
+        // Post Showcase Widgets
+        'posts_grid'             => 1,
+        'posts_list'             => 1,
+        'awesome_posts_list'     => 1,
+        'posts_carousel'         => 1,
+        'posts_slider'           => 1,
+        'posts_accordion'        => 1,
+        'posts_tab'              => 1,
+        'posts_ticker'           => 1,
+        'posts_cat'              => 1,
+        'adv_posts_grid1'        => 1,
+        'adv_posts_grid2'        => 1,
+        'adv_posts_img_grid'     => 1,
+        'news_magazine_grid'     => 1,
+        'news_magazine_img_grid' => 1,
+        // Theme Builder Widgets
+        'theme_post_title'       => 1,
+        'theme_post_excerpt'     => 1,
+        'theme_post_content'     => 1,
+        'theme_featured_image'   => 1,
+        'theme_post_meta'        => 1,
+        'theme_post_navigation'  => 1,
+        'theme_post_comments'    => 1,
+        'theme_author_box'       => 1,
+        'theme_archive_title'    => 1,
+        'theme_archive_posts'    => 1,
+        'theme_post_pagination'  => 1,
+    );
+}
+
+/**
+ * Elements metadata for Widget Manager dashboard
+ */
+function mpd_get_elements_metadata()
+{
+    return array(
+        'showcase' => array(
+            'title' => __('Post Showcase Widgets', 'magical-posts-display'),
+            'widgets' => array(
+                'posts_grid' => array(
+                    'name'        => __('Posts Grid', 'magical-posts-display'),
+                    'class'       => '\mgpdEPostsGrid',
+                    'description' => __('Multi-column post grid with static & masonry layout support.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-grid-view',
+                ),
+                'posts_list' => array(
+                    'name'        => __('Posts List', 'magical-posts-display'),
+                    'class'       => '\mgpdEPostsList',
+                    'description' => __('Clean list style with side-by-side featured images.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-list-view',
+                ),
+                'awesome_posts_list' => array(
+                    'name'        => __('Awesome Posts List', 'magical-posts-display'),
+                    'class'       => '\mgpdEAwesomePostsList',
+                    'description' => __('Modern magazine cards and styled compact list layouts.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-excerpt-view',
+                ),
+                'posts_carousel' => array(
+                    'name'        => __('Posts Carousel', 'magical-posts-display'),
+                    'class'       => '\mgPosts_carousel',
+                    'description' => __('Touch-friendly Swiper carousel with dots, arrows and autoplay.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-images-alt2',
+                ),
+                'posts_slider' => array(
+                    'name'        => __('Posts Slider', 'magical-posts-display'),
+                    'class'       => '\mgpdEPostsSlider',
+                    'description' => __('Full-width and hero banner sliders for highlighted posts.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-slides',
+                ),
+                'posts_accordion' => array(
+                    'name'        => __('Posts Accordion', 'magical-posts-display'),
+                    'class'       => '\mgpdEPostsAccordion',
+                    'description' => __('Collapsible accordion cards for FAQs and content-heavy posts.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-menu-alt3',
+                ),
+                'posts_tab' => array(
+                    'name'        => __('Posts Tabs', 'magical-posts-display'),
+                    'class'       => '\mgpdEPostsTab',
+                    'description' => __('Category-partitioned tabs displaying posts dynamically.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-category',
+                ),
+                'posts_ticker' => array(
+                    'name'        => __('Posts Ticker', 'magical-posts-display'),
+                    'class'       => '\mgpdEPostsTicker',
+                    'description' => __('Animated breaking news headline ticker.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-megaphone',
+                ),
+                'posts_cat' => array(
+                    'name'        => __('Posts Categories', 'magical-posts-display'),
+                    'class'       => '\mgpdEPosts_cats',
+                    'description' => __('Visual category badges and grid items.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-tag',
+                ),
+                'adv_posts_grid1' => array(
+                    'name'        => __('Advanced Posts Grid 1', 'magical-posts-display'),
+                    'class'       => '\mgpdAdPostsGrid1',
+                    'description' => __('Special magazine card layout with meta highlight.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-screenoptions',
+                ),
+                'adv_posts_grid2' => array(
+                    'name'        => __('Advanced Posts Grid 2', 'magical-posts-display'),
+                    'class'       => '\mgpdAdPostsGrid2',
+                    'description' => __('Secondary advanced layout with boxed typography.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-layout',
+                ),
+                'adv_posts_img_grid' => array(
+                    'name'        => __('Advanced Posts Img Grid', 'magical-posts-display'),
+                    'class'       => '\mgpdAdPostsImgGrid',
+                    'description' => __('Visual-heavy layout highlighting featured images.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-format-image',
+                ),
+                'news_magazine_grid' => array(
+                    'name'        => __('News Magazine Grid', 'magical-posts-display'),
+                    'class'       => '\mgpdNewsMagazineGrid',
+                    'description' => __('Editorially styled news layout with multiple featured columns.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-welcome-widgets-menus',
+                ),
+                'news_magazine_img_grid' => array(
+                    'name'        => __('News/Magazine Image Grid', 'magical-posts-display'),
+                    'class'       => '\mgpdNewsMagazineImgGrid',
+                    'description' => __('Modern magazine overlay grid with 5 distinct preset styles.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-format-gallery',
+                ),
+            ),
+        ),
+        'theme_builder' => array(
+            'title' => __('Theme Builder Widgets (Single & Archive)', 'magical-posts-display'),
+            'widgets' => array(
+                'theme_post_title' => array(
+                    'name'        => __('Post Title', 'magical-posts-display'),
+                    'class'       => 'Mgpd_Theme_Post_Title',
+                    'description' => __('Dynamic post or archive title heading.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-heading',
+                ),
+                'theme_post_excerpt' => array(
+                    'name'        => __('Post Excerpt', 'magical-posts-display'),
+                    'class'       => 'Mgpd_Theme_Post_Excerpt',
+                    'description' => __('Dynamic post excerpt or summary text.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-editor-paragraph',
+                ),
+                'theme_post_content' => array(
+                    'name'        => __('Post Content', 'magical-posts-display'),
+                    'class'       => 'Mgpd_Theme_Post_Content',
+                    'description' => __('Full dynamic post or page body content.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-text-page',
+                ),
+                'theme_featured_image' => array(
+                    'name'        => __('Featured Image', 'magical-posts-display'),
+                    'class'       => 'Mgpd_Theme_Featured_Image',
+                    'description' => __('Dynamic current post featured image with lightbox & link options.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-format-image',
+                ),
+                'theme_post_meta' => array(
+                    'name'        => __('Post Meta', 'magical-posts-display'),
+                    'class'       => 'Mgpd_Theme_Post_Meta',
+                    'description' => __('Author, date, comments, categories, and reading time badges.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-info',
+                ),
+                'theme_post_navigation' => array(
+                    'name'        => __('Post Navigation', 'magical-posts-display'),
+                    'class'       => 'Mgpd_Theme_Post_Navigation',
+                    'description' => __('Previous & Next post pagination links.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-leftright',
+                ),
+                'theme_post_comments' => array(
+                    'name'        => __('Post Comments', 'magical-posts-display'),
+                    'class'       => 'Mgpd_Theme_Post_Comments',
+                    'description' => __('Standard WordPress comments thread & reply form.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-admin-comments',
+                ),
+                'theme_author_box' => array(
+                    'name'        => __('Author Box', 'magical-posts-display'),
+                    'class'       => 'Mgpd_Theme_Author_Box',
+                    'description' => __('Author avatar, bio, and archive link box.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-admin-users',
+                ),
+                'theme_archive_title' => array(
+                    'name'        => __('Archive Title', 'magical-posts-display'),
+                    'class'       => 'Mgpd_Theme_Archive_Title',
+                    'description' => __('Dynamic category, tag, author, or search results title.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-editor-quote',
+                ),
+                'theme_archive_posts' => array(
+                    'name'        => __('Archive Posts Loop', 'magical-posts-display'),
+                    'class'       => 'Mgpd_Theme_Archive_Posts',
+                    'description' => __('Main archive loop widget with multiple layouts & AJAX load more.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-networking',
+                ),
+                'theme_post_pagination' => array(
+                    'name'        => __('Post Pagination', 'magical-posts-display'),
+                    'class'       => 'Mgpd_Theme_Post_Pagination',
+                    'description' => __('Numeric, AJAX load more, and Prev/Next archive pagination.', 'magical-posts-display'),
+                    'icon'        => 'dashicons-arrow-right-alt2',
+                ),
+            ),
+        ),
+    );
+}
+
+/**
+ * Get active elements mapping
+ */
+function mpd_get_active_elements()
+{
+    $defaults = mpd_get_default_elements();
+    $saved    = get_option('mgpd_active_elements');
+
+    if (!is_array($saved)) {
+        return $defaults;
+    }
+
+    return wp_parse_args($saved, $defaults);
+}
+
+/**
+ * Check if a widget is enabled
+ */
+function mpd_is_widget_enabled($widget_key)
+{
+    $active = mpd_get_active_elements();
+    return !empty($active[$widget_key]);
+}
+
+/**
+ * Pro only text helper (prevents fatal error if trait calls it)
+ */
+if (!function_exists('mp_display_pro_only_text')) {
+    function mp_display_pro_only_text()
+    {
+        if (!function_exists('mp_display_check_main_ok') || !mp_display_check_main_ok()) {
+            return ' <span class="mgpd-pro-badge" style="color: #ff5722; font-size: 11px; font-weight: bold;">(' . esc_html__('Pro', 'magical-posts-display') . ')</span>';
+        }
+        return '';
+    }
+}

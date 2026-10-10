@@ -71,10 +71,16 @@ class mgpdEPostsTicker extends \Elementor\Widget_Base
     }
 
 
+    public function get_style_depends()
+    {
+        return ['mpd-style', 'mpd-fonts'];
+    }
+
     public function get_script_depends()
     {
         return [
-            'jquery.easy-ticker'
+            'jquery.easy-ticker',
+            'mpd-ticker-script-js'
         ];
     }
 
@@ -367,7 +373,7 @@ class mgpdEPostsTicker extends \Elementor\Widget_Base
                 [
                     'type' => \Elementor\Controls_Manager::RAW_HTML,
                     'raw' => mp_go_pro_template([
-                        'title' => esc_html__('Get All Pro Features', 'elementor'),
+                        'title' => esc_html__('Get All Pro Features', 'magical-posts-display'),
                         'massage' => esc_html__('Posts Video, QR Code, Reading Time Calculator, Total Word Count, Share Icons, Pagination And More style & options waiting for you. So upgrade pro today!! it\'s lifetime Deal!!!', 'magical-posts-display'),
                         'link' => 'https://wpthemespace.com/product/magical-posts-display-pro/',
                     ]),

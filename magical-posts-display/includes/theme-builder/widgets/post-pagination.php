@@ -34,6 +34,14 @@ if ( ! class_exists( 'Mgpd_Theme_Post_Pagination' ) ) {
 			return [ 'pagination', 'pager', 'next', 'previous', 'page', 'theme' ];
 		}
 
+		public function get_style_depends() {
+			return [ 'mgpd-theme-builder-widgets' ];
+		}
+
+		public function get_script_depends() {
+			return [ 'mgpd-theme-builder' ];
+		}
+
 		protected function register_controls() {
 			$this->start_controls_section(
 				'content_section',

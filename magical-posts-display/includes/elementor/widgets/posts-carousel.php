@@ -989,7 +989,7 @@ class mgPosts_carousel extends \Elementor\Widget_Base
                 [
                     'type' => \Elementor\Controls_Manager::RAW_HTML,
                     'raw' => mp_go_pro_template([
-                        'title' => esc_html__('Get All Pro Features', 'elementor'),
+                        'title' => esc_html__('Get All Pro Features', 'magical-posts-display'),
                         'massage' => esc_html__('Posts Video, QR Code, Reading Time Calculator, Total Word Count, Share Icons, Pagination And More style & options waiting for you. So upgrade pro today!! it\'s lifetime Deal!!!', 'magical-posts-display'),
                         'link' => 'https://wpthemespace.com/product/magical-posts-display-pro/',
                     ]),
@@ -2196,7 +2196,7 @@ class mgPosts_carousel extends \Elementor\Widget_Base
         $this->start_controls_section(
             'mgpdc_attr_sec',
             [
-                'label' => __('Magical Attributes', 'plugin-name'),
+                'label' => __('Magical Attributes', 'magical-posts-display'),
                 'tab' => \Elementor\Controls_Manager::TAB_ADVANCED,
             ]
         );
@@ -2224,14 +2224,14 @@ class mgPosts_carousel extends \Elementor\Widget_Base
         $this->start_controls_section(
             'mgpdc_custom_css_sec',
             [
-                'label' => __('Magical Custom CSS', 'plugin-name'),
+                'label' => __('Magical Custom CSS', 'magical-posts-display'),
                 'tab' => \Elementor\Controls_Manager::TAB_ADVANCED,
             ]
         );
         $this->add_control(
             'mgpdc_custom_css',
             [
-                'label' => __('Custom CSS', 'plugin-domain'),
+                'label' => __('Custom CSS', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::CODE,
                 'language' => 'css',
                 'rows' => 20,
@@ -2256,6 +2256,9 @@ class mgPosts_carousel extends \Elementor\Widget_Base
         $mgpla_post_type = isset($settings['mgpla_post_type']) ? $settings['mgpla_post_type'] : 'post';
         $mgpla_post_type = sanitize_text_field($mgpla_post_type);
         $mgpcar_posts_count = absint($this->get_settings('mgpcar_posts_count'));
+        if (empty($mgpcar_posts_count)) {
+            $mgpcar_posts_count = 6;
+        }
 
 
         $mgpcar_filter = $this->get_settings('mgpcar_posts_filter');

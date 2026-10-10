@@ -1,126 +1,129 @@
 (function ($) {
-	"use strict";
-    
-    // Document ready function
-    jQuery(document).ready(function($){
-        // Show sticker lists
-        $('.mgpd-sticker ul').show();
-    });
-    
-// Enhanced masonry initialization for multiple containers
-$(window).on('load', function() {
-    $('.mgpd-masonry').each(function() {
-        var $container = $(this);
-        var $wrapper = $container.closest('.mgpd-masonry-container');
-        var container = this;
-        
-        // Wait for images to load before initializing masonry
-        imagesLoaded(container, function() {
-            try {
-                var masonryInstance = new Masonry(container, {
-                    itemSelector: '.mgpd-masonry-item',
-                    percentPosition: true,
-                    gutter: 0,
-                    horizontalOrder: true,
-                    fitWidth: false,
-                    transitionDuration: 0 // Disable animation for initial load
-                });
-                
-                // Store masonry instance for later use
-                $container.data('masonry', masonryInstance);
-                
-                // Force layout calculation after initialization
-                setTimeout(function() {
-                    masonryInstance.layout();
-                    $container.css('height', 'auto');
-                }, 100);
-                
-                // Add loaded class for smooth appearance
+    "use strict";
+
+    /**
+     * Initialize Masonry for a given scope or all containers
+     *
+     * @param {jQuery|HTMLElement|null} scope Optional Elementor widget scope
+     */
+    window.mgpdInitSingleMasonry = function (scope) {
+        var $targetContainers = scope ? $(scope).find('.mgpd-masonry') : $('.mgpd-masonry');
+
+        if (!$targetContainers.length) {
+            return;
+        }
+
+        $targetContainers.each(function () {
+            var container = this;
+            var $container = $(this);
+            var $wrapper = $container.closest('.mgpd-masonry-container');
+
+            // Fallback if libraries are missing
+            if (typeof imagesLoaded === 'undefined' || typeof Masonry === 'undefined') {
                 $wrapper.addClass('masonry-loaded');
-                
-            } catch (error) {
-                console.error('MGPD: Error initializing masonry:', error);
+                return;
             }
-        });
-    });
-    
-    // Initialize Premium Features if available
-    if (typeof initMGPDPremiumFeatures === 'function') {
-        initMGPDPremiumFeatures();
-    }
-}); 
 
-// Also initialize on DOM ready for faster loading
-$(document).ready(function() {
-    // Pre-initialize masonry containers
-    $('.mgpd-masonry').each(function() {
-        var $container = $(this);
-        $container.css('min-height', '600px'); // Temporary min-height
-    });
-});
-
-// Global function to reinitialize masonry (can be called by premium features)
-// Add throttling to prevent excessive calls
-var mgpdMasonryThrottle = false;
-
-window.mgpdReinitializeMasonry = function() {
-    if (mgpdMasonryThrottle) {
-        return; // Silent throttle
-    }
-    
-    mgpdMasonryThrottle = true;
-    
-    setTimeout(function() {
-        mgpdMasonryThrottle = false;
-    }, 500); // Throttle for 500ms
-    
-    $('.mgpd-masonry').each(function() {
-        var $container = $(this);
-        var container = this;
-        var masonryInstance = $container.data('masonry');
-        
-        // Check if masonry is already initialized on this container
-        if (masonryInstance) {
-            // Masonry is initialized, reload items
-            imagesLoaded(container, function() {
+            imagesLoaded(container, function () {
                 try {
-                    // Use direct instance methods instead of jQuery plugin
-                    masonryInstance.reloadItems();
-                    masonryInstance.layout();
-                    
-                    // Reset height to auto to allow proper calculation
-                    $container.css('height', 'auto');
-                    
-                } catch (error) {
-                    console.error('MGPD: Error reloading masonry:', error);
-                }
-            });
-        } else {
-            // Masonry not initialized, initialize it first
-            imagesLoaded(container, function() {
-                try {
-                    var newMasonryInstance = new Masonry(container, {
+                    // Destroy previous instance if re-rendering in Elementor editor
+                    var existingMasonry = $container.data('masonry');
+                    if (existingMasonry && typeof existingMasonry.destroy === 'function') {
+                        try {
+                            existingMasonry.destroy();
+                        } catch (e) {
+                            // Suppress destroy errors during rapid editor redraws
+                        }
+                    }
+
+                    var masonryInstance = new Masonry(container, {
                         itemSelector: '.mgpd-masonry-item',
                         percentPosition: true,
                         gutter: 0,
                         horizontalOrder: true,
-                        fitWidth: false
+                        fitWidth: false,
+                        transitionDuration: '0.2s'
                     });
-                    
-                    // Store masonry instance
-                    $container.data('masonry', newMasonryInstance);
-                    
-                    // Add loaded class for smooth appearance
-                    $container.closest('.mgpd-masonry-container').addClass('masonry-loaded');
-                    
-                } catch (error) {
-                    console.error('MGPD: Error initializing masonry:', error);
+
+                    // Store reference
+                    $container.data('masonry', masonryInstance);
+
+                    // Reveal container smoothly
+                    $wrapper.addClass('masonry-loaded');
+                    $container.css('height', 'auto');
+
+                    // Force reflow after images settle
+                    setTimeout(function () {
+                        if (masonryInstance && typeof masonryInstance.layout === 'function') {
+                            masonryInstance.layout();
+                        }
+                    }, 150);
+
+                } catch (err) {
+                    $wrapper.addClass('masonry-loaded');
                 }
+            });
+        });
+    };
+
+    // Document ready initialization
+    $(document).ready(function () {
+        // Show sticker lists
+        $('.mgpd-sticker ul').show();
+
+        // Pre-initialize masonry containers
+        $('.mgpd-masonry').each(function () {
+            var $container = $(this);
+            if (!$container.closest('.mgpd-masonry-container').hasClass('masonry-loaded')) {
+                $container.css('min-height', '300px');
+            }
+        });
+
+        // Initialize on DOM ready
+        window.mgpdInitSingleMasonry();
+    });
+
+    // Window load fallback
+    $(window).on('load', function () {
+        window.mgpdInitSingleMasonry();
+
+        // Initialize Premium Features if available
+        if (typeof initMGPDPremiumFeatures === 'function') {
+            initMGPDPremiumFeatures();
+        }
+    });
+
+    // Elementor Editor Live Re-initialization Hooks
+    $(window).on('elementor/frontend/init', function () {
+        if (typeof elementorFrontend !== 'undefined' && elementorFrontend.hooks) {
+            var masonryWidgets = [
+                'frontend/element_ready/mgposts_dgrid.default',
+                'frontend/element_ready/mgposts_adv_grid1.default',
+                'frontend/element_ready/mgposts_adv_grid2.default',
+                'frontend/element_ready/mgposts_adv_img_grid.default'
+            ];
+
+            $.each(masonryWidgets, function (index, hookName) {
+                elementorFrontend.hooks.addAction(hookName, function ($scope) {
+                    window.mgpdInitSingleMasonry($scope);
+                });
             });
         }
     });
-};
 
-}(jQuery));
+    // Global throttled re-layout helper
+    var mgpdMasonryThrottle = false;
+    window.mgpdReinitializeMasonry = function () {
+        if (mgpdMasonryThrottle) {
+            return;
+        }
 
+        mgpdMasonryThrottle = true;
+        setTimeout(function () {
+            mgpdMasonryThrottle = false;
+        }, 300);
 
+        window.mgpdInitSingleMasonry();
+    };
+
+})(jQuery);

@@ -34,6 +34,10 @@ if ( ! class_exists( 'Mgpd_Theme_Archive_Title' ) ) {
 			return [ 'archive', 'title', 'heading', 'category', 'tag', 'theme' ];
 		}
 
+		public function get_style_depends() {
+			return [ 'mgpd-theme-builder-widgets' ];
+		}
+
 		protected function register_controls() {
 			$this->start_controls_section(
 				'content_section',

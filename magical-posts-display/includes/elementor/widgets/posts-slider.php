@@ -731,7 +731,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
                 [
                     'type' => \Elementor\Controls_Manager::RAW_HTML,
                     'raw' => mp_go_pro_template([
-                        'title' => esc_html__('Get All Pro Features', 'elementor'),
+                        'title' => esc_html__('Get All Pro Features', 'magical-posts-display'),
                         'massage' => esc_html__('Posts Video, QR Code, Reading Time Calculator, Total Word Count, Share Icons, Pagination And More style & options waiting for you. So upgrade pro today!! it\'s lifetime Deal!!!', 'magical-posts-display'),
                         'link' => 'https://wpthemespace.com/product/magical-posts-display-pro/',
                     ]),
@@ -1049,7 +1049,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             Group_Control_Text_Shadow::get_type(),
             [
                 'name' => 'mgps_cat_shadow',
-                'label' => __('Title Text Shadow', 'plugin-domain'),
+                'label' => __('Title Text Shadow', 'magical-posts-display'),
                 'selector' => '{{WRAPPER}} span.slide-cat a, {{WRAPPER}} .mgps-style-two-content span.slide-cat a',
             ]
         );
@@ -1117,7 +1117,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             Group_Control_Text_Shadow::get_type(),
             [
                 'name' => 'mgps_title_shadow',
-                'label' => __('Title Text Shadow', 'plugin-domain'),
+                'label' => __('Title Text Shadow', 'magical-posts-display'),
                 'selector' => '{{WRAPPER}} .mgs-content .mgs-title, {{WRAPPER}} .mgps-style-two-content .mgs-title',
             ]
         );
@@ -1167,7 +1167,7 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
             Group_Control_Text_Shadow::get_type(),
             [
                 'name' => 'mgps_subtitle_shadow',
-                'label' => __('Title Text Shadow', 'plugin-domain'),
+                'label' => __('Title Text Shadow', 'magical-posts-display'),
                 'selector' => '{{WRAPPER}} .mgs-content .mgs-subtitle, {{WRAPPER}} .mgps-style-two-content .mgs-subtitle',
             ]
         );
@@ -1677,12 +1677,14 @@ class mgpdEPostsSlider extends \Elementor\Widget_Base
         $sanitized_product_ids = mp_display_resolve_post_ids($product_ids, 'post');
         // Query Argument
         $args = array(
-            'post_type'             => 'post',
-            'post_status'           => 'publish',
-            'ignore_sticky_posts'   => 1,
-            'posts_per_page'        => -1,
-            'post__in'        => $sanitized_product_ids
+            'post_type'           => 'post',
+            'post_status'         => 'publish',
+            'ignore_sticky_posts' => 1,
+            'posts_per_page'      => !empty($sanitized_product_ids) ? count($sanitized_product_ids) : 5,
         );
+        if (!empty($sanitized_product_ids)) {
+            $args['post__in'] = $sanitized_product_ids;
+        }
 
         $mgpslide_posts = new WP_Query($args);
 

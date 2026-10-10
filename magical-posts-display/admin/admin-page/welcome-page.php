@@ -8,7 +8,7 @@
 defined('ABSPATH') || exit;
 
 $is_pro = function_exists('mp_display_check_main_ok') ? mp_display_check_main_ok() : (class_exists('magicalPostDisplayPro') && !empty(get_option('has_magical_posts_pro')));
-$version = defined('MAGICAL_POSTS_DISPLAY_VERSION') ? MAGICAL_POSTS_DISPLAY_VERSION : '1.3.0';
+$version = defined('MAGICAL_POSTS_DISPLAY_VERSION') ? MAGICAL_POSTS_DISPLAY_VERSION : '1.3.1';
 ?>
 
 <div id="mgpdp1" class="mgpd-dashboard-wrapper">
@@ -24,10 +24,10 @@ $version = defined('MAGICAL_POSTS_DISPLAY_VERSION') ? MAGICAL_POSTS_DISPLAY_VERS
 				<?php endif; ?>
 			</div>
 
-			<h1 class="mgpd-hero-title">
+			<h3 class="mgpd-hero-title">
 				<span class="dashicons dashicons-tickets-alt mgpd-hero-icon"></span>
 				<?php esc_html_e('Magical Posts Display', 'magical-posts-display'); ?>
-			</h1>
+			</h3>
 
 			<p class="mgpd-hero-subtitle">
 				<?php esc_html_e('The most flexible posts showcase & theme builder solution for Elementor. Create stunning grids, carousels, lists, sliders, and dynamic templates in minutes.', 'magical-posts-display'); ?>
@@ -39,8 +39,21 @@ $version = defined('MAGICAL_POSTS_DISPLAY_VERSION') ? MAGICAL_POSTS_DISPLAY_VERS
 					<?php esc_html_e('Create Page in Elementor', 'magical-posts-display'); ?>
 				</a>
 
-				<?php if (post_type_exists('mg_tb_template')) : ?>
-					<a href="<?php echo esc_url(admin_url('admin.php?page=magical-theme-builder')); ?>" class="mgpd-btn mgpd-btn-secondary">
+				<a href="#magical_ptab_elements" class="mgpd-btn mgpd-btn-secondary mgpd-tab-trigger">
+					<span class="dashicons dashicons-admin-generic"></span>
+					<?php esc_html_e('Widgets Manager', 'magical-posts-display'); ?>
+				</a>
+
+				<a href="#magical_ptab_presets" class="mgpd-btn mgpd-btn-secondary mgpd-tab-trigger">
+					<span class="dashicons dashicons-art"></span>
+					<?php esc_html_e('Presets & Guide', 'magical-posts-display'); ?>
+				</a>
+
+				<?php 
+				$mg_plugin_file    = 'magical-addons-for-elementor/magical-addons-for-elementor.php';
+				$has_theme_builder = function_exists('mg_tb') || class_exists('MgTB') || (function_exists('is_plugin_active') && is_plugin_active($mg_plugin_file));
+				if ($has_theme_builder) : ?>
+					<a href="<?php echo esc_url(admin_url('admin.php?page=magical-addons#/theme-builder')); ?>" class="mgpd-btn mgpd-btn-secondary">
 						<span class="dashicons dashicons-layout"></span>
 						<?php esc_html_e('Theme Builder Templates', 'magical-posts-display'); ?>
 					</a>
@@ -58,7 +71,7 @@ $version = defined('MAGICAL_POSTS_DISPLAY_VERSION') ? MAGICAL_POSTS_DISPLAY_VERS
 
 	<!-- Quick Start Steps -->
 	<section class="mgpd-section">
-		<h2 class="mgpd-section-title"><?php esc_html_e('Get Started in 3 Simple Steps', 'magical-posts-display'); ?></h2>
+		<h3 class="mgpd-section-title"><?php esc_html_e('Get Started in 3 Simple Steps', 'magical-posts-display'); ?></h3>
 		<div class="mgpd-steps-grid">
 			<div class="mgpd-step-card">
 				<div class="mgpd-step-number">1</div>
@@ -81,8 +94,12 @@ $version = defined('MAGICAL_POSTS_DISPLAY_VERSION') ? MAGICAL_POSTS_DISPLAY_VERS
 	<!-- Features & Widgets Showcase -->
 	<section class="mgpd-section">
 		<div class="mgpd-section-header">
-			<h2 class="mgpd-section-title"><?php esc_html_e('Included Showcase Widgets', 'magical-posts-display'); ?></h2>
+			<h3 class="mgpd-section-title"><?php esc_html_e('Included Showcase Widgets', 'magical-posts-display'); ?></h3>
 			<p class="mgpd-section-subtitle"><?php esc_html_e('Every widget is crafted with responsive controls, advanced query options, and beautiful typography.', 'magical-posts-display'); ?></p>
+			<a href="#magical_ptab_elements" class="button mgpd-tab-trigger" style="margin-top: 8px; display: inline-flex; align-items: center; gap: 6px;">
+				<span class="dashicons dashicons-admin-generic"></span>
+				<?php esc_html_e('Open Widgets Manager (Enable/Disable)', 'magical-posts-display'); ?>
+			</a>
 		</div>
 
 		<div class="mgpd-features-grid">

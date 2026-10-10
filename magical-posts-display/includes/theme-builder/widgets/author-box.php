@@ -34,6 +34,10 @@ if ( ! class_exists( 'Mgpd_Theme_Author_Box' ) ) {
 			return [ 'author', 'profile', 'bio', 'avatar', 'box', 'theme' ];
 		}
 
+		public function get_style_depends() {
+			return [ 'mgpd-theme-builder-widgets', 'mpd-fonts' ];
+		}
+
 		protected function register_controls() {
 			$this->start_controls_section(
 				'content_section',

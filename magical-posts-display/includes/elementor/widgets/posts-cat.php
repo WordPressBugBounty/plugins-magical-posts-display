@@ -69,6 +69,11 @@ class mgpdEPosts_cats extends \Elementor\Widget_Base
         return ['magic', 'post', 'grid', 'card', 'category'];
     }
 
+    public function get_style_depends()
+    {
+        return ['mpd-style', 'mpd-fonts'];
+    }
+
     /**
      * Register Blank widget controls.
      *
@@ -180,20 +185,9 @@ class mgpdEPosts_cats extends \Elementor\Widget_Base
         $this->add_control(
             'cat_list',
             [
-                'label' => esc_html__('Category List', 'textdomain'),
+                'label' => esc_html__('Category List', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::REPEATER,
                 'fields' => $repeater->get_controls(),
-                /* 'default' => [
-                    [
-                        'list_title' => esc_html__('Title #1', 'textdomain'),
-                        'list_content' => esc_html__('Item content. Click the edit button to change this text.', 'textdomain'),
-                    ],
-                    [
-                        'list_title' => esc_html__('Title #2', 'textdomain'),
-                        'list_content' => esc_html__('Item content. Click the edit button to change this text.', 'textdomain'),
-                    ],
-                ],
-                'title_field' => '{{{ list_title }}}', */
             ]
         );
 
@@ -852,6 +846,26 @@ class mgpdEPosts_cats extends \Elementor\Widget_Base
         $mgpd_cats_column_tablet = $this->get_settings('mgpd_cats_column_tablet') ? $this->get_settings('mgpd_cats_column_tablet') : '6';
         $mgpd_cats_column_mobile = $this->get_settings('mgpd_cats_column_mobile') ? $this->get_settings('mgpd_cats_column_mobile') : '12';
 
+        // Auto fallback: If no categories are added to repeater yet, fetch top 4 categories
+        if (empty($cat_list) || !is_array($cat_list)) {
+            $default_terms = get_terms([
+                'taxonomy'   => 'category',
+                'number'     => 4,
+                'hide_empty' => false,
+            ]);
+            if (!empty($default_terms) && !is_wp_error($default_terms)) {
+                $cat_list = [];
+                foreach ($default_terms as $dterm) {
+                    $cat_list[] = [
+                        'mgpd_cats'      => $dterm->slug,
+                        'mgpc_cat_img'   => [],
+                        'mgpc_badge_use' => '',
+                        'badge_position' => 'right-top',
+                        'badge_text'     => '',
+                    ];
+                }
+            }
+        }
 
         if ($cat_list) :
 
@@ -860,9 +874,15 @@ class mgpdEPosts_cats extends \Elementor\Widget_Base
                 <div class="mgp-row">
                     <?php
                     foreach ($cat_list as $item) :
-                        $catslug = $item['mgpd_cats'];
-                        $mgpc_cat_img = $item['mgpc_cat_img'];
+                        $catslug = !empty($item['mgpd_cats']) ? $item['mgpd_cats'] : '';
+                        if (empty($catslug)) {
+                            continue;
+                        }
+                        $mgpc_cat_img = !empty($item['mgpc_cat_img']) ? $item['mgpc_cat_img'] : array();
                         $category = get_category_by_slug($catslug);
+                        if (!$category || is_wp_error($category)) {
+                            continue;
+                        }
 
                         $catid = $category->term_id;
 
@@ -871,7 +891,7 @@ class mgpdEPosts_cats extends \Elementor\Widget_Base
                         //term desc
                         $term_desc = $category->description;
 
-                        $cat_link =  get_category_link($catid);;
+                        $cat_link = get_category_link($catid);
                     ?>
                         <div class="mgp-col-lg-<?php echo esc_attr($mgpd_cats_column); ?> mgp-col-md-<?php echo esc_attr($mgpd_cats_column_tablet); ?> mgp-col-sm-<?php echo esc_attr($mgpd_cats_column_mobile); ?>">
                             <div class="mgpckit-cat-item <?php if ($settings['content_grid_boxshadow'] == 'yes') : ?>mgpdi-shadow<?php endif; ?>">
@@ -880,7 +900,7 @@ class mgpdEPosts_cats extends \Elementor\Widget_Base
                                     <div class="mgpckit-cat-img">
                                         <figure>
                                             <a href="<?php echo esc_url($cat_link); ?> ">
-                                                <?php if (!empty($mgpc_cat_img['url'] || $mgpc_cat_img['id'])) : ?>
+                                                <?php if (!empty($mgpc_cat_img['url']) || !empty($mgpc_cat_img['id'])) : ?>
                                                     <?php echo \Elementor\Group_Control_Image_Size::get_attachment_image_html($item, 'thumbnail', 'mgpc_cat_img'); ?>
                                                 <?php else : ?>
                                                     <?php echo \Elementor\Group_Control_Image_Size::get_attachment_image_html($settings, 'thumbnail', 'mgpc_default_img'); ?>
@@ -889,8 +909,8 @@ class mgpdEPosts_cats extends \Elementor\Widget_Base
                                             </a>
 
                                         </figure>
-                                        <?php if ($item['mgpc_badge_use']) : ?>
-                                            <span class="mgpckit-cat-badge mgpckit-cat-<?php echo esc_attr($item['badge_position']); ?>"><?php echo esc_html($item['badge_text']); ?></span>
+                                        <?php if (!empty($item['mgpc_badge_use'])) : ?>
+                                            <span class="mgpckit-cat-badge mgpckit-cat-<?php echo esc_attr(!empty($item['badge_position']) ? $item['badge_position'] : 'right-top'); ?>"><?php echo esc_html(!empty($item['badge_text']) ? $item['badge_text'] : ''); ?></span>
                                         <?php endif; ?>
                                     </div>
                                 <?php endif; ?>
@@ -908,8 +928,8 @@ class mgpdEPosts_cats extends \Elementor\Widget_Base
                 </div>
             </div>
         <?php else : ?>
-            <div class="mgp-alert mgp-alert-danger">
-                <?php echo esc_html('Please select posts categories for display this section.'); ?>
+            <div class="mgp-alert mgp-alert-danger mgp-text-center">
+                <?php echo esc_html__('Please select post categories to display this section.', 'magical-posts-display'); ?>
             </div>
         <?php endif; ?>
 

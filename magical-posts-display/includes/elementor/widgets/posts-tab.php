@@ -69,6 +69,16 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
         return ['magic', 'post', 'category', 'grid', 'tab'];
     }
 
+    public function get_style_depends()
+    {
+        return ['mpd-style', 'mpd-fonts', 'mp-tab-style'];
+    }
+
+    public function get_script_depends()
+    {
+        return ['mgp-bootstrap'];
+    }
+
 
     /**
      * Register Blank widget controls.
@@ -694,7 +704,7 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                 [
                     'type' => \Elementor\Controls_Manager::RAW_HTML,
                     'raw' => mp_go_pro_template([
-                        'title' => esc_html__('Get All Pro Features', 'elementor'),
+                        'title' => esc_html__('Get All Pro Features', 'magical-posts-display'),
                         'massage' => esc_html__('Posts Video, QR Code, Reading Time Calculator, Total Word Count, Share Icons, Pagination And More style & options waiting for you. So upgrade pro today!! it\'s lifetime Deal!!!', 'magical-posts-display'),
                         'link' => 'https://wpthemespace.com/product/magical-posts-display-pro/',
                     ]),
@@ -1891,7 +1901,7 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
         $this->start_controls_section(
             'mapt_attr_sec',
             [
-                'label' => __('Magical Attributes', 'plugin-name'),
+                'label' => __('Magical Attributes', 'magical-posts-display'),
                 'tab' => \Elementor\Controls_Manager::TAB_ADVANCED,
             ]
         );
@@ -1919,14 +1929,14 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
         $this->start_controls_section(
             'mapt_custom_css_sec',
             [
-                'label' => __('Magical Custom CSS', 'plugin-name'),
+                'label' => __('Magical Custom CSS', 'magical-posts-display'),
                 'tab' => \Elementor\Controls_Manager::TAB_ADVANCED,
             ]
         );
         $this->add_control(
             'mapt_custom_css',
             [
-                'label' => __('Custom CSS', 'plugin-domain'),
+                'label' => __('Custom CSS', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::CODE,
                 'language' => 'css',
                 'rows' => 20,
@@ -1948,6 +1958,15 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
     {
         $settings = $this->get_settings_for_display();
         $mapt_cats = $this->get_settings('mapt_cats');
+
+        // Auto fallback: If no categories are selected, pick top 3 categories
+        if (empty($mapt_cats) || !is_array($mapt_cats)) {
+            $default_cats = get_categories(['number' => 3, 'hide_empty' => false]);
+            if (!empty($default_cats)) {
+                $mapt_cats = wp_list_pluck($default_cats, 'slug');
+            }
+        }
+
         $mapt_post_img_show = $this->get_settings('mapt_post_img_show');
         $mapt_column    = $settings['mapt_column'];
         $mapt_column_tablet = !empty($settings['mapt_column_tablet']) ? $settings['mapt_column_tablet'] : '6';
@@ -2043,7 +2062,7 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
                                 // Support both term_id and slug
                                 if (is_numeric($cats_id)) {
                                     $pcat_obj = get_term_by('id', $cats_id, 'category');
-                                    $pcat_term = empty($pcat_obj->slug) ? null : $pcat_obj->slug;
+                                    $pcat_term = ($pcat_obj && !is_wp_error($pcat_obj) && !empty($pcat_obj->slug)) ? $pcat_obj->slug : null;
                                     $pcat_field = 'slug';
                                 } else {
                                     $pcat_term = $cats_id; // Already a slug
@@ -2158,7 +2177,7 @@ class mgpdEPostsTab extends \Elementor\Widget_Base
             </div>
         <?php else : ?>
             <div class="mgp-alert mgp-alert-danger mgp-text-center">
-                <?php echo esc_html('Please select posts categories for display the Tab.'); ?>
+                <?php echo esc_html__('Please select post categories to display the tab.', 'magical-posts-display'); ?>
             </div>
         <?php endif; //Check tab item 
         ?>

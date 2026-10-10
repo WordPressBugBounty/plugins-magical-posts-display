@@ -34,6 +34,10 @@ if ( ! class_exists( 'Mgpd_Theme_Post_Comments' ) ) {
 			return [ 'post', 'comments', 'discussion', 'replies', 'theme' ];
 		}
 
+		public function get_style_depends() {
+			return [ 'mgpd-theme-builder-widgets' ];
+		}
+
 		protected function register_controls() {
 			$this->start_controls_section(
 				'content_section',
