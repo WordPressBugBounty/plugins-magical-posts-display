@@ -9,15 +9,15 @@
 
 
 
-if (!class_exists('mpd_posts_meta_author_date')) {
-    function mpd_posts_meta_author_date($author = '', $date = '', $class = 'mgp-mt-3 mgp-text-right')
+if (!function_exists('mpd_posts_meta_author_date')) {
+    function mpd_posts_meta_author_date($author = '', $date = '', $class = 'mgp-mt-3 mgp-text-right', $show_avatar = false)
     {
 ?>
         <div class="mp-meta mgp-ms2 <?php echo esc_attr($class); ?>">
             <div class="mgp-row">
                 <?php if ($author) : ?>
                     <div class="mgp-col-auto">
-                        <?php mp_display_posted_by(); ?>
+                        <?php mp_display_posted_by($show_avatar); ?>
                     </div>
                 <?php endif; ?>
                 <?php if ($date) : ?>
@@ -63,14 +63,14 @@ function mp_display_check_main_ok()
     return false;
 }
 
-if (!class_exists('mpd_posts_meta')) {
-    function mpd_posts_meta($author = '', $date = '', $comment = '', $class = 'mgp-mb-2')
+if (!function_exists('mpd_posts_meta')) {
+    function mpd_posts_meta($author = '', $date = '', $comment = '', $class = 'mgp-mb-2', $show_avatar = false)
     {
     ?>
         <div class="mp-meta bottom-meta <?php echo esc_attr($class); ?>">
             <?php
             if ($author) {
-                mp_display_posted_by();
+                mp_display_posted_by($show_avatar);
             }
             if ($date) {
                 echo '<span class="mp-posts-date">';

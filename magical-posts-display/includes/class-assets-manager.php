@@ -30,15 +30,15 @@ class MPD_Assets_Manager
     /**
      * Add style and scripts for admin
      */
-    public static function admin_scripts()
+    public static function admin_scripts($hook = '')
     {
-        wp_enqueue_style(
-            'mp-admin-style',
-            MAGICAL_POSTS_DISPLAY_URL . '/assets/css/admin-style.css',
-            array(),
-            MAGICAL_POSTS_DISPLAY_VERSION,
-            'all'
-        );
+        // Strictly prevent loading any Magical Posts Display assets on WooCommerce admin screens
+        if (isset($_GET['page']) && (strpos(sanitize_text_field($_GET['page']), 'wc') === 0 || strpos(sanitize_text_field($_GET['page']), 'woocommerce') === 0)) {
+            return;
+        }
+        if (!empty($hook) && (strpos($hook, 'woocommerce') !== false || strpos($hook, 'wc-') !== false)) {
+            return;
+        }
 
         if (isset($_GET['page']) && sanitize_text_field($_GET['page']) === 'mgpd-page') {
             wp_enqueue_style(
@@ -64,22 +64,33 @@ class MPD_Assets_Manager
             );
         }
 
-        wp_enqueue_script(
-            'mgntc-js',
-            MAGICAL_POSTS_DISPLAY_URL . '/assets/js/mgntc.js',
-            array('jquery'),
-            MAGICAL_POSTS_DISPLAY_VERSION,
-            true
-        );
+        // Admin notice styles & snooze script (Only enqueue when Pro is not active)
+        if (!mpd_check_plugin_active('magical-posts-display-pro/magical-posts-display-pro.php')) {
+            wp_enqueue_style(
+                'mp-admin-style',
+                MAGICAL_POSTS_DISPLAY_URL . '/assets/css/admin-style.css',
+                array(),
+                MAGICAL_POSTS_DISPLAY_VERSION,
+                'all'
+            );
 
-        wp_localize_script(
-            'mgntc-js',
-            'mgpd_notice_data',
-            array(
-                'ajax_url' => admin_url('admin-ajax.php'),
-                'nonce'    => wp_create_nonce('mgpd_hide_pro_notice'),
-            )
-        );
+            wp_enqueue_script(
+                'mgntc-js',
+                MAGICAL_POSTS_DISPLAY_URL . '/assets/js/mgntc.js',
+                array('jquery'),
+                MAGICAL_POSTS_DISPLAY_VERSION,
+                true
+            );
+
+            wp_localize_script(
+                'mgntc-js',
+                'mgpd_notice_data',
+                array(
+                    'ajax_url' => admin_url('admin-ajax.php'),
+                    'nonce'    => wp_create_nonce('mgpd_hide_pro_notice'),
+                )
+            );
+        }
     }
 
     /**

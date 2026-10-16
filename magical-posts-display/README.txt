@@ -159,6 +159,16 @@ Yes, Magical Posts Display supports posts categories, allowing you to display po
 
 == Changelog ==
 
+= 1.3.2 =
+* Fix: Purged legacy Select2 CSS overrides in admin-style.css and added strict admin screen isolation to prevent conflicts with WooCommerce settings and third-party plugins.
+* Feature: Added Equal Height Cards control for Posts Grid, Posts Carousel, and Archive Posts widgets (aligns cards and buttons cleanly across all rows).
+* Feature: Added modern Image Aspect Ratio options (16:9 Landscape, 4:3 Standard, 1:1 Square, 3:2 Photo) with responsive cover fit.
+* Feature: Added interactive Image Hover Effects (Zoom In, Zoom Out, Grayscale to Color, Brightness Boost).
+* Feature: Added Floating Category Badge on image thumbnail with modern pill styling.
+* Feature: Added Show Author Avatar option in post meta for enhanced author presentation.
+* Enhanced: Added Sticky Posts control across widgets (Ignore, Include at Top, Only Sticky Posts).
+* Enhanced: Added "Last Modified" and "Most Commented / Popular" orderby sorting options.
+
 = 1.3.1 =
 * Enhanced: Redesigned PRO admin notice with modern high-converting UI, instant AJAX dismissal, and 30-day snooze mechanism.
 * Security: Hardened admin notice dismissal with CSRF nonce verification and capability checks.

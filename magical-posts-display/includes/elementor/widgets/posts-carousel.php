@@ -221,8 +221,9 @@ class mgPosts_carousel extends \Elementor\Widget_Base
                     'date'          => esc_html__('Date', 'magical-posts-display'),
                     'name'          => esc_html__('Name', 'magical-posts-display'),
                     'title'         => esc_html__('Title', 'magical-posts-display'),
-                    'comment_count' => esc_html__('Comment count', 'magical-posts-display'),
+                    'comment_count' => esc_html__('Most Commented / Popular', 'magical-posts-display'),
                     'rand'          => esc_html__('Random', 'magical-posts-display'),
+                    'modified'      => esc_html__('Last Modified', 'magical-posts-display'),
                 ],
                 'condition' => [
                     'mgpcar_custom_order' => 'yes',
@@ -246,12 +247,42 @@ class mgPosts_carousel extends \Elementor\Widget_Base
             ]
         );
 
+        $this->add_control(
+            'mgpcar_sticky_mode',
+            [
+                'label'       => esc_html__('Sticky Posts', 'magical-posts-display'),
+                'type'        => \Elementor\Controls_Manager::SELECT,
+                'default'     => 'ignore',
+                'options'     => [
+                    'ignore'      => esc_html__('Ignore Sticky Posts', 'magical-posts-display'),
+                    'default'     => esc_html__('Include at Top', 'magical-posts-display'),
+                    'sticky_only' => esc_html__('Only Sticky Posts', 'magical-posts-display'),
+                ],
+                'condition'   => [
+                    'mgpla_post_type' => 'post',
+                ],
+            ]
+        );
+
         $this->end_controls_section();
         // posts Content
         $this->start_controls_section(
             'mgpcar_layout',
             [
                 'label' => esc_html__('Carousel Layout', 'magical-posts-display'),
+            ]
+        );
+        $this->add_control(
+            'mgpcar_equal_height',
+            [
+                'label'        => esc_html__('Equal Height Cards', 'magical-posts-display'),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', 'magical-posts-display'),
+                'label_off'    => esc_html__('No', 'magical-posts-display'),
+                'return_value' => 'yes',
+                'default'      => 'yes',
+                'prefix_class' => 'mgp-equal-height-',
+                'description'  => esc_html__('Align all carousel cards to uniform equal height', 'magical-posts-display'),
             ]
         );
         $this->add_control(
@@ -707,6 +738,23 @@ class mgPosts_carousel extends \Elementor\Widget_Base
             ]
         );
         $this->add_control(
+            'mgpcar_floating_category',
+            [
+                'label'        => esc_html__('Floating Badge on Image', 'magical-posts-display'),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', 'magical-posts-display'),
+                'label_off'    => esc_html__('No', 'magical-posts-display'),
+                'return_value' => 'yes',
+                'default'      => '',
+                'description'  => esc_html__('Show category as a modern floating badge over the thumbnail image', 'magical-posts-display'),
+                'condition'    => [
+                    'mgpcar_category_show' => 'yes',
+                    'mgpla_post_type'      => 'post',
+                    'mgpcar_post_img_show' => 'yes',
+                ],
+            ]
+        );
+        $this->add_control(
             'mgpcar_date_show',
             [
                 'label'     => __('Show Date', 'magical-posts-display'),
@@ -722,6 +770,21 @@ class mgPosts_carousel extends \Elementor\Widget_Base
                 'type'      => \Elementor\Controls_Manager::SWITCHER,
                 'default' => 'yes',
 
+            ]
+        );
+        $this->add_control(
+            'mgpcar_author_avatar',
+            [
+                'label'        => esc_html__('Show Author Avatar', 'magical-posts-display'),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', 'magical-posts-display'),
+                'label_off'    => esc_html__('No', 'magical-posts-display'),
+                'return_value' => 'yes',
+                'default'      => '',
+                'description'  => esc_html__('Display author profile avatar circle next to the name', 'magical-posts-display'),
+                'condition'    => [
+                    'mgpcar_author_show' => 'yes',
+                ],
             ]
         );
         $this->add_control(
@@ -1240,6 +1303,42 @@ class mgPosts_carousel extends \Elementor\Widget_Base
             [
                 'name' => 'mgpcar_img_border',
                 'selector' => '{{WRAPPER}} .mgpc-pcarousel .mgp-card figure img',
+            ]
+        );
+
+        $this->add_control(
+            'mgpcar_img_aspect_ratio',
+            [
+                'label'        => esc_html__('Aspect Ratio', 'magical-posts-display'),
+                'type'         => \Elementor\Controls_Manager::SELECT,
+                'default'      => 'original',
+                'options'      => [
+                    'original' => esc_html__('Original / Auto', 'magical-posts-display'),
+                    '16-9'     => esc_html__('16:9 (Landscape)', 'magical-posts-display'),
+                    '4-3'      => esc_html__('4:3 (Standard)', 'magical-posts-display'),
+                    '1-1'      => esc_html__('1:1 (Square)', 'magical-posts-display'),
+                    '3-2'      => esc_html__('3:2 (Classic Photo)', 'magical-posts-display'),
+                ],
+                'prefix_class' => 'mgp-img-ratio-',
+                'description'  => esc_html__('Apply uniform aspect ratio with cover fit to all post images', 'magical-posts-display'),
+            ]
+        );
+
+        $this->add_control(
+            'mgpcar_img_hover_effect',
+            [
+                'label'        => esc_html__('Hover Effect', 'magical-posts-display'),
+                'type'         => \Elementor\Controls_Manager::SELECT,
+                'default'      => 'none',
+                'options'      => [
+                    'none'       => esc_html__('None', 'magical-posts-display'),
+                    'zoom-in'    => esc_html__('Zoom In', 'magical-posts-display'),
+                    'zoom-out'   => esc_html__('Zoom Out', 'magical-posts-display'),
+                    'grayscale'  => esc_html__('Grayscale to Color', 'magical-posts-display'),
+                    'brightness' => esc_html__('Brightness Boost', 'magical-posts-display'),
+                ],
+                'prefix_class' => 'mgp-img-hover-',
+                'description'  => esc_html__('Smooth transition effect on card hover', 'magical-posts-display'),
             ]
         );
         $this->end_controls_section();
@@ -2329,6 +2428,24 @@ class mgPosts_carousel extends \Elementor\Widget_Base
             }
         }
 
+        // Sticky Posts handling
+        $mgpcar_sticky_mode = !empty($settings['mgpcar_sticky_mode']) ? $settings['mgpcar_sticky_mode'] : 'ignore';
+        if ($mgpla_post_type === 'post') {
+            if ($mgpcar_sticky_mode === 'default') {
+                $args['ignore_sticky_posts'] = 0;
+            } elseif ($mgpcar_sticky_mode === 'sticky_only') {
+                $sticky_posts = get_option('sticky_posts');
+                if (!empty($sticky_posts)) {
+                    $args['post__in'] = !empty($args['post__in']) ? array_intersect((array)$args['post__in'], (array)$sticky_posts) : (array)$sticky_posts;
+                    $args['ignore_sticky_posts'] = 1;
+                } else {
+                    $args['post__in'] = array(0);
+                }
+            } else {
+                $args['ignore_sticky_posts'] = 1;
+            }
+        }
+
 
 
         //grid layout
@@ -2428,10 +2545,28 @@ class mgPosts_carousel extends \Elementor\Widget_Base
 
     ?>
         <div class="mgp-card mg-card mg-shadow mgp-card mgp-mb-4">
-            <?php mp_post_thumbnail($mgpcar_post_img_show, $mgpcar_img_size); ?>
+            <?php
+            if ($mgpcar_post_img_show && has_post_thumbnail()) {
+                echo '<div class="mp-post-img">';
+                if (!empty($settings['mgpcar_floating_category']) && $settings['mgpcar_floating_category'] === 'yes' && $settings['mgpla_post_type'] === 'post') {
+                    $mp_cats = get_the_category();
+                    if (!empty($mp_cats)) {
+                        $first_cat = $mp_cats[0];
+                        echo '<a class="mgp-floating-cat-badge" href="' . esc_url(get_category_link($first_cat)) . '">' . esc_html($first_cat->name) . '</a>';
+                    }
+                }
+                echo '<figure>';
+                the_post_thumbnail($mgpcar_img_size);
+                echo '</figure>';
+                echo '</div>';
+            }
+            ?>
             <div class="mg-card-text mgp-card-body">
                 <?php
-                if ($settings['mgpla_post_type'] == 'post') {
+                $show_floating_cat = !empty($settings['mgpcar_floating_category']) && $settings['mgpcar_floating_category'] === 'yes';
+                $author_avatar = !empty($settings['mgpcar_author_avatar']) && $settings['mgpcar_author_avatar'] === 'yes';
+
+                if ($settings['mgpla_post_type'] == 'post' && !$show_floating_cat) {
                     mp_post_cat_display($settings['mgpcar_category_show'], $settings['mgpcar_cat_type'], ', ', 'mp-post-cat', $settings['mgpcar_caticon_show']);
                 }
 
@@ -2442,7 +2577,7 @@ class mgPosts_carousel extends \Elementor\Widget_Base
                 ?>
                 <?php
                 if ($mgpcar_post_style == '1') {
-                    mpd_posts_meta($settings['mgpcar_author_show'], $settings['mgpcar_date_show'], $settings['mgpcar_comment_icon_show']);
+                    mpd_posts_meta($settings['mgpcar_author_show'], $settings['mgpcar_date_show'], $settings['mgpcar_comment_icon_show'], 'mgp-mb-2', $author_avatar);
                 }
                 ?>
                 <?php if ($mgpcar_desc_show) : ?>
@@ -2469,7 +2604,7 @@ class mgPosts_carousel extends \Elementor\Widget_Base
                 }
 
                 if ($mgpcar_post_style == '2') {
-                    mpd_posts_meta_author_date($settings['mgpcar_author_show'], $settings['mgpcar_date_show']);
+                    mpd_posts_meta_author_date($settings['mgpcar_author_show'], $settings['mgpcar_date_show'], 'mgp-mt-3 mgp-text-right', $author_avatar);
                 }
 
                 mpd_post_tags($settings['mgpcar_tag_show']);

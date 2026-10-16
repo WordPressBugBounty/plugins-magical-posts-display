@@ -252,8 +252,9 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                     'date'          => esc_html__('Date', 'magical-posts-display'),
                     'name'          => esc_html__('Name', 'magical-posts-display'),
                     'title'         => esc_html__('Title', 'magical-posts-display'),
-                    'comment_count' => esc_html__('Comment count', 'magical-posts-display'),
+                    'comment_count' => esc_html__('Most Commented / Popular', 'magical-posts-display'),
                     'rand'          => esc_html__('Random', 'magical-posts-display'),
+                    'modified'      => esc_html__('Last Modified', 'magical-posts-display'),
                 ],
                 'condition' => [
                     'mgpg_custom_order' => 'yes',
@@ -264,7 +265,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
         $this->add_control(
             'order',
             [
-                'label' => esc_html__('order', 'magical-posts-display'),
+                'label' => esc_html__('Order', 'magical-posts-display'),
                 'type' => \Elementor\Controls_Manager::SELECT,
                 'default' => 'DESC',
                 'options' => [
@@ -277,12 +278,42 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
             ]
         );
 
+        $this->add_control(
+            'mgpg_sticky_mode',
+            [
+                'label'       => esc_html__('Sticky Posts', 'magical-posts-display'),
+                'type'        => \Elementor\Controls_Manager::SELECT,
+                'default'     => 'ignore',
+                'options'     => [
+                    'ignore'      => esc_html__('Ignore Sticky Posts', 'magical-posts-display'),
+                    'default'     => esc_html__('Include at Top', 'magical-posts-display'),
+                    'sticky_only' => esc_html__('Only Sticky Posts', 'magical-posts-display'),
+                ],
+                'condition'   => [
+                    'mgpg_post_type' => 'post',
+                ],
+            ]
+        );
+
         $this->end_controls_section();
         // posts Content
         $this->start_controls_section(
             'mgpg_layout',
             [
                 'label' => esc_html__('Grid Layout', 'magical-posts-display'),
+            ]
+        );
+        $this->add_control(
+            'mgpg_equal_height',
+            [
+                'label'        => esc_html__('Equal Height Cards', 'magical-posts-display'),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', 'magical-posts-display'),
+                'label_off'    => esc_html__('No', 'magical-posts-display'),
+                'return_value' => 'yes',
+                'default'      => 'yes',
+                'prefix_class' => 'mgp-equal-height-',
+                'description'  => esc_html__('Align all cards in each row to uniform equal height', 'magical-posts-display'),
             ]
         );
         $this->add_control(
@@ -584,6 +615,23 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
             ]
         );
         $this->add_control(
+            'mgpg_floating_category',
+            [
+                'label'        => esc_html__('Floating Badge on Image', 'magical-posts-display'),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', 'magical-posts-display'),
+                'label_off'    => esc_html__('No', 'magical-posts-display'),
+                'return_value' => 'yes',
+                'default'      => '',
+                'description'  => esc_html__('Show category as a modern floating badge over the thumbnail image', 'magical-posts-display'),
+                'condition'    => [
+                    'mgpg_category_show' => 'yes',
+                    'mgpg_post_type'     => 'post',
+                    'mgpg_post_img_show' => 'yes',
+                ],
+            ]
+        );
+        $this->add_control(
             'mgpg_date_show',
             [
                 'label'     => __('Show Date', 'magical-posts-display'),
@@ -599,6 +647,21 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 'type'      => \Elementor\Controls_Manager::SWITCHER,
                 'default' => 'yes',
 
+            ]
+        );
+        $this->add_control(
+            'mgpg_author_avatar',
+            [
+                'label'        => esc_html__('Show Author Avatar', 'magical-posts-display'),
+                'type'         => \Elementor\Controls_Manager::SWITCHER,
+                'label_on'     => esc_html__('Yes', 'magical-posts-display'),
+                'label_off'    => esc_html__('No', 'magical-posts-display'),
+                'return_value' => 'yes',
+                'default'      => '',
+                'description'  => esc_html__('Display author profile avatar circle next to the name', 'magical-posts-display'),
+                'condition'    => [
+                    'mgpg_author_show' => 'yes',
+                ],
             ]
         );
         $this->add_control(
@@ -1145,6 +1208,42 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
             [
                 'name' => 'mgpg_img_border',
                 'selector' => '{{WRAPPER}} .mgp-card .mp-post-img figure img',
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_img_aspect_ratio',
+            [
+                'label'        => esc_html__('Aspect Ratio', 'magical-posts-display'),
+                'type'         => \Elementor\Controls_Manager::SELECT,
+                'default'      => 'original',
+                'options'      => [
+                    'original' => esc_html__('Original / Auto', 'magical-posts-display'),
+                    '16-9'     => esc_html__('16:9 (Landscape)', 'magical-posts-display'),
+                    '4-3'      => esc_html__('4:3 (Standard)', 'magical-posts-display'),
+                    '1-1'      => esc_html__('1:1 (Square)', 'magical-posts-display'),
+                    '3-2'      => esc_html__('3:2 (Classic Photo)', 'magical-posts-display'),
+                ],
+                'prefix_class' => 'mgp-img-ratio-',
+                'description'  => esc_html__('Apply uniform aspect ratio with cover fit to all post images', 'magical-posts-display'),
+            ]
+        );
+
+        $this->add_control(
+            'mgpg_img_hover_effect',
+            [
+                'label'        => esc_html__('Hover Effect', 'magical-posts-display'),
+                'type'         => \Elementor\Controls_Manager::SELECT,
+                'default'      => 'none',
+                'options'      => [
+                    'none'       => esc_html__('None', 'magical-posts-display'),
+                    'zoom-in'    => esc_html__('Zoom In', 'magical-posts-display'),
+                    'zoom-out'   => esc_html__('Zoom Out', 'magical-posts-display'),
+                    'grayscale'  => esc_html__('Grayscale to Color', 'magical-posts-display'),
+                    'brightness' => esc_html__('Brightness Boost', 'magical-posts-display'),
+                ],
+                'prefix_class' => 'mgp-img-hover-',
+                'description'  => esc_html__('Smooth transition effect on card hover', 'magical-posts-display'),
             ]
         );
         $this->end_controls_section();
@@ -3329,6 +3428,15 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 if ($mgpg_post_img_show) {
                     echo '<div class="mp-post-img">';
 
+                    // Floating Category Badge on Image
+                    if (!empty($settings['mgpg_floating_category']) && $settings['mgpg_floating_category'] === 'yes' && $mgpg_post_type === 'post') {
+                        $mp_cats = get_the_category();
+                        if (!empty($mp_cats)) {
+                            $first_cat = $mp_cats[0];
+                            echo '<a class="mgp-floating-cat-badge" href="' . esc_url(get_category_link($first_cat)) . '">' . esc_html($first_cat->name) . '</a>';
+                        }
+                    }
+
                     // Check if using advanced media source (Pro Only)
                     if (mp_display_check_main_ok() && $mgpg_media_source && $mgpg_media_source !== 'featured') {
                         $media_settings = array(
@@ -3361,18 +3469,25 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                 ?>
                 <div class="mg-card-text mgp-card-body">
                     <?php
+                    $show_floating_cat = !empty($settings['mgpg_floating_category']) && $settings['mgpg_floating_category'] === 'yes';
+                    $author_avatar = !empty($settings['mgpg_author_avatar']) && $settings['mgpg_author_avatar'] === 'yes';
+
                     if ($mgpg_post_style == '3') {
                     ?>
                         <div class="magical-post-authon-category">
                             <?php
-                            mpd_posts_meta($settings['mgpg_author_show']);
-                            mp_post_cat_display($settings['mgpg_category_show']);
+                            mpd_posts_meta($settings['mgpg_author_show'], '', '', 'mgp-mb-2', $author_avatar);
+                            if (!$show_floating_cat) {
+                                mp_post_cat_display($settings['mgpg_category_show']);
+                            }
                             ?>
                         </div>
                     <?php
                     }
                     if ($mgpg_post_type == 'post' && ($mgpg_post_style == '1' || $mgpg_post_style == '2')) {
-                        mp_post_cat_display($settings['mgpg_category_show'], $settings['mgpg_cat_type'] ?? 'one', ', ');
+                        if (!$show_floating_cat) {
+                            mp_post_cat_display($settings['mgpg_category_show'], $settings['mgpg_cat_type'] ?? 'one', ', ');
+                        }
                     }
                     ?>
                     <?php
@@ -3380,7 +3495,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                     ?>
                     <?php
                     if ($mgpg_post_style == '1') {
-                        mpd_posts_meta($settings['mgpg_author_show'], $settings['mgpg_date_show'], $settings['mgpg_comment_icon_show']);
+                        mpd_posts_meta($settings['mgpg_author_show'], $settings['mgpg_date_show'], $settings['mgpg_comment_icon_show'], 'mgp-mb-2', $author_avatar);
                     }
                     ?>
                     <?php if ($mgpg_desc_show) : ?>
@@ -3436,7 +3551,7 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                     }
 
                     if ($mgpg_post_style == '2') {
-                        mpd_posts_meta_author_date($settings['mgpg_author_show'], $settings['mgpg_date_show']);
+                        mpd_posts_meta_author_date($settings['mgpg_author_show'], $settings['mgpg_date_show'], 'mgp-mt-3 mgp-text-right', $author_avatar);
                     }
 
                     mpd_post_tags($settings['mgpg_tag_show']);
@@ -3574,6 +3689,24 @@ class mgpdEPostsGrid extends \Elementor\Widget_Base
                             )
                         );
                     }
+                }
+            }
+
+            // Sticky Posts handling
+            $mgpg_sticky_mode = !empty($settings['mgpg_sticky_mode']) ? $settings['mgpg_sticky_mode'] : 'ignore';
+            if ($mgpg_post_type === 'post') {
+                if ($mgpg_sticky_mode === 'default') {
+                    $args['ignore_sticky_posts'] = 0;
+                } elseif ($mgpg_sticky_mode === 'sticky_only') {
+                    $sticky_posts = get_option('sticky_posts');
+                    if (!empty($sticky_posts)) {
+                        $args['post__in'] = !empty($args['post__in']) ? array_intersect((array)$args['post__in'], (array)$sticky_posts) : (array)$sticky_posts;
+                        $args['ignore_sticky_posts'] = 1;
+                    } else {
+                        $args['post__in'] = array(0);
+                    }
+                } else {
+                    $args['ignore_sticky_posts'] = 1;
                 }
             }
         }

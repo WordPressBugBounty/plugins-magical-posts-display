@@ -73,6 +73,23 @@ if ( ! class_exists( 'Mgpd_Theme_Archive_Posts' ) ) {
 				]
 			);
 
+			$this->add_control(
+				'archive_equal_height',
+				[
+					'label'        => __( 'Equal Height Cards', 'magical-posts-display' ),
+					'type'         => \Elementor\Controls_Manager::SWITCHER,
+					'label_on'     => __( 'Yes', 'magical-posts-display' ),
+					'label_off'    => __( 'No', 'magical-posts-display' ),
+					'return_value' => 'yes',
+					'default'      => 'yes',
+					'prefix_class' => 'mgp-equal-height-',
+					'description'  => __( 'Align all cards in each row to uniform equal height', 'magical-posts-display' ),
+					'condition'    => [
+						'display_style' => 'grid',
+					],
+				]
+			);
+
 			// Grid Layout Type
 			$this->add_control(
 				'grid_layout_type',
@@ -392,6 +409,23 @@ if ( ! class_exists( 'Mgpd_Theme_Archive_Posts' ) ) {
 				]
 			);
 
+			$this->add_control(
+				'floating_category',
+				[
+					'label'        => __( 'Floating Badge on Image', 'magical-posts-display' ),
+					'type'         => \Elementor\Controls_Manager::SWITCHER,
+					'label_on'     => __( 'Yes', 'magical-posts-display' ),
+					'label_off'    => __( 'No', 'magical-posts-display' ),
+					'return_value' => 'yes',
+					'default'      => '',
+					'description'  => __( 'Show category as a modern floating badge over the thumbnail image', 'magical-posts-display' ),
+					'condition'    => [
+						'show_category'  => 'yes',
+						'show_thumbnail' => 'yes',
+					],
+				]
+			);
+
 			// Meta
 			$this->add_control(
 				'show_author',
@@ -400,6 +434,22 @@ if ( ! class_exists( 'Mgpd_Theme_Archive_Posts' ) ) {
 					'type'      => \Elementor\Controls_Manager::SWITCHER,
 					'default'   => 'yes',
 					'separator' => 'before',
+				]
+			);
+
+			$this->add_control(
+				'show_author_avatar',
+				[
+					'label'        => __( 'Show Author Avatar', 'magical-posts-display' ),
+					'type'         => \Elementor\Controls_Manager::SWITCHER,
+					'label_on'     => __( 'Yes', 'magical-posts-display' ),
+					'label_off'    => __( 'No', 'magical-posts-display' ),
+					'return_value' => 'yes',
+					'default'      => '',
+					'description'  => __( 'Display author profile avatar circle next to the name', 'magical-posts-display' ),
+					'condition'    => [
+						'show_author' => 'yes',
+					],
 				]
 			);
 
@@ -788,6 +838,42 @@ if ( ! class_exists( 'Mgpd_Theme_Archive_Posts' ) ) {
 					'selectors' => [
 						'{{WRAPPER}} .mp-post-img img' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					],
+				]
+			);
+
+			$this->add_control(
+				'image_aspect_ratio',
+				[
+					'label'        => __( 'Aspect Ratio', 'magical-posts-display' ),
+					'type'         => \Elementor\Controls_Manager::SELECT,
+					'default'      => 'original',
+					'options'      => [
+						'original' => __( 'Original / Auto', 'magical-posts-display' ),
+						'16-9'     => __( '16:9 (Landscape)', 'magical-posts-display' ),
+						'4-3'      => __( '4:3 (Standard)', 'magical-posts-display' ),
+						'1-1'      => __( '1:1 (Square)', 'magical-posts-display' ),
+						'3-2'      => __( '3:2 (Classic Photo)', 'magical-posts-display' ),
+					],
+					'prefix_class' => 'mgp-img-ratio-',
+					'description'  => __( 'Apply uniform aspect ratio with cover fit to all post images', 'magical-posts-display' ),
+				]
+			);
+
+			$this->add_control(
+				'image_hover_effect',
+				[
+					'label'        => __( 'Hover Effect', 'magical-posts-display' ),
+					'type'         => \Elementor\Controls_Manager::SELECT,
+					'default'      => 'none',
+					'options'      => [
+						'none'       => __( 'None', 'magical-posts-display' ),
+						'zoom-in'    => __( 'Zoom In', 'magical-posts-display' ),
+						'zoom-out'   => __( 'Zoom Out', 'magical-posts-display' ),
+						'grayscale'  => __( 'Grayscale to Color', 'magical-posts-display' ),
+						'brightness' => __( 'Brightness Boost', 'magical-posts-display' ),
+					],
+					'prefix_class' => 'mgp-img-hover-',
+					'description'  => __( 'Smooth transition effect on card hover', 'magical-posts-display' ),
 				]
 			);
 
@@ -1585,6 +1671,15 @@ if ( ! class_exists( 'Mgpd_Theme_Archive_Posts' ) ) {
 					<?php if ( $show_thumbnail ) : ?>
 						<div class="mp-post-img">
 							<?php
+							// Floating Category Badge
+							if ( ! empty( $settings['floating_category'] ) && $settings['floating_category'] === 'yes' ) {
+								$cats = get_the_category();
+								if ( ! empty( $cats ) ) {
+									$first_cat = $cats[0];
+									echo '<a class="mgp-floating-cat-badge" href="' . esc_url( get_category_link( $first_cat ) ) . '">' . esc_html( $first_cat->name ) . '</a>';
+								}
+							}
+
 							// Advanced Media Source (Pro)
 							if ( mp_display_check_main_ok() && $settings['media_source'] !== 'featured' ) {
 								$media_settings = [
@@ -1616,15 +1711,18 @@ if ( ! class_exists( 'Mgpd_Theme_Archive_Posts' ) ) {
 
 					<div class="mg-card-text mgp-card-body mgpd-archive-post-content">
 						<?php
+						$show_floating_cat = ! empty( $settings['floating_category'] ) && $settings['floating_category'] === 'yes';
+						$author_avatar = ! empty( $settings['show_author_avatar'] ) && $settings['show_author_avatar'] === 'yes';
+
 						// Style 3 - Author & Category at top
 						if ( $grid_style == '3' ) :
 							?>
 							<div class="magical-post-authon-category">
 								<?php
 								if ( $show_author ) {
-									mpd_posts_meta( 'yes', '', '' );
+									mpd_posts_meta( 'yes', '', '', 'mgp-mb-2', $author_avatar );
 								}
-								if ( $show_category ) {
+								if ( $show_category && ! $show_floating_cat ) {
 									mp_post_cat_display( 'yes', $settings['cat_type'] ?? 'one' );
 								}
 								?>
@@ -1633,7 +1731,7 @@ if ( ! class_exists( 'Mgpd_Theme_Archive_Posts' ) ) {
 						endif;
 
 						// Style 1 & 2 - Category before title
-						if ( $show_category && ( $grid_style == '1' || $grid_style == '2' ) ) {
+						if ( $show_category && ! $show_floating_cat && ( $grid_style == '1' || $grid_style == '2' ) ) {
 							mp_post_cat_display( 'yes', $settings['cat_type'] ?? 'one', ', ' );
 						}
 
@@ -1644,7 +1742,7 @@ if ( ! class_exists( 'Mgpd_Theme_Archive_Posts' ) ) {
 
 						// Style 1 - Meta after title
 						if ( $grid_style == '1' ) {
-							mpd_posts_meta( $show_author ? 'yes' : '', $show_date ? 'yes' : '', $show_comments ? 'yes' : '' );
+							mpd_posts_meta( $show_author ? 'yes' : '', $show_date ? 'yes' : '', $show_comments ? 'yes' : '', 'mgp-mb-2', $author_avatar );
 						}
 
 						// Excerpt
@@ -1695,7 +1793,7 @@ if ( ! class_exists( 'Mgpd_Theme_Archive_Posts' ) ) {
 
 						// Style 2 - Meta at bottom
 						if ( $grid_style == '2' ) {
-							mpd_posts_meta_author_date( $show_author ? 'yes' : '', $show_date ? 'yes' : '' );
+							mpd_posts_meta_author_date( $show_author ? 'yes' : '', $show_date ? 'yes' : '', 'mgp-mt-3 mgp-text-right', $author_avatar );
 						}
 
 						// Tags

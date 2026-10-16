@@ -138,6 +138,11 @@ class mgpAdminInfo
             return;
         }
 
+        // Never show on WooCommerce admin pages
+        if (isset($_GET['page']) && (strpos(sanitize_text_field($_GET['page']), 'wc') === 0 || strpos(sanitize_text_field($_GET['page']), 'woocommerce') === 0)) {
+            return;
+        }
+
         $hide_date = get_option('mgpd_pro_info_text1');
         if (!empty($hide_date)) {
             $days_passed = round((time() - strtotime($hide_date)) / (24 * 60 * 60));
